@@ -83,14 +83,14 @@ int main(){
 	maxminusdxminus=(float *)malloc(imageW*imageH*sizeof(*maxminusdxminus));
 	for(int i=0;i<imageW*imageH;i++){
 		maxminusdxminus[i]=max(&minusdxminus[i]);
-		maxminusdxminus[i]=maxminusdxminus[i]*maxminusdxminus[i];
+		maxminusdxminus[i]=maxminusdxminus[i]*maxminusdxminus[i]; //squared
 	}
 
 	float *minminusdxminus;
 	minminusdxminus=(float *)malloc(imageW*imageH*sizeof(*minminusdxminus));
 	for(int i=0;i<imageW*imageH;i++){
 		minminusdxminus[i]=min(&minusdxminus[i]);
-		minminusdxminus[i]=minminusdxminus[i]*minminusdxminus[i];
+		minminusdxminus[i]=minminusdxminus[i]*minminusdxminus[i]; //squared
 	}
 	free(minusdxminus);
 
@@ -145,11 +145,13 @@ int main(){
 	maxdyplus=(float *)malloc(imageW*imageH*sizeof(*phi));
 	for(int i=0;i<imageW*imageH;i++){
 		maxdyplus[i]=max(&dyplus[i]);
+		maxdyplus[i]=maxdyplus[i]*maxdyplus[i]; //squared
 	}
 	float *mindyplus;
 	mindyplus=(float *)malloc(imageW*imageH*sizeof(*phi));
 	for(int i=0;i<imageW*imageH;i++){
 		mindyplus[i]=min(&dyplus[i]);
+		mindyplus[i]=mindyplus[i]*mindyplus[i]; //squared
 	}
 	free(dyplus);
 
@@ -157,11 +159,13 @@ int main(){
 	maxminusdyminus=(float *)malloc(imageW*imageH*sizeof(*phi));
 	for(int i=0;i<imageW*imageH;i++){
 		maxminusdyminus[i]=max(&minusdyminus[i]);
+		maxminusdyminus[i]=maxminusdyminus[i]*maxminusdyminus[i]; //squared
 	}
 	float *minminusdyminus;
 	minminusdyminus=(float *)malloc(imageW*imageH*sizeof(*phi));
 	for(int i=0;i<imageW*imageH;i++){
 		minminusdyminus[i]=min(&minusdyminus[i]);
+		minminusdyminus[i]=minminusdyminus[i]*minminusdyminus[i]; //squared
 	}
 	free(minusdyminus);
 
