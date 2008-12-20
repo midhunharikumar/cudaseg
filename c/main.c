@@ -5,20 +5,27 @@
 #include <cuda_runtime.h>
 #include <cutil.h>
 #include <math.h>
+#include <GL/glut.h>
+#include <GL/glew.h>
 
-#define ITERATIONS   100
-#define THRESHOLD	 230
-#define EPSILON		 40
+#define ITERATIONS   400
+#define THRESHOLD	 130
+#define EPSILON		 30
 
 
-float *phi, *D;
+float *phi, *D, *displayphi;
 uchar4 *h_Src, *h_Mask;
-int imageW, imageH;
+int imageW, imageH, N;
 unsigned char *mask;
 
 
 void LoadBMPFile(uchar4 **dst, int *width, int *height, const char *name);
 void sedt2d(int *_d,unsigned char *_bimg,int _h,int _w);
+
+
+int its=0;
+
+
 
 //printf("\n");	
 //for(int r=0;r<imageH;r++){
@@ -51,7 +58,7 @@ void init_phi(){
 
 
 
-	printf("sdf of init mask\n");
+	//printf("sdf of init mask\n");
 	for(int r=0;r<imageH;r++){
 		for(int c=0;c<imageW;c++){
 			phi[r*imageW+c]=(float)init[r*imageW+c];
@@ -60,19 +67,54 @@ void init_phi(){
 			} else {
 				phi[r*imageW+c]=-0.5*sqrt(abs(phi[r*imageW+c]));
 			}
-			printf("%6.3f ", phi[r*imageW+c]);
+			//printf("%6.3f ", phi[r*imageW+c]);
 		}
-		printf("\n");
+		//printf("\n");
 	}
 
 	free(init);
 	free(mask);
 }
 
-void update_phi(){
+void reinit_phi(){
 
-	int N;
-	N = imageW*imageH;
+	unsigned char *reinit;
+	reinit=(unsigned char *)malloc(imageW*imageH*sizeof(unsigned char));
+	int *intphi;
+	if((intphi=(int *)malloc(imageW*imageH*sizeof(int)))==NULL)printf("ME_INIT\n");
+	
+	for(int i=0;i<N;i++){
+		if(phi[i]<0){
+			phi[i]=1;
+		} else {
+			phi[i]=0;
+		}
+		reinit[i]=(int)phi[i];
+	}
+
+
+	sedt2d(intphi,reinit,imageH,imageW);
+
+	printf("reinit\n");
+	for(int r=0;r<imageH;r++){
+		for(int c=0;c<imageW;c++){
+			phi[r*imageW+c]=(float)intphi[r*imageW+c];
+			if(phi[r*imageW+c]>0){
+				phi[r*imageW+c]=0.5*sqrt(abs(phi[r*imageW+c]));
+			} else {
+				phi[r*imageW+c]=-0.5*sqrt(abs(phi[r*imageW+c]));
+			}
+			//printf("%6.3f ", phi[r*imageW+c]);
+		}
+		//printf("\n");
+	}
+
+	free(reinit);
+	free(intphi);
+}
+
+
+void update_phi(){
 
 	float *dxplus, *ptr2dxplus;
 	if((dxplus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_DX+\n");
@@ -319,13 +361,13 @@ void update_phi(){
 			ptr2gradphi++;
 			ptr2F++;
 		}
-	printf("phi+1\n");
-	for(int r=0;r<imageH;r++){
-		for(int c=0;c<imageW;c++){
-			printf("%6.3f ", phi[r*imageW+c]);
-		}
-		printf("\n");
-	}
+	//printf("phi+1\n");
+	//for(int r=0;r<imageH;r++){
+	//	for(int c=0;c<imageW;c++){
+	//		printf("%6.3f ", phi[r*imageW+c]);
+	//	}
+	//	printf("\n");
+	//}
 
 //printf("Freeing Memory\n");
 if(gradphi!=NULL)free(gradphi);
@@ -338,9 +380,51 @@ if(minminusdyminus!=NULL)free(minminusdyminus);
 
 }
 
-int main(){
+void disp(void){
+	
+	glClear(GL_COLOR_BUFFER_BIT);
 
-	const char *image_path = "squares.bmp";
+	update_phi();
+
+	if(its%25==0){
+			reinit_phi();
+			glutPostRedisplay();
+		}
+
+	for(int i=0;i<N;i++){
+		displayphi[i]=phi[i];
+		if((displayphi[i]<-5) | (displayphi[i]>5)){
+			displayphi[i]=0;
+		} else {
+			displayphi[i]=displayphi[i];
+		}
+	}
+
+	glDrawPixels(imageH, imageW, GL_GREEN, GL_FLOAT, displayphi);
+
+	glutSwapBuffers();
+	
+	its++;
+
+	if(its<ITERATIONS){
+		glutPostRedisplay();
+	} else {
+
+		//printf("phi+1\n");
+		//for(int r=0;r<imageH;r++){
+		//	for(int c=0;c<imageW;c++){
+		//		printf("%3.1f ", phi[r*imageW+c]);
+		//	}
+		//	printf("\n");
+		//}
+	}
+}
+
+
+
+int main(int argc, char** argv){
+
+	const char *image_path = "brain.bmp";
 	
 	//TODO : declare ALL variables here
 
@@ -356,29 +440,44 @@ int main(){
 		//printf("\n");
 	}
 
+	N = imageW*imageH;
 
 	float *ptr2D;
 	ptr2D=D;
-	for(int i=0;i<imageH*imageW;i++){
+	for(int i=0;i<N;i++){
 		*ptr2D = EPSILON - abs(*ptr2D - THRESHOLD);
 		ptr2D++;
 	}
 
-	printf("Speed Function\n");	
-	for(int r=0;r<imageH;r++){
-		for(int c=0;c<imageW;c++){
-			printf("%3.0f ", D[r*imageW+c]);
-		}
-		printf("\n");
-	}
-	
+	//printf("Speed Function\n");	
+	//for(int r=0;r<imageH;r++){
+	//	for(int c=0;c<imageW;c++){
+	//		printf("%3.0f ", D[r*imageW+c]);
+	//	}
+	//	printf("\n");
+	//}
 
 
 	init_phi();
+	if((displayphi=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_PHI\n");
 
-	for(int i=0;i<ITERATIONS;i++){
-		update_phi();
-	}
+		  // GL initialisation
+		  glutInit(&argc, argv);
+		  glutInitDisplayMode(GLUT_ALPHA | GLUT_DOUBLE);
+		  glutInitWindowSize(imageH,imageW);
+		  glutInitWindowPosition(100,100);
+		  glutCreateWindow("Muz's Badass OpenGL Skills Yo");
+		  glClearColor(0.0,0.0,0.0,0.0);
 
-	
+
+		  glutDisplayFunc(disp);
+		  glutMainLoop();
+
+	//printf("phi+1\n");
+	//for(int r=0;r<imageH;r++){
+	//	for(int c=0;c<imageW;c++){
+	//		printf("%6.3f ", phi[r*imageW+c]);
+	//	}
+	//	printf("\n");
+	//}
 }
