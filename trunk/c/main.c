@@ -4,20 +4,21 @@
 #include <float.h>
 #include <GL/glew.h>
 #include <cuda_runtime.h>
-#include <cutil.h>
 #include <math.h>
 #include <GL/glut.h>
 
-#define IMAGE		 "brain.bmp"
+#define IMAGE			"liver.bmp"
+#define IMAGE_FILE_NAME "Output.pgm"
 
-#define ITERATIONS   2000
-#define THRESHOLD	 110
-#define EPSILON		 20
 
-#define ALPHA		 0.03
-#define DT			 0.2
+#define ITERATIONS   500
+#define THRESHOLD	 10
+#define EPSILON		 100
 
-#define RITS		 20
+#define ALPHA		 0.004
+#define DT			 0.3
+
+#define RITS		 200
 
 float *phi, *D, *contour;
 uchar4 *h_Src, *h_Mask;
@@ -30,16 +31,6 @@ void sedt2d(int *_d,unsigned char *_bimg,int _h,int _w);
 
 
 int its=0;
-
-
-
-//printf("\n");	
-//for(int r=0;r<imageH;r++){
-//	for(int c=0;c<imageW;c++){
-//		printf("%3.0f ", dxminus[r*imageW+c]);
-//	}
-//	printf("\n");
-//}
 
 void init_phi(){
 
@@ -101,7 +92,7 @@ void reinit_phi(){
 
 	sedt2d(intphi,reinit,imageH,imageW);
 
-	printf("reinit\n");
+	printf("ReInit @ %4d its\n",its);
 	for(int r=0;r<imageH;r++){
 		for(int c=0;c<imageW;c++){
 			phi[r*imageW+c]=(float)intphi[r*imageW+c];
@@ -122,406 +113,105 @@ void reinit_phi(){
 
 void update_phi(){
 
-	float *ptr2phi;
+float *dx;
+float *dxplus;
+float *dxminus;
+float *dxplusy;
+float *dxminusy;
+float *maxdxplus;
+float *maxminusdxminus;
+float *mindxplus;
+float *minminusdxminus;
 
-	float *dx, *ptr2dx;
-	if((dx=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_DX\n");
-	ptr2dx=dx;
-	ptr2phi=phi;
-	for(int r=0;r<imageH;r++){
-		*ptr2dx=0;
-		for(int c=0;c<imageW-2;c++){
-			ptr2phi++;
-			ptr2dx++;
-			*ptr2dx = (*(ptr2phi+1) - *(ptr2phi-1)) /2 ;
-		}
-		ptr2dx++;
-		*ptr2dx=0;
-		ptr2dx++;
-		ptr2phi++;
-		if(r!=(imageH-1))ptr2phi++;
-	}
+float *dy;
+float *dyplus;
+float *dyminus;
+float *dyplusx;
+float *dyminusx;
+float *maxdyplus;
+float *maxminusdyminus;
+float *mindyplus;
+float *minminusdyminus;
 
-	float *dxplus, *ptr2dxplus;
-	if((dxplus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_DX+\n");
-	for(int i=0;i<N;i++)dxplus[i]=phi[i];
-	ptr2dxplus=dxplus;
-	for(int r=0;r<imageH;r++){
-		for(int c=0;c<imageW-1;c++){
-			*ptr2dxplus = *(ptr2dxplus+1) - *ptr2dxplus;
-			ptr2dxplus++;
-		}
-		*ptr2dxplus=0;
-		ptr2dxplus++;
-	}
+float *gradphimax;
+float *gradphimin;
 
-	float *dxminus, *ptr2dxminus;
-	if((dxminus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_DX-\n");
-	for(int i=0;i<N;i++)dxminus[i]=phi[i];
-	ptr2dxminus=dxminus+N-1;
-	for(int r=0;r<imageH;r++){
-		for(int c=0;c<imageW-1;c++){
-			*ptr2dxminus = *ptr2dxminus - *(ptr2dxminus-1);
-			ptr2dxminus--;
-		}
-		*ptr2dxminus=0;
-		ptr2dxminus--;
-	
-	}
+float *nplusx;
+float *nplusy;
+float *nminusx;
+float *nminusy;
+float *curvature;
 
-	float *dxplusy, *ptr2dxplusy;
-	if((dxplusy=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_dxplusy\n");
-	ptr2dxplusy=dxplusy;
-	ptr2phi=phi;
+float *F;
+float *gradphi;
+
+if((dx=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_DX\n");
+if((dxplus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_DX+\n");
+if((dxminus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_DX-\n");
+if((dxplusy=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_dxplusy\n");
+if((dxminusy=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_dxminusy\n");
+if((maxdxplus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_MDX+\n");
+if((maxminusdxminus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_-MDX-\n");
+if((mindxplus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_MDX+\n");
+if((minminusdxminus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_-MDX-\n");
+
+if((dy=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_dy\n");
+if((dyplus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_dy+\n");
+if((dyminus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_dy+\n");
+if((dyplusx=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_dyplusx\n");
+if((dyminusx=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_dyminusx\n");
+if((maxdyplus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_Mdy+\n");
+if((maxminusdyminus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_-Mdy-\n");
+if((mindyplus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_Mdy+\n");
+if((minminusdyminus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_-Mdy-\n");
+
+if((gradphimax=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("GRADPHIMAX\n");
+if((gradphimin=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("GRADPHImin\n");
+if((nplusx=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("nplusx\n");
+if((nplusy=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("nplusy\n");	
+if((nminusx=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("nminusx\n");
+if((nminusy=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("nminusy\n");
+if((curvature=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("curvature\n");
+
+if((F=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("F\n");
+if((gradphi=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("GRADPHI\n");
+
+for(int r=0;r<imageH;r++){
 	for(int c=0;c<imageW;c++){
-		*ptr2dxplusy = 0;
-		ptr2dxplusy++;
+
+		if(c==0||c>imageW-2){dx[r*imageW+c]=0;} else {dx[r*imageW+c]=(phi[r*imageW+c+1]-phi[r*imageW+c-1])/2;}
+		if(c==imageW-1){dxplus[r*imageW+c]=0;} else {dxplus[r*imageW+c]=(phi[r*imageW+c+1]-phi[r*imageW+c]);}
+		if(c==0){dxminus[r*imageW+c]=0;} else {dxminus[r*imageW+c]=(phi[r*imageW+c]-phi[r*imageW+c-1]);}
+		if(r==0||c==0||c==imageW-1){dxplusy[r*imageW+c]=0;} else {dxplusy[r*imageW+c]=(phi[r*imageW+c-imageW+1]-phi[r*imageW+c-imageW-1])/2;}
+		if(r==imageH-1||c==0||c==imageW-1){dxminusy[r*imageW+c]=0;} else {dxminusy[r*imageW+c]=(phi[r*imageW+c+imageW+1]-phi[r*imageW+c+imageW-1])/2;}
+		if(dxplus[r*imageW+c]<0){maxdxplus[r*imageW+c]=0;} else { maxdxplus[r*imageW+c]= dxplus[r*imageW+c]*dxplus[r*imageW+c]; }
+		if(-dxminus[r*imageW+c]<0){maxminusdxminus[r*imageW+c]=0;} else { maxminusdxminus[r*imageW+c]= dxminus[r*imageW+c]*dxminus[r*imageW+c]; }
+		if(dxplus[r*imageW+c]>0){mindxplus[r*imageW+c]=0;} else { mindxplus[r*imageW+c]= dxplus[r*imageW+c]*dxplus[r*imageW+c]; }
+		if(-dxminus[r*imageW+c]>0){minminusdxminus[r*imageW+c]=0;} else { minminusdxminus[r*imageW+c]= dxminus[r*imageW+c]*dxminus[r*imageW+c]; }
+
+		if(r==0||r==imageH-1){dy[r*imageW+c]=0;} else {dy[r*imageW+c]=(phi[r*imageW+c-imageW]-phi[r*imageW+c+imageW])/2;}
+		if(r==0){dyplus[r*imageW+c]=0;} else {dyplus[r*imageW+c]=(phi[r*imageW+c-imageW]-phi[r*imageW+c]);}
+		if(r==imageH-1){dyminus[r*imageW+c]=0;} else {dyminus[r*imageW+c]=(phi[r*imageW+c]-phi[r*imageW+c+imageW]);}
+		if(r==0||c==imageW-1||r==imageH-1){dyplusx[r*imageW+c]=0;} else {dyplusx[r*imageW+c]=(phi[r*imageW+c-imageW+1]-phi[r*imageW+c+imageW+1])/2;}
+		if(r==0||c==0||r==imageH-1){dyminusx[r*imageW+c]=0;} else {dyminusx[r*imageW+c]=(phi[r*imageW+c-imageW-1]-phi[r*imageW+c+imageW-1])/2;}
+		if(dyplus[r*imageW+c]<0){maxdyplus[r*imageW+c]=0;} else { maxdyplus[r*imageW+c]= dyplus[r*imageW+c]*dyplus[r*imageW+c]; }
+		if(-dyminus[r*imageW+c]<0){maxminusdyminus[r*imageW+c]=0;} else { maxminusdyminus[r*imageW+c]= dyminus[r*imageW+c]*dyminus[r*imageW+c]; }
+		if(dyplus[r*imageW+c]>0){mindyplus[r*imageW+c]=0;} else { mindyplus[r*imageW+c]= dyplus[r*imageW+c]*dyplus[r*imageW+c]; }
+		if(-dyminus[r*imageW+c]>0){minminusdyminus[r*imageW+c]=0;} else { minminusdyminus[r*imageW+c]= dyminus[r*imageW+c]*dyminus[r*imageW+c]; }
+
+		gradphimax[r*imageW+c]=sqrt((sqrt(maxdxplus[r*imageW+c]+maxminusdxminus[r*imageW+c]))*(sqrt(maxdxplus[r*imageW+c]+maxminusdxminus[r*imageW+c]))+(sqrt(maxdyplus[r*imageW+c]+maxminusdyminus[r*imageW+c]))*(sqrt(maxdyplus[r*imageW+c]+maxminusdyminus[r*imageW+c])));
+		gradphimin[r*imageW+c]=sqrt((sqrt(mindxplus[r*imageW+c]+minminusdxminus[r*imageW+c]))*(sqrt(mindxplus[r*imageW+c]+minminusdxminus[r*imageW+c]))+(sqrt(mindyplus[r*imageW+c]+minminusdyminus[r*imageW+c]))*(sqrt(mindyplus[r*imageW+c]+minminusdyminus[r*imageW+c])));
+		nplusx[r*imageW+c]= dxplus[r*imageW+c] / sqrt(FLT_EPSILON + (dxplus[r*imageW+c]*dxplus[r*imageW+c]) + ((dyplusx[r*imageW+c] + dy[r*imageW+c])*(dyplusx[r*imageW+c] + dy[r*imageW+c])*0.25) );
+		nplusy[r*imageW+c]= dyplus[r*imageW+c] / sqrt(FLT_EPSILON + (dyplus[r*imageW+c]*dyplus[r*imageW+c]) + ((dxplusy[r*imageW+c] + dx[r*imageW+c])*(dxplusy[r*imageW+c] + dx[r*imageW+c])*0.25) );
+		nminusx[r*imageW+c]= dxminus[r*imageW+c] / sqrt(FLT_EPSILON + (dxminus[r*imageW+c]*dxminus[r*imageW+c]) + ((dyminusx[r*imageW+c] + dy[r*imageW+c])*(dyminusx[r*imageW+c] + dy[r*imageW+c])*0.25) );
+		nminusy[r*imageW+c]= dyminus[r*imageW+c] / sqrt(FLT_EPSILON + (dyminus[r*imageW+c]*dyminus[r*imageW+c]) + ((dxminusy[r*imageW+c] + dx[r*imageW+c])*(dxminusy[r*imageW+c] + dx[r*imageW+c])*0.25) );
+		curvature[r*imageW+c]= ((nplusx[r*imageW+c]-nminusx[r*imageW+c])+(nplusy[r*imageW+c]-nminusy[r*imageW+c])/2);
+
+		F[r*imageW+c] = (ALPHA * D[r*imageW+c]) + ((1-ALPHA) * curvature[r*imageW+c]);
+		if(F[r*imageW+c]>0) {gradphi[r*imageW+c]=gradphimax[r*imageW+c];} else {gradphi[r*imageW+c]=gradphimin[r*imageW+c];}
+		phi[r*imageW+c]=phi[r*imageW+c] + (DT * F[r*imageW+c] * gradphi[r*imageW+c]);
 	}
-	for(int r=0;r<imageH-1;r++){
-		*ptr2dxplusy=0;
-		for(int c=0;c<imageW-2;c++){
-			ptr2phi++;
-			ptr2dxplusy++;
-			*ptr2dxplusy = (*(ptr2phi+1) - *(ptr2phi-1)) /2 ;
-		}
-		ptr2dxplusy++;
-		*ptr2dxplusy=0;
-		ptr2dxplusy++;
-		ptr2phi++;
-		if(r!=(imageH-2))ptr2phi++;
-	}
-
-	float *dxminusy, *ptr2dxminusy;
-	if((dxminusy=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_dxminusy\n");
-	ptr2dxminusy=dxminusy;
-	ptr2phi=phi+imageW;
-	for(int r=0;r<imageH-1;r++){
-		*ptr2dxminusy=0;
-		for(int c=0;c<imageW-2;c++){
-			ptr2phi++;
-			ptr2dxminusy++;
-			*ptr2dxminusy = (*(ptr2phi+1) - *(ptr2phi-1) );
-		}
-		ptr2dxminusy++;
-		*ptr2dxminusy=0;
-		ptr2dxminusy++;
-		ptr2phi++;
-		if(r!=(imageH-2))ptr2phi++;
-	}
-	for(int c=0;c<imageW;c++){
-		*ptr2dxminusy = 0;
-		ptr2dxminusy++;
-	}
-
-	float *maxdxplus, *ptr2maxdxplus;
-	if((maxdxplus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_MDX+\n");
-	for(int i=0;i<N;i++)maxdxplus[i]=dxplus[i];
-	ptr2maxdxplus = maxdxplus;
-	for(int i=0;i<N;i++){
-		if (*ptr2maxdxplus < 0) {
-			*ptr2maxdxplus = 0;
-		} else {
-			*ptr2maxdxplus *= *ptr2maxdxplus;
-		}
-		ptr2maxdxplus++;
-	}
-
-	float *maxminusdxminus, *ptr2maxminusdxminus;
-	if((maxminusdxminus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_-MDX-\n");
-	for(int i=0;i<N;i++)maxminusdxminus[i]=-dxminus[i];
-	ptr2maxminusdxminus = maxminusdxminus;
-	for(int i=0;i<N;i++){
-		if (*ptr2maxminusdxminus < 0) {
-			*ptr2maxminusdxminus = 0;
-		} else {
-			*ptr2maxminusdxminus *= *ptr2maxminusdxminus;
-		}
-		ptr2maxminusdxminus++;
-	}
-
-	float *mindxplus, *ptr2mindxplus;
-	if((mindxplus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_MDX+\n");
-	for(int i=0;i<N;i++)mindxplus[i]=dxplus[i];
-	ptr2mindxplus = mindxplus;
-	for(int i=0;i<N;i++){
-		if (*ptr2mindxplus > 0) {
-			*ptr2mindxplus = 0;
-		} else {
-			*ptr2mindxplus *= *ptr2mindxplus;
-		}
-		ptr2mindxplus++;
-	}
-
-	float *minminusdxminus, *ptr2minminusdxminus;
-	if((minminusdxminus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_-MDX-\n");
-	for(int i=0;i<N;i++)minminusdxminus[i]=-dxminus[i];
-	ptr2minminusdxminus = minminusdxminus;
-	for(int i=0;i<N;i++){
-		if (*ptr2minminusdxminus > 0) {
-			*ptr2minminusdxminus = 0;
-		} else {
-			*ptr2minminusdxminus *= *ptr2minminusdxminus;
-		}
-		ptr2minminusdxminus++;
-	}
-
-	//////// DY ////////
-
-	float *dy, *ptr2dy;
-	if((dy=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_dy\n");
-	ptr2dy=dy;
-	ptr2phi=phi;
-	for(int c=0;c<imageW;c++){
-		*ptr2dy = 0;
-		ptr2dy++;
-		ptr2phi++;
-	}
-	for(int r=0;r<imageH-2;r++){
-		for(int c=0;c<imageW;c++){
-			*ptr2dy = (*(ptr2phi-imageW) - *(ptr2phi+imageW))/2;
-			ptr2dy++;
-			ptr2phi++;
-		}
-	}
-	for(int c=0;c<imageW;c++){
-		*ptr2dy = 0;
-		ptr2dy++;
-		ptr2phi++;
-	}
-
-	float *dyplus, *ptr2dyplus;
-	if((dyplus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_dy+\n");
-	for(int i=0;i<N;i++)dyplus[i]=phi[i];
-	ptr2dyplus=dyplus+N-1;
-	for(int r=0;r<imageH-1;r++){
-		for(int c=0;c<imageW;c++){
-			*ptr2dyplus = *(ptr2dyplus-imageW) - *ptr2dyplus;
-			ptr2dyplus--;
-		}
-	}
-	for(int c=0;c<imageW;c++){
-		*ptr2dyplus = 0;
-		ptr2dyplus--;
-	}
-
-	float *dyminus, *ptr2dyminus;
-	if((dyminus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_dy+\n");
-	for(int i=0;i<N;i++)dyminus[i]=phi[i];
-	ptr2dyminus=dyminus;
-	for(int r=0;r<imageH-1;r++){
-		for(int c=0;c<imageW;c++){
-			*ptr2dyminus = *ptr2dyminus - *(ptr2dyminus+imageW);
-			ptr2dyminus++;
-		}
-	}
-	for(int c=0;c<imageW;c++){
-		*ptr2dyminus = 0;
-		ptr2dyminus++;
-	}
-
-	float *dyplusx, *ptr2dyplusx;
-	if((dyplusx=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_dyplusx\n");
-	ptr2dyplusx=dyplusx;
-	ptr2phi=phi;
-	for(int c=0;c<imageW;c++){
-		*ptr2dyplusx = 0;
-		ptr2dyplusx++;
-		ptr2phi++;
-	}
-	for(int r=0;r<imageH-2;r++){
-		for(int c=0;c<imageW-1;c++){
-			ptr2phi++;
-			*ptr2dyplusx = (*(ptr2phi-imageW) - *(ptr2phi+imageW))/2;
-			ptr2dyplusx++;
-		}
-		*ptr2dyplusx=0;
-		ptr2dyplusx++;
-		ptr2phi++;
-	}
-	for(int c=0;c<imageW;c++){
-		*ptr2dyplusx = 0;
-		ptr2dyplusx++;
-	}
-
-	float *dyminusx, *ptr2dyminusx;
-	if((dyminusx=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_dyminusx\n");
-	ptr2dyminusx=dyminusx;
-	ptr2phi=phi;
-	for(int c=0;c<imageW;c++){
-		*ptr2dyminusx = 0;
-		ptr2dyminusx++;
-		ptr2phi++;
-	}
-	for(int r=0;r<imageH-2;r++){
-		*ptr2dyminusx=0;
-		for(int c=0;c<imageW-1;c++){
-			ptr2dyminusx++;
-			*ptr2dyminusx = (*(ptr2phi-imageW) - *(ptr2phi+imageW))/2;
-			ptr2phi++;
-		}
-		ptr2dyminusx++;
-		ptr2phi++;
-	}
-	for(int c=0;c<imageW;c++){
-		*ptr2dyminusx = 0;
-		ptr2dyminusx++;
-	}
-
-	float *maxdyplus, *ptr2maxdyplus;
-	if((maxdyplus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_Mdy+\n");
-	for(int i=0;i<N;i++)maxdyplus[i]=dyplus[i];
-	ptr2maxdyplus = maxdyplus;
-	for(int i=0;i<N;i++){
-		if (*ptr2maxdyplus < 0) {
-			*ptr2maxdyplus = 0;
-		} else {
-			*ptr2maxdyplus *= *ptr2maxdyplus;
-		}
-		ptr2maxdyplus++;
-	}
-
-	float *maxminusdyminus, *ptr2maxminusdyminus;
-	if((maxminusdyminus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_-Mdy-\n");
-	for(int i=0;i<N;i++)maxminusdyminus[i]=-dyminus[i];
-	ptr2maxminusdyminus = maxminusdyminus;
-	for(int i=0;i<N;i++){
-		if (*ptr2maxminusdyminus < 0) {
-			*ptr2maxminusdyminus = 0;
-		} else {
-			*ptr2maxminusdyminus *= *ptr2maxminusdyminus;
-		}
-		ptr2maxminusdyminus++;
-	}
-
-	float *mindyplus, *ptr2mindyplus;
-	if((mindyplus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_Mdy+\n");
-	for(int i=0;i<N;i++)mindyplus[i]=dyplus[i];
-	ptr2mindyplus = mindyplus;
-	for(int i=0;i<N;i++){
-		if (*ptr2mindyplus > 0) {
-			*ptr2mindyplus = 0;
-		} else {
-			*ptr2mindyplus *= *ptr2mindyplus;
-		}
-		ptr2mindyplus++;
-	}
-
-	float *minminusdyminus, *ptr2minminusdyminus;
-	if((minminusdyminus=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("ME_-Mdy-\n");
-	for(int i=0;i<N;i++)minminusdyminus[i]=-dyminus[i];
-	ptr2minminusdyminus = minminusdyminus;
-	for(int i=0;i<N;i++){
-		if (*ptr2minminusdyminus > 0) {
-			*ptr2minminusdyminus = 0;
-		} else {
-			*ptr2minminusdyminus *= *ptr2minminusdyminus;
-		}
-		ptr2minminusdyminus++;
-	}
-
-		float *gradphimax;
-		if((gradphimax=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("GRADPHIMAX\n");
-		for(int i=0;i<N;i++){
-			gradphimax[i]=sqrt((sqrt(maxdxplus[i]+maxminusdxminus[i]))*(sqrt(maxdxplus[i]+maxminusdxminus[i]))+(sqrt(maxdyplus[i]+maxminusdyminus[i]))*(sqrt(maxdyplus[i]+maxminusdyminus[i])));
-		}
-
-		float *gradphimin;
-		if((gradphimin=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("GRADPHImin\n");
-		for(int i=0;i<N;i++){
-			gradphimin[i]=sqrt((sqrt(mindxplus[i]+minminusdxminus[i]))*(sqrt(mindxplus[i]+minminusdxminus[i]))+(sqrt(mindyplus[i]+minminusdyminus[i]))*(sqrt(mindyplus[i]+minminusdyminus[i])));
-		}
-
-			float *nplusx;
-			if((nplusx=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("nplusx\n");
-			for(int i=0;i<N;i++){
-				nplusx[i]= dxplus[i] / sqrt(FLT_EPSILON + (dxplus[i]*dxplus[i]) + ((dyplusx[i] + dy[i])*(dyplusx[i] + dy[i])*0.25) );
-			}
-			float *nplusy;
-			if((nplusy=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("nplusy\n");
-			for(int i=0;i<N;i++){
-				nplusy[i]= dyplus[i] / sqrt(FLT_EPSILON + (dyplus[i]*dyplus[i]) + ((dxplusy[i] + dx[i])*(dxplusy[i] + dx[i])*0.25) );
-			}			
-			
-			float *nminusx;
-			if((nminusx=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("nminusx\n");
-			for(int i=0;i<N;i++){
-				nminusx[i]= dxminus[i] / sqrt(FLT_EPSILON + (dxminus[i]*dxminus[i]) + ((dyminusx[i] + dy[i])*(dyminusx[i] + dy[i])*0.25) );
-			}			
-			
-			float *nminusy;
-			if((nminusy=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("nminusy\n");
-			for(int i=0;i<N;i++){
-				nminusy[i]= dyminus[i] / sqrt(FLT_EPSILON + (dyminus[i]*dyminus[i]) + ((dxminusy[i] + dx[i])*(dxminusy[i] + dx[i])*0.25) );
-			}
-
-			float *curvature, *ptr2curvature;
-			if((curvature=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("curvature\n");
-			for(int i=0;i<N;i++){
-				curvature[i]= ((nplusx[i]-nminusx[i])+(nplusy[i]-nminusy[i])/2);
-			}
-	
-
-		float *F, *ptr2F, *ptr2D;
-		if((F=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("F\n");
-		ptr2F=F;
-		ptr2D=D;
-		ptr2curvature=curvature;
-		for(int i=0;i<N;i++){
-			*ptr2F = (ALPHA * (*ptr2D)) + ( (1-ALPHA) * (*ptr2curvature));
-			ptr2F++;
-			ptr2D++;
-			ptr2curvature++;
-		}
-
-//		printf("\n");	
-//for(int r=0;r<imageH;r++){
-//	for(int c=0;c<imageW;c++){
-//		printf("%3.1f ", curvature[r*imageW+c]);
-//	}
-//	printf("\n");
-//}
-//		exit(0);
-
-		float *gradphi, *ptr2gradphi, *ptr2gradphimax, *ptr2gradphimin;
-		if((gradphi=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("GRADPHI\n");
-		ptr2gradphi=gradphi;
-		ptr2gradphimax=gradphimax;
-		ptr2gradphimin=gradphimin;
-		ptr2F=F;
-		for(int i=0; i<N; i++){
-			if(*ptr2F>0){
-				*ptr2gradphi = *ptr2gradphimax;
-			} else {
-				*ptr2gradphi = *ptr2gradphimin;
-			}
-			ptr2gradphi++;
-			ptr2F++;
-			ptr2gradphimax++;
-			ptr2gradphimin++;
-		}
-
-		ptr2phi=phi;
-		ptr2gradphi=gradphi;
-		ptr2F=F;
-		for(int i=0; i<N; i++){
-			*ptr2phi = *ptr2phi + DT * (*ptr2F) * (*ptr2gradphi);
-			ptr2phi++;
-			ptr2gradphi++;
-			ptr2F++;
-		}
-
-	//printf("phi+1\n");
-	//for(int r=0;r<imageH;r++){
-	//	for(int c=0;c<imageW;c++){
-	//		printf("%6.3f ", phi[r*imageW+c]);
-	//	}
-	//	printf("\n");
-	//}
-
-//printf("Freeing Memory\n");
-
-
-
+}
 
 free(dx);
 free(dxplus);
@@ -571,11 +261,11 @@ void disp(void){
 		if((contour[i]<-3) | (contour[i]>3)){
 			contour[i]=0;
 		} else {
-			contour[i]=contour[i];
+			contour[i]=contour[i]/3;
 		}
 	}
 
-	glDrawPixels(imageH, imageW, GL_GREEN, GL_FLOAT, phi);
+	glDrawPixels(imageW, imageH, GL_GREEN, GL_FLOAT, contour);
 
 	glutSwapBuffers();
 	
@@ -585,13 +275,28 @@ void disp(void){
 		glutPostRedisplay();
 	} else {
 
-		//printf("phi+1\n");
-		//for(int r=0;r<imageH;r++){
-		//	for(int c=0;c<imageW;c++){
-		//		printf("%3.1f ", phi[r*imageW+c]);
-		//	}
-		//	printf("\n");
-		//}
+		printf("Writing Output\n");
+		for(int i=0;i<N;i++){
+			if(phi[i]>0){
+				D[i]=0;
+			} else {
+				D[i]= D[i];
+			}
+			FILE* imagefile;
+			imagefile=fopen(IMAGE_FILE_NAME, "w");
+
+			if( imagefile == NULL)
+			{
+				perror( "Can't create '" IMAGE_FILE_NAME "'");
+				exit( 1);
+			}
+
+			fprintf(imagefile,"P5\n%u %u 255\n", imageW,imageH );
+			fwrite(D, 4, N, imagefile);
+			fclose(imagefile);
+			exit(0);
+
+		}
 	}
 }
 
@@ -609,7 +314,7 @@ int main(int argc, char** argv){
 	//printf("Input Image\n");
 	for(int r=0;r<imageH;r++){
 		for(int c=0;c<imageW;c++){
-			D[r*imageW+c] = h_Src[r*imageW+c].x;
+			D[(r)*imageW+c] = h_Src[r*imageW+c].x;
 			/*printf("%3.0f ", D[r*imageW+c]);*/
 		}
 		//printf("\n");
@@ -617,11 +322,8 @@ int main(int argc, char** argv){
 
 	N = imageW*imageH;
 
-	float *ptr2D;
-	ptr2D=D;
 	for(int i=0;i<N;i++){
-		*ptr2D = EPSILON - abs(*ptr2D - THRESHOLD);
-		ptr2D++;
+		D[i] = EPSILON - abs(D[i] - THRESHOLD);
 	}
 
 	//printf("Speed Function\n");	
@@ -636,10 +338,12 @@ int main(int argc, char** argv){
 	init_phi();
 	if((contour=(float *)malloc(imageW*imageH*sizeof(float)))==NULL)printf("Contour\n");
 
+//update_phi();
+
 		  // GL initialisation
 		  glutInit(&argc, argv);
 		  glutInitDisplayMode(GLUT_ALPHA | GLUT_DOUBLE);
-		  glutInitWindowSize(imageH,imageW);
+		  glutInitWindowSize(imageW,imageH);
 		  glutInitWindowPosition(100,100);
 		  glutCreateWindow("GL Level Set Evolution");
 		  glClearColor(0.0,0.0,0.0,0.0);
@@ -656,3 +360,10 @@ int main(int argc, char** argv){
 	//	printf("\n");
 	//}
 }
+
+
+//TODO Memory Malloc Free
+
+//TODO Timer
+
+//TODO Comment Code
