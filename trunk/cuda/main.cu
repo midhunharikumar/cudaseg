@@ -4,35 +4,43 @@
 #include <float.h>
 #include <GL/glew.h>
 #include <cuda_runtime.h>
+#include <cutil.h>
 #include <math.h>
 #include <GL/glut.h>
 
 #define IMAGE			"bigbrain.bmp"
 
 #define ITERATIONS   5000
-#define THRESHOLD	 100
-#define EPSILON		 40
+#define THRESHOLD	 60
+#define EPSILON		 10
 
 #define RITS		 50
 
+#define BLOCKDIM_X	 4
+#define BLOCKDIM_Y	 32
+
+
 float *phi, *D;
 uchar4 *h_Src, *h_Mask;
-int imageW, imageH, N;
+int imageW, imageH, N, pitch;
+size_t pitchbytes;
 
 float *d_phi, *d_D;
-
+float *d_phi1;
 
 void LoadBMPFile(uchar4 **dst, int *width, int *height, const char *name);
 void sedt2d(int *_d,unsigned char *_bimg,int _h,int _w);
 
 
 int its=0;
+unsigned int Timer = 0;
+unsigned int ReInitTimer = 0;
 
 int r;
 int c;
 int i;
 
-__global__ void updatephi( float *d_phi, float *d_phi1, float *d_D, int imageW, int imageH);
+__global__ void updatephi( float *d_phi, float *d_phi1, float *d_D, int imageW, int imageH, int pitch);
 
 void init_phi(){
 
@@ -75,105 +83,152 @@ void init_phi(){
 	free(mask);
 }
 
+void reinit_phi(){
 
+	int *intphi;
+	unsigned char *reinit;
+	if((intphi=(int *)malloc(imageW*imageH*sizeof(int)))==NULL)printf("ME_INIT\n");
+	reinit=(unsigned char *)malloc(imageW*imageH*sizeof(unsigned char));//TODO check
+
+	for(i=0;i<N;i++){
+		if(phi[i]<0){
+			phi[i]=1;
+		} else {
+			phi[i]=0;
+		}
+		reinit[i]=(int)phi[i];
+	}
+
+
+	sedt2d(intphi,reinit,imageH,imageW);
+
+	/*printf("ReInit @ %4d its\n",its);*/
+	for(r=0;r<imageH;r++){
+		for(c=0;c<imageW;c++){
+			phi[r*imageW+c]=(float)intphi[r*imageW+c];
+			if(phi[r*imageW+c]>0){
+				phi[r*imageW+c]=0.5*sqrt(abs(phi[r*imageW+c]));
+			} else {
+				phi[r*imageW+c]=-0.5*sqrt(abs(phi[r*imageW+c]));
+			}
+			//printf("%6.3f ", phi[r*imageW+c]);
+		}
+		//printf("\n");
+	}
+
+	free(reinit);
+	free(intphi);
+}
 
 void cuda_update(){
 
-    float *d_phi1;
+
+	dim3 dimGrid( ((imageW-1)/BLOCKDIM_X) + 1, ((imageH-1)/BLOCKDIM_Y) +1 );
+	dim3 dimBlock(BLOCKDIM_X, BLOCKDIM_Y);
+
 	
-	cudaMalloc((void**)&d_phi1,         sizeof(float)*imageW*imageH);
+	updatephi<<< dimGrid, dimBlock>>>(d_phi, d_phi1, d_D,  imageW, imageH, pitch);
 
-	cudaMemcpy(d_phi1, phi, sizeof(float)*imageW*imageH, cudaMemcpyHostToDevice);
+	d_phi=d_phi1;
+	
 
-
-	dim3 dimGrid( ((imageW-1)/4) + 1, ((imageH-1)/32) +1 );
-	dim3 dimBlock(4, 32);
-
-
-	updatephi<<< dimGrid, dimBlock>>>(d_phi, d_phi1, d_D,  imageW, imageH);
-
-	cudaMemcpy(phi, d_phi, sizeof(float)*imageW*imageH, cudaMemcpyDeviceToHost);
-
-
-	printf("%3d\n", its);
-	//printf("Speed Function\n");	
-	//for(int r=0;r<imageH;r++){
-	//	for(int c=0;c<imageW;c++){
-	//		printf("%4.1f ", phi[r*imageW+c]);
-	//	}
-	//	printf("\n");
-	//}
-
-
-	cudaFree(d_phi1);
 
 }
 
 void disp(void){
 	
+	
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	cuda_update();
-
-	glDrawPixels(imageW, imageH, GL_GREEN, GL_FLOAT, phi);
-
-	glutSwapBuffers();
 	
+	cuda_update();
+	
+
 	its++;
 
 	if(its<ITERATIONS){
 		glutPostRedisplay();
-	} else {
+		
+		if(its%50==0){
+			
+			printf("Iteration %3d Total Time: %3.2f ReInit Time: %3.2f\n", its, 0.001*cutGetTimerValue(Timer), 0.001*cutGetTimerValue(ReInitTimer));
+			
+			cutStartTimer(ReInitTimer); // ReInit Timer Start
+			cudaMemcpy(phi, d_phi, sizeof(float)*imageW*imageH, cudaMemcpyDeviceToHost);
 
+			reinit_phi(); // ReInit
+
+			glDrawPixels(imageW, imageH, GL_GREEN, GL_FLOAT, phi);
+			glutSwapBuffers();
+			cutStopTimer(ReInitTimer); // ReInit Timer Stop
 		}
+
+	} else {
+		
+		printf("Iteration %3d Total Time: %3.2f ReInit Time: %3.2f\n", its, 0.001*cutGetTimerValue(Timer), 0.001*cutGetTimerValue(ReInitTimer));
+
+		cudaMemcpy(phi, d_phi, sizeof(float)*imageW*imageH, cudaMemcpyDeviceToHost);
+		glDrawPixels(imageW, imageH, GL_GREEN, GL_FLOAT, phi);
+		glutSwapBuffers();
+
+
+
+	}
+	
 }
 
 int main(int argc, char** argv){
 
+	// Load the Input Image using BMPLoader
 	const char *image_path = IMAGE;
-	
-	//TODO : declare ALL variables here
-
 	LoadBMPFile(&h_Src, &imageW, &imageH, image_path);
 	D = (float *)malloc(imageW*imageH*sizeof(float));
-
-	//printf("Input Image\n");
 	for(r=0;r<imageH;r++){
 		for(c=0;c<imageW;c++){
 			D[r*imageW+c] = h_Src[r*imageW+c].x;
-			/*printf("%3.0f ", D[r*imageW+c]);*/
 		}
-		//printf("\n");
 	}
 
 	N = imageW*imageH;
 
+	// Threshold based on hash defined paramters
 	for(i=0;i<N;i++){
 		D[i] = EPSILON - abs(D[i] - THRESHOLD);
 	}
 
+	// Init phi to SDF
 	init_phi();
 
+	// Set up CUDA Timer
+	cutCreateTimer(&Timer);
+	cutCreateTimer(&ReInitTimer);
 
+	cutStartTimer(Timer);
 
-	cudaMalloc((void**)&d_D,         sizeof(float)*imageW*imageH);
-    cudaMemcpy(d_D, D, sizeof(float)*imageW*imageH, cudaMemcpyHostToDevice);
+	// Allocate Memory on Device
+	cudaMallocPitch((void**)&d_D,			  &pitchbytes, sizeof(float)*imageW, imageH);
+	cudaMallocPitch((void**)&d_phi,           &pitchbytes, sizeof(float)*imageW, imageH);
+	cudaMallocPitch((void**)&d_phi1,          &pitchbytes, sizeof(float)*imageW, imageH);
 
-	cudaMalloc((void**)&d_phi, sizeof(float)*imageW*imageH);
-	
+	pitch=pitchbytes/sizeof(float);
 
-		  // GL initialisation
-		  glutInit(&argc, argv);
-		  glutInitDisplayMode(GLUT_ALPHA | GLUT_DOUBLE);
-		  glutInitWindowSize(imageW,imageH);
-		  glutInitWindowPosition(100,100);
-		  glutCreateWindow("GL Level Set Evolution");
-		  glClearColor(0.0,0.0,0.0,0.0);
+	// Copy Host Thresholding Data to Device Memory
+	cudaMemcpy2D(d_D,    pitchbytes, D,	  sizeof(float)*imageW,	sizeof(float)*imageW, imageH, cudaMemcpyHostToDevice);
+	cudaMemcpy2D(d_phi1, pitchbytes, phi, sizeof(float)*imageW, sizeof(float)*imageW, imageH, cudaMemcpyHostToDevice);
 
+	// Init GL Window
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_ALPHA | GLUT_DOUBLE);
+	glutInitWindowSize(imageW,imageH);
+	glutInitWindowPosition(100,100);
+	glutCreateWindow("GL Level Set Evolution");
+	glClearColor(0.0,0.0,0.0,0.0);
+	glutDisplayFunc(disp);
+	glutMainLoop();
 
-		  glutDisplayFunc(disp);
-		  glutMainLoop();
-	
+		cudaFree(d_D);
+		cudaFree(d_phi1);
+		cudaFree(d_phi);
 }
 
 
@@ -181,6 +236,6 @@ int main(int argc, char** argv){
 
 //TODO Memory Malloc Free
 
-//TODO Timer
-
 //TODO Comment Code
+
+//TODO Cutil PGm
