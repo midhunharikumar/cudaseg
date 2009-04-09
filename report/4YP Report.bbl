@@ -1,0 +1,22 @@
+\begin{thebibliography}{1}
+
+\bibitem{gist}
+J.E. Cates, A.E. Lefohn, and R.T. Whitaker.
+\newblock {GIST: an interactive, GPU-based level set segmentation tool for 3D
+  medical images}.
+\newblock {\em Medical Image Analysis}, 8(3):217--231, 2004.
+
+\bibitem{Lefohn04astreaming}
+Aaron~E. Lefohn, Joe~M. Kniss, Charles~D. Hansen, and Ross~T. Whitaker.
+\newblock A streaming narrow-band algorithm: Interactive computation and
+  visualization of level sets.
+\newblock {\em IEEE Transactions on Visualization and Computer Graphics},
+  10:422--433, 2004.
+
+\bibitem{oshersethian}
+Stanley Osher and James~A. Sethian.
+\newblock Fronts propagating with curvature dependent speed: algorithms based
+  on hamilton-jacobi formulations.
+\newblock {\em Journal of Computational Physics}, 79:12--49, 1988.
+
+\end{thebibliography}

@@ -1,0 +1,107 @@
+\documentclass{report}
+\usepackage{graphicx}
+\usepackage[a4paper]{geometry}
+\pagestyle{headings}
+
+\begin{document}
+
+\title{Fast Level Set Segmentation of Biomedical Images using Graphics Processing Units}
+\author{Hormuz~Mostofi}
+\date{\today}
+\maketitle
+
+\tableofcontents
+
+\chapter{Introduction}
+
+\chapter{Background and Related Work}
+	\section{Image Segmentation using Level Sets}
+	
+\subsection{Image Segmentation}
+\subsection{Level Set Method}
+The level set method evolves a contour (in two dimensions) or a surface (in three dimensions) implicitly by manipulating a higher dimensional function, called the level set function $\phi(\textbf{x,t})$. The evolving contour or surface can be extracted from the zero level set $\Gamma(\textbf{x,t})=\left\{\phi(\textbf{x,t}) = \textbf{0}\right\}$. The advantage of using this method is that topological changes such as merging and splitting of the contour or surface are catered for implicitly, as can be seen below in figure \ref{fig:levelsets}. The level set method, since its introduction by Osher and Sethian in \cite{oshersethian}, has seen widespread application in image processing, computer graphics and physical simulation.
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[scale=0.6]{images/levelsets.png}
+	\caption{The relationship between the level set function (left) and contour (right) can be seen. It can be seen evolving the surface splits the contour.}
+	\label{fig:levelsets}
+\end{figure}
+
+The evolution of the contour or surface is governed by a level set equation. The solution tended to by this partial differential equation is computed iteratively by updating $\phi$ at each time interval. The general form of the level set equation is shown below.
+
+\begin{equation}
+\frac{\partial{\phi}}{\partial{t}}=-|\nabla{\phi|}\cdot v
+\end{equation}
+
+In the above level set equation $v$ is the velocity term that describes the level set evolution. By manipulating $v$, we can converge the level set to different areas or shapes, given an initialisation of the level set function. Typically, for applications in image segmentation $v$ is dependent on the image intensity values or curvature values of the level set. It may also be dependent on an edge indicator function, which is defined as having a value zero on an edge, and zero otherwise. This causes $v$ to slow the level set evolution when on an edge.
+
+In \cite{Lefohn04astreaming} $v$ is dependent on a data term and a curvature term (with a weighting term between the two) for the purposes of image segmentation. Therefore, the level set equation takes the form
+
+\begin{equation}
+\frac{\partial{\phi}}{\partial{t}}=-|\nabla{\phi}|\left[\alpha D(\bar{x})  + (1-\alpha)\nabla \cdot{\frac{\nabla{\phi}}{|\nabla{\phi|}}}\right]
+\end{equation}
+
+where the data function $D(I)$ tends the solution towards targeted features, and the mean curvature term $\nabla \cdot{(\nabla{\phi}/|\nabla{\phi|})}$ keeps the level set function smooth. Weighting between these two is $\alpha \in [0,1]$, a free parameter that is set beforehand to control how smooth the contour or surface should be.
+
+The data function $D(I)$ acts as the principal 'force' that drives the segmentation. By making $D$ positive in desired regions or negative in undesired regions, the model will tend towards the segmentation sought after. A simple speed function that fulfills this purpose, used in \cite{gist}, is given by
+
+\begin{equation}
+D(I)= \epsilon - |I-T|
+\end{equation}
+
+which is plotted in figure \ref{fig:speedterm}. Here $T$ describes the central intensity value of the region to be segmented, and $\epsilon$ describes the intensity deviation around T that is part of the desired segmentation. Therefore if a pixel or voxel has an intensity value within the $T\pm\epsilon$ range the model will expand, and otherwise it will contract. 
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[scale=0.35]{images/speedterm.png}
+	\caption{The speed term from \cite{gist}}
+	\label{fig:speedterm}
+\end{figure}
+
+Therefore the three user parameters that need to be specified for segmentation are $T$,$\epsilon$ and $\alpha$. An initialization for the level set function is also required, which may take the form of a cube in three dimensions or a square in two dimensions, or any other arbitrary closed shape. 
+
+
+With this initial mask, the level set surface is initialized to a signed Euclidean distance transform of the mask (defined as $\phi<0$ inside, $\phi>0$ outside) before iteration of the level set equation begins.
+
+
+	\section{Parallel Processing}
+		\subsection{GPGPU}
+		\subsection{CUDA}
+			\subsubsection{Hardware Issues}
+			\subsubsection{Software Issues}
+
+\chapter{Implementation}
+
+	\section{Level Set Algorithm}
+
+	\section{Sequential Implementation}
+		\subsection{Matlab}
+		\subsection{C}
+
+	\section{Parallel Implemention}
+		\subsection{Block and Grid Sizes}
+		\subsection{Shared Memory}
+	
+
+\chapter{Results}
+	\section{Speed Tests and Analysis}
+	\section{Limitations}
+	
+
+\chapter{Conclusions and Future Work}
+	\section{Conclusion}
+	\section{Future Work}
+	
+
+\chapter{References}
+
+\chapter{Appendix}
+
+
+
+\bibliographystyle{plain}
+\bibliography{References}
+
+
+\end{document}
