@@ -15,18 +15,20 @@ The level set method evolves a contour (in two dimensions) or a surface (in thre
 The evolution of the contour or surface is governed by a level set equation. The solution tended to by this partial differential equation is computed iteratively by updating $\phi$ at each time interval. The general form of the level set equation is shown below.
 
 	\begin{equation}
-	\frac{\partial{\phi}}{\partial{t}}=-|\nabla{\phi|}\cdot v
+	\frac{\partial{\phi}}{\partial{t}}=-|\nabla{\phi|}\cdot F
+	\label{eq:levelsetequation}
 	\end{equation}
 
-In the above level set equation $v$ is the velocity term that describes the level set evolution. By manipulating $v$, we can converge the level set to different areas or shapes, given an initialisation of the level set function. 
+In the above level set equation $F$ is the velocity term that describes the level set evolution. By manipulating $F$, we can converge the level set to different areas or shapes, given an initialisation of the level set function. 
 
 \section{Segmentation using Level Sets}
-Typically, for applications in image segmentation $v$ is dependent on the pixel intensity or curvature values. It may also be dependent on an edge indicator function, which is defined as having a value zero on an edge, and zero otherwise. This causes $v$ to slow the level set evolution when on an edge.
+Typically, for applications in image segmentation $F$ is dependent on the pixel intensity or curvature values. It may also be dependent on an edge indicator function, which is defined as having a value zero on an edge, and zero otherwise. This causes $F$ to slow the level set evolution when on an edge.
 
-In \cite{Lefohn04astreaming} $v$ is dependent on a data term and a curvature term (with a weighting term between the two) for the purposes of image segmentation. Therefore, the level set equation takes the form
+In \cite{Lefohn04astreaming} $F$ is dependent on a data term and a curvature term (with a weighting term between the two) for the purposes of image segmentation. Therefore, the level set equation takes the form
 
 	\begin{equation}
 	\frac{\partial{\phi}}{\partial{t}}=-|\nabla{\phi}|\left[\alpha D(\bar{x})  + (1-\alpha)\nabla \cdot{\frac{\nabla{\phi}}{|\nabla{\phi|}}}\right]
+	\label{eq:fulllevelsetequation}
 	\end{equation}
 
 where the data function $D(I)$ tends the solution towards targeted features, and the mean curvature term $\nabla \cdot{(\nabla{\phi}/|\nabla{\phi|})}$ keeps the level set function smooth. Weighting between these two is $\alpha \in [0,1]$, a free parameter that is set beforehand to control how smooth the contour or surface should be.
@@ -35,6 +37,7 @@ The data function $D(I)$ acts as the principal 'force' that drives the segmentat
 
 	\begin{equation}
 	D(I)= \epsilon - |I-T|
+	\label{eq:dataterm}
 	\end{equation}
 
 which is plotted in Figure \ref{fig:speedterm}. Here $T$ describes the central intensity value of the region to be segmented, and $\epsilon$ describes the intensity deviation around T that is part of the desired segmentation. Therefore if a pixel or voxel has an intensity value within the $T\pm\epsilon$ range the model will expand, and otherwise it will contract. 

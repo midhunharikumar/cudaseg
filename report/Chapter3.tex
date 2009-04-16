@@ -1,12 +1,109 @@
 \chapter{Implementation}
 
-	\section{Level Set Algorithm}\label{levelsetalgorithm}
-	
+\section{Level Set Algorithm}\label{levelsetalgorithm}
 
-	\section{Sequential Implementation}
-		\subsection{Matlab}
-		\subsection{C}
+\subsection{Upwinding}
+Equation \eqref{eq:levelsetequation}, the level set equation, needs to be discretized for both sequential and parallel computation. This is done using the \textit{up-wind} differencing scheme. The following explanation of \textit{upwinding} is from \cite{osher2003lsm}.
 
-	\section{Parallel Implemention}
-		\subsection{Block and Grid Sizes}
-		\subsection{Shared Memory}
+A first order accurate method for time discretization of equation \eqref{eq:levelsetequation}, is given by the forward Euler method, from \cite{osher2003lsm}:
+
+\begin{equation}
+\frac{\phi^{t+\Delta t}-\phi^t}{\Delta t} +F^{t}\cdot{\nabla{\phi^{t}}} = 0
+\label{eq:euler1}
+\end{equation}
+
+where $\phi^{t}$ represents the current values of $\phi$ at time $t$, $F^{t}$ represents the velocity field at time $t$, and  $\nabla{\phi^{t}}$ represents the values of the gradient of $\phi$ at time $t$. When computing the gradient, a great deal of care must be taken with regards to the spatial derivatives of $\phi$. This is best exemplified by considering the expanded form of equation \eqref{eq:euler1}.
+
+\begin{equation}
+\frac{\phi^{t+\Delta t}-\phi^t}{\Delta t} +u^{t}\phi_x^t+v^{t}\phi_y^t+w^{t}\phi_z^t = 0
+\label{eq:euler2}
+\end{equation}
+
+The one dimensional form of equation \eqref{eq:euler2} at a specific grid point $x_i$ is
+
+\begin{equation}
+\frac{\phi^{t+\Delta t}-\phi^t}{\Delta t} +u_i^{t}(\phi_x)_i^t = 0
+\label{eq:euler3}
+\end{equation}
+
+where $(\phi_x)_i$ is the spatial derivative of $\phi$ at $x_i$. The method of characteristics indicates whether to use a forward difference or backwards difference for $\phi$ based on the sign of $u_i$ at the point $x_i$. If $u_i > 0$, the values of $\phi$ are moving from left to right, and therefore backwards difference methods ($D_x^-$) should be used. Conversely, if $u_i<0$, forward difference methods ($D_x^+$) should be used to approximate $\phi_x$. It is this process of choosing which approximation for the spatial derivative of $\phi$ to use based on the sign of $u_i$ that is known as \textit{upwinding}.
+
+Extending this to three dimensions, from \cite{Lefohn04astreaming}, results in the derivatives below required for the level set equation update. 
+
+\begin{eqnarray}
+	D_x &=& (u_{i+1,j,k}-u_{i-1,j,k})/2 \nonumber\\
+	D_y &=& (u_{i,j+1,k}-u_{i,j-1,k})/2 \nonumber\\
+	D_z &=& (u_{i,j,k+1}-u_{i,j,k-1})/2 \nonumber\\
+	D_x^+ &=& u_{i+1,j,k}-u_{i,j,k} \nonumber\\
+	D_y^+ &=& u_{i,j+1,k}-u_{i,j,k} \nonumber\\
+	D_z^+ &=& u_{i,j,k+1}-u_{i,j,k} \nonumber\\
+	D_x^- &=& u_{i,j,k}-u_{i-1,j,k} \nonumber\\
+	D_y^- &=& u_{i,j,k}-u_{i,j-1,k} \nonumber\\
+	D_z^- &=& u_{i,j,k}-u_{i,j,k-1} \nonumber\\
+\end{eqnarray}
+
+$\nabla\phi$ is approximated using the upwind scheme.
+
+\begin{eqnarray}
+\nabla\phi_{max} = \left[
+  \begin{array}{ c }
+     \sqrt{max(D_x^+, 0)^2 + max(-D_x^+,0)^2}  \\[2em]
+     \sqrt{max(D_y^+, 0)^2 + max(-D_y^+,0)^2}  \\[2em]
+     \sqrt{max(D_z^+, 0)^2 + max(-D_z^+,0)^2}  \\[2em]
+  \end{array} \right] \\
+\nabla\phi_{min} = \left[
+  \begin{array}{ c }
+     \sqrt{min(D_x^+, 0)^2 + min(-D_x^+,0)^2}  \\[2em]
+     \sqrt{min(D_y^+, 0)^2 + min(-D_y^+,0)^2}  \\[2em]
+     \sqrt{min(D_z^+, 0)^2 + min(-D_z^+,0)^2}  \\[2em]  
+  \end{array} \right] 
+\end{eqnarray}
+
+Curvature is computed using the derivatives below. In two dimensions only the first two derivatives are required.
+
+\begin{eqnarray}
+	D_x^{+y} &=& (u_{i+1,j+1,k}-u_{i-1,j+1,k})/2 \nonumber\\
+	D_x^{-y} &=& (u_{i+1,j-1,k}-u_{i-1,j-1,k})/2 \nonumber\\
+	D_x^{+z} &=& (u_{i+1,j,k+1}-u_{i-1,j,k+1})/2 \nonumber\\
+	D_x^{-z} &=& (u_{i+1,j,k-1}-u_{i-1,j,k-1})/2 \nonumber\\
+	D_y^{+x} &=& (u_{i+1,j+1,k}-u_{i+1,j-1,k})/2 \nonumber\\
+	D_y^{-x} &=& (u_{i-1,j+1,k}-u_{i-1,j-1,k})/2 \nonumber\\
+	D_y^{+z} &=& (u_{i,j+1,k+1}-u_{i,j-1,k+1})/2 \nonumber\\
+	D_y^{-z} &=& (u_{i,j+1,k-1}-u_{i,j-1,k-1})/2 \nonumber\\
+	D_z^{+x} &=& (u_{i+1,j,k+1}-u_{i+1,j,k-1})/2 \nonumber\\
+	D_z^{-x} &=& (u_{i-1,j,k+1}-u_{i-1,j,k-1})/2 \nonumber\\
+	D_z^{+y} &=& (u_{i,j+1,k+1}-u_{i,j+1,k-1})/2 \nonumber\\
+	D_z^{-y} &=& (u_{i,j-1,k+1}-u_{i,j-1,k-1})/2 \nonumber\\
+\end{eqnarray}
+
+Using the \textit{difference of normals} method from \cite{Lefohn04astreaming}, curvature is computed using the above derivates using the two normals $\textbf{n}^+$ and $\textbf{n}^-$.
+
+\begin{eqnarray}
+\textbf{n}^+ = \left[
+  \begin{array}{ c }
+     \frac{D_x^+}{\sqrt{(D_x^+)^2 + {(\frac{D_y^{+x}+D_y}{2})}^2 +{(\frac{D_z^{+x}+D_z}{2})}^2  }}  \\[2em]
+     \frac{D_y^+}{\sqrt{(D_y^+)^2 + {(\frac{D_x^{+y}+D_x}{2})}^2 +{(\frac{D_z^{+y}+D_z}{2})}^2  }}  \\[2em]
+     \frac{D_z^+}{\sqrt{(D_z^+)^2 + {(\frac{D_y^{+z}+D_x}{2})}^2 +{(\frac{D_y^{+z}+D_y}{2})}^2  }}  
+  \end{array} \right] &&
+\textbf{n}^- = \left[
+  \begin{array}{ c }
+     \frac{D_x^-}{\sqrt{(D_x^-)^2 + {(\frac{D_y^{-x}+D_y}{2})}^2 +{(\frac{D_z^{-x}+D_z}{2})}^2  }}  \\[2em]
+     \frac{D_y^-}{\sqrt{(D_y^-)^2 + {(\frac{D_x^{-y}+D_x}{2})}^2 +{(\frac{D_z^{-y}+D_z}{2})}^2  }}  \\[2em]
+     \frac{D_z^-}{\sqrt{(D_z^-)^2 + {(\frac{D_y^{-z}+D_x}{2})}^2 +{(\frac{D_y^{-z}+D_y}{2})}^2  }}  
+  \end{array} \right] \nonumber
+\end{eqnarray}
+
+The two normals are used to compute divergence, allowing for mean curvature to be computed.
+
+\begin{equation}
+H = \frac{1}{2}\nabla\cdot\frac{\nabla\phi}{|\nabla\phi|} = \frac{1}{2}((\textbf{n}_x^+ - \textbf{n}_x^-)+(\textbf{n}_y^+ - \textbf{n}_y^-)+(\textbf{n}_z^+ - \textbf{n}_z^-))
+\label{eq:curv}
+\end{equation}
+
+\section{Sequential Implementation}
+	\subsection{Matlab}
+	\subsection{C}
+
+\section{Parallel Implemention}
+	\subsection{Block and Grid Sizes}
+	\subsection{Shared Memory}

@@ -18,6 +18,11 @@ NVIDIA.
 \newblock Compute unified device architecture programming guide.
 \newblock {\em Nvidia, June}, 2007.
 
+\bibitem{osher2003lsm}
+S.~Osher and R.P. Fedkiw.
+\newblock {\em {Level set methods and dynamic implicit surfaces}}.
+\newblock Springer, 2003.
+
 \bibitem{oshersethian}
 Stanley Osher and James~A. Sethian.
 \newblock Fronts propagating with curvature dependent speed: algorithms based

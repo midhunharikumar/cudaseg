@@ -11,17 +11,18 @@
 \contentsline {subsection}{\numberline {2.2.1}Signed Distance Transform}{8}
 \contentsline {chapter}{\numberline {3}Implementation}{10}
 \contentsline {section}{\numberline {3.1}Level Set Algorithm}{10}
-\contentsline {section}{\numberline {3.2}Sequential Implementation}{10}
-\contentsline {subsection}{\numberline {3.2.1}Matlab}{10}
-\contentsline {subsection}{\numberline {3.2.2}C}{10}
-\contentsline {section}{\numberline {3.3}Parallel Implemention}{10}
-\contentsline {subsection}{\numberline {3.3.1}Block and Grid Sizes}{10}
-\contentsline {subsection}{\numberline {3.3.2}Shared Memory}{10}
-\contentsline {chapter}{\numberline {4}Results}{11}
-\contentsline {section}{\numberline {4.1}Speed Tests and Analysis}{11}
-\contentsline {section}{\numberline {4.2}Limitations}{11}
-\contentsline {chapter}{\numberline {5}Conclusions and Future Work}{12}
-\contentsline {section}{\numberline {5.1}Conclusion}{12}
-\contentsline {section}{\numberline {5.2}Future Work}{12}
-\contentsline {chapter}{\numberline {6}References}{13}
-\contentsline {chapter}{\numberline {7}Appendix}{14}
+\contentsline {subsection}{\numberline {3.1.1}Upwinding}{10}
+\contentsline {section}{\numberline {3.2}Sequential Implementation}{13}
+\contentsline {subsection}{\numberline {3.2.1}Matlab}{13}
+\contentsline {subsection}{\numberline {3.2.2}C}{13}
+\contentsline {section}{\numberline {3.3}Parallel Implemention}{13}
+\contentsline {subsection}{\numberline {3.3.1}Block and Grid Sizes}{13}
+\contentsline {subsection}{\numberline {3.3.2}Shared Memory}{13}
+\contentsline {chapter}{\numberline {4}Results}{14}
+\contentsline {section}{\numberline {4.1}Speed Tests and Analysis}{14}
+\contentsline {section}{\numberline {4.2}Limitations}{14}
+\contentsline {chapter}{\numberline {5}Conclusions and Future Work}{15}
+\contentsline {section}{\numberline {5.1}Conclusion}{15}
+\contentsline {section}{\numberline {5.2}Future Work}{15}
+\contentsline {chapter}{\numberline {6}References}{16}
+\contentsline {chapter}{\numberline {7}Appendix}{17}
