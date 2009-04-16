@@ -1,0 +1,48 @@
+\chapter{Introduction}
+
+\section{Image Segmentation}
+Image segmentation is the task of splitting a digital image into one or more regions of interest. It is a fundamental problem in computer vision and many different methods, each with their own advantages and disadvantages, exist for the task. Image segmentation is a particularly difficult task for several reasons. Firstly, the ambiguous nature of splitting up images into objects of interest provides a trade off between making algorithms more generalized and having many free user specified parameters. Secondly, imaging artificats such as noise, inhomogeneity, acquisition artifacts and low contrast, are very difficult to account for in segmentation algorithms without a high level of interactivity. 
+
+In this report, segmentation is discussed in a medical imaging context however the proposed algorithm could equally be used in general purpose segmentations. Segmented images are typically used as the input for applications such as classification, shape analysis and measurement. In medical image processing, segmented images are used for studying anatomical structures, diagnosis and assisting in surgical planning.
+
+Image segmentation also encompasses three dimensional volume segmentations, which are slower to compute by several orders of magnitude. It should be noted that before such algorithms existed, segmentation of medical images was done by hand by experts. This was a very accurate, yet slow, process. These segmentations will form the gold standard with which to validate algorithmic segmentations.
+
+In this report, the level set method is used for the purposes of segmentation. Their principal disadvantage is that they are relatively slow to compute, which provides the motivation for optimizing and accelerating such algorithms using graphics processing units (GPUs). Section \ref{levelsetmethod} discusses them in great detail.
+
+
+
+\section{Parallel Processing}
+The algorithms for processing level sets have vast parallelization potential. Section \ref{levelsetalgorithm} details the algorithms used to discretize the level set equation.
+	\subsection{GPGPU}
+General purpose computation on graphics processing units (GPGPU) is the technique of using graphics hardware to compute on applications typically handled by the central processing unit (CPU). Graphics cards over the past two decards have been required to render increasingly complex 3D scenes at high frame rates, which is in itself a highly parallelizable task computationally. 
+
+Compared to a CPU, a GPU features many more transistors on the control path due to the lower number of control instructions required. Memory is optimized for throughput and not latency, with strict access patterns. It is not optimized for general purpose programs, and does not have the complex instruction sets, or branch control of the modern CPU. It should be noted however that CPUs are slowly being parallelized by featuring multiple cores on a single chip.
+
+The advent of GPGPU programming came with programmable shader units that allowed 
+
+	\subsection{CUDA}
+Compute Unified Device Architecture, or CUDA, is NVIDIA's GPGPU technology that allows for programming of the GPU without any graphics knowledge. The C language model has at its core three key abstractions, from \cite{cuda}: a heirachy of thread groups. shared memories, and barrier synchronization. This breaks the task of parallelization into three sub problems, which allows for languaging expressivity when threads cooperate, and scalability when extended to multiple processor cores.
+
+		\subsubsection{Framework}
+CUDA uses extends C by allowing a programming to write \textit{kernels} that when invoked execute a thousands of lightweight identical threads in parallel. CUDA arranges these threads into a hierarchy of blocks and grids, as can be seen in Figure \ref{fig:cudathreads} allowing for runtime transparent scaling of code to different GPUs. The threads are identified by their location within the grid and block, making CUDA perfectly suited for tasks such as image processing where each threads is easily assigned to an individual pixel or voxel.
+
+\begin{figure}[p]
+	\centering
+		\includegraphics[scale=0.4]{images/cudathreads.PNG}
+		\caption{A grid of thread blocks. This figure taken from \cite{cuda}}
+	\label{fig:cudathreads}
+\end{figure}
+
+When writing and optimizing complex parallel code in CUDA it is often found that threads may need to cooperate. The memory hierarchy of CUDA threads is shown in Figure \ref{fig:cudamemory}. Here it can be seen that each thread has access to: a per-thread private local memory, a per-block on-chip shared memory to share data between threads, and finally an off-chip global memory accessible to all threads. There are also constant and texture memory spaces accessible to all threads, however these are not utilised in this reports algorithm and so will not be discussed in any further detail.
+
+\begin{figure}[p]
+	\centering
+		\includegraphics[scale=0.4]{images/cudamemory.PNG}
+		\caption{The memory heirarchy of CUDA threads and blocks. This figure taken from \cite{cuda}}
+	\label{fig:cudamemory}
+\end{figure}
+
+		\subsubsection{Performance Guidelines}
+There are many techniques to optimize a parallel algorithm. Firstly, the optimum block and grid sizes should be used to ensure maximum 'occupancy'. Occupancy is the ratio of the number of active warps (32 parallel threads) to the maximum number of active warps supported by the GPU multiprocessor. 
+
+Secondly, one of the best ways in which to optimize the parallelization is through efficient shared memory usage. Global memory has much higher latency and lower bandwidth than on-chip shared memory. Therefore it is the aim of the programmer to minimise global memory accesses. From \cite{cuda}, it recommended that each thread in a block firstly loads data from global memory to shared memory, synchronizes with all other threads within the threadblock to ensure shared memory locations have been written to, processes the data, synchronizes again to ensure shared memory has been fully updated with results, and finally writes the results back to global memory.

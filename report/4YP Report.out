@@ -1,0 +1,18 @@
+\BOOKMARK [0][]{chapter.1}{1 Introduction}{}
+\BOOKMARK [1][]{section.1.1}{1.1 Image Segmentation}{chapter.1}
+\BOOKMARK [1][]{section.1.2}{1.2 Parallel Processing}{chapter.1}
+\BOOKMARK [0][]{chapter.2}{2 Method}{}
+\BOOKMARK [1][]{section.2.1}{2.1 Level Set Method}{chapter.2}
+\BOOKMARK [1][]{section.2.2}{2.2 Segmentation using Level Sets}{chapter.2}
+\BOOKMARK [0][]{chapter.3}{3 Implementation}{}
+\BOOKMARK [1][]{section.3.1}{3.1 Level Set Algorithm}{chapter.3}
+\BOOKMARK [1][]{section.3.2}{3.2 Sequential Implementation}{chapter.3}
+\BOOKMARK [1][]{section.3.3}{3.3 Parallel Implemention}{chapter.3}
+\BOOKMARK [0][]{chapter.4}{4 Results}{}
+\BOOKMARK [1][]{section.4.1}{4.1 Speed Tests and Analysis}{chapter.4}
+\BOOKMARK [1][]{section.4.2}{4.2 Limitations}{chapter.4}
+\BOOKMARK [0][]{chapter.5}{5 Conclusions and Future Work}{}
+\BOOKMARK [1][]{section.5.1}{5.1 Conclusion}{chapter.5}
+\BOOKMARK [1][]{section.5.2}{5.2 Future Work}{chapter.5}
+\BOOKMARK [0][]{chapter.6}{6 References}{}
+\BOOKMARK [0][]{chapter.7}{7 Appendix}{}

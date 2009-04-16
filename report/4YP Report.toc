@@ -1,0 +1,27 @@
+\contentsline {chapter}{\numberline {1}Introduction}{2}
+\contentsline {section}{\numberline {1.1}Image Segmentation}{2}
+\contentsline {section}{\numberline {1.2}Parallel Processing}{3}
+\contentsline {subsection}{\numberline {1.2.1}GPGPU}{3}
+\contentsline {subsection}{\numberline {1.2.2}CUDA}{3}
+\contentsline {subsubsection}{Framework}{3}
+\contentsline {subsubsection}{Performance Guidelines}{4}
+\contentsline {chapter}{\numberline {2}Method}{6}
+\contentsline {section}{\numberline {2.1}Level Set Method}{6}
+\contentsline {section}{\numberline {2.2}Segmentation using Level Sets}{7}
+\contentsline {subsection}{\numberline {2.2.1}Signed Distance Transform}{8}
+\contentsline {chapter}{\numberline {3}Implementation}{10}
+\contentsline {section}{\numberline {3.1}Level Set Algorithm}{10}
+\contentsline {section}{\numberline {3.2}Sequential Implementation}{10}
+\contentsline {subsection}{\numberline {3.2.1}Matlab}{10}
+\contentsline {subsection}{\numberline {3.2.2}C}{10}
+\contentsline {section}{\numberline {3.3}Parallel Implemention}{10}
+\contentsline {subsection}{\numberline {3.3.1}Block and Grid Sizes}{10}
+\contentsline {subsection}{\numberline {3.3.2}Shared Memory}{10}
+\contentsline {chapter}{\numberline {4}Results}{11}
+\contentsline {section}{\numberline {4.1}Speed Tests and Analysis}{11}
+\contentsline {section}{\numberline {4.2}Limitations}{11}
+\contentsline {chapter}{\numberline {5}Conclusions and Future Work}{12}
+\contentsline {section}{\numberline {5.1}Conclusion}{12}
+\contentsline {section}{\numberline {5.2}Future Work}{12}
+\contentsline {chapter}{\numberline {6}References}{13}
+\contentsline {chapter}{\numberline {7}Appendix}{14}
