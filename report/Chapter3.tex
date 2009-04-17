@@ -45,17 +45,17 @@ Extending this to three dimensions, from \cite{Lefohn04astreaming}, results in t
 $\nabla\phi$ is approximated using the upwind scheme.
 
 \begin{eqnarray}
-\nabla\phi_{max} &=& \left[
+\nabla\phi_{\max} &=& \left[
   \begin{array}{ c }
-     \sqrt{max(D_x^+, 0)^2 + max(-D_x^+,0)^2}  \\[2em]
-     \sqrt{max(D_y^+, 0)^2 + max(-D_y^+,0)^2}  \\[2em]
-     \sqrt{max(D_z^+, 0)^2 + max(-D_z^+,0)^2}  
+     \sqrt{\max(D_x^+, 0)^2 + \max(-D_x^+,0)^2}  \\[2em]
+     \sqrt{\max(D_y^+, 0)^2 + \max(-D_y^+,0)^2}  \\[2em]
+     \sqrt{\max(D_z^+, 0)^2 + \max(-D_z^+,0)^2}  
   \end{array} \right] \\[2em]
-\nabla\phi_{min} &=& \left[
+\nabla\phi_{\min} &=& \left[
   \begin{array}{ c }
-     \sqrt{min(D_x^+, 0)^2 + min(-D_x^+,0)^2}  \\[2em]
-     \sqrt{min(D_y^+, 0)^2 + min(-D_y^+,0)^2}  \\[2em]
-     \sqrt{min(D_z^+, 0)^2 + min(-D_z^+,0)^2} 
+     \sqrt{\min(D_x^+, 0)^2 + \min(-D_x^+,0)^2}  \\[2em]
+     \sqrt{\min(D_y^+, 0)^2 + \min(-D_y^+,0)^2}  \\[2em]
+     \sqrt{\min(D_z^+, 0)^2 + \min(-D_z^+,0)^2} 
   \end{array} \right] 
 \end{eqnarray}
 
@@ -64,8 +64,8 @@ Finally, depending on whether $F_{i,j,k} > 0$ or $F_{i,j,k} < 0$, $\nabla\phi$ i
 \begin{equation}
 \nabla\phi = \left\{ 
 \begin{array}{l l}
-  ||\nabla\phi_{max}||_2 & \quad \mbox{if $F_{i,j,k} > 0$}\\
-  ||\nabla\phi_{min}||_2 & \quad \mbox{if $F_{i,j,k} < 0$}\\ \end{array} \right.
+  ||\nabla\phi_{\max}||_2 & \quad \mbox{if $F_{i,j,k} > 0$}\\
+  ||\nabla\phi_{\min}||_2 & \quad \mbox{if $F_{i,j,k} < 0$}\\ \end{array} \right.
 \label{eq:finalchoice}
 \end{equation}
 
@@ -109,6 +109,7 @@ Using the \textit{difference of normals} method from \cite{Lefohn04astreaming}, 
      \frac{D_y^-}{\sqrt{(D_y^-)^2 + {\left(\frac{D_x^{-y}+D_x}{2}\right)}^2 +{\left(\frac{D_z^{-y}+D_z}{2}\right)}^2  }}  \\[2em]
      \frac{D_z^-}{\sqrt{(D_z^-)^2 + {\left(\frac{D_y^{-z}+D_x}{2}\right)}^2 +{\left(\frac{D_y^{-z}+D_y}{2}\right)}^2  }}  
   \end{array} \right] 
+\label{eq:n}
 \end{eqnarray}
 
 The two normals are used to compute divergence, allowing for mean curvature to be computed as shown below in equation \eqref{eq:curv}.
@@ -128,14 +129,36 @@ From \cite{osher2003lsm}, a finite difference approximation to a linear partial 
 
 which is usually implemented, through variants of equation \eqref{eq:cfl}, by choosing a \textit{CFL number} that lies between 0 and 1 to further guarentee stability.
 
+Another measure taken to ensure stability is the inclusion of a floating point relative accuracy term in the denominator of any fractions to avoid singularity errors as the denominator tends to zero. This is done in equations \eqref{eq:n} to ensure that $\textbf{n}$ does not tend to infinity if the square root is zero.
+
 \section{Sequential Implementation}
+Two dimensional implementations of the code in MATLAB, C and then CUDA were firstly written. Once these had been optimized, three dimensional implementations were written. 
+
+
 
 	\subsection{Matlab}
-The first task was to write code in MATLAB to segment two dimensional greyscale images. The MATLAB Image Processing Toolbox provides many functions (such as to load, resample and filter images, compute distance transforms and easily visualise the level set evolution) which kept the code reasonably concise. 
+The first task was to write code in MATLAB to segment two dimensional greyscale images. The MATLAB Image Processing Toolbox provides many functions (such as the ability to load, resample and filter images, compute distance transforms and easily visualise the level set evolution) which kept the code reasonably concise. 
 
-The code is split into two files, in order to seperate the initialisation and level set update code
+The code is split into two files (a launcher and a kernel), in order to seperate the initialisation and level set update code. The user specifies parameters for threshold values $T$, range $\epsilon$ and curvature weighting $\alpha$, runs the launcher and then proceeds to draw a closed polygon that will form the initial mask (providing some basic interactivity). 
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[scale=0.6]{images/matlab.png}
+	\caption{MATLAB user interface showing four subfigures with the input image, the initial mask, the current zero level set interface superimposed on the input image and the current level set surface in 3D}
+	\label{fig:matlab}
+\end{figure}
+
+The level set function $\phi$ is then initialised to a signed distance function of this mask, and iteration of the level set equation begins for a fixed number of iterations (also user-definable). Reinitialisation of the level set is performed once every 50 iterations, and the current level set contour and surface are displayed every 20 iterations.
+
+The derivatives are calculated by subtracting shifted matrices of $\phi$ from $\phi$ (or vice-versa). Note how derivatives are not calculated in an element by element fashion.
+
+Finally, the user has the option of downsampling the input image in order to speed up the computation.
+
+
 
 	\subsection{C}
+Initially C code was written 
+
 
 \section{Parallel Implemention}
 	\subsection{Block and Grid Sizes}

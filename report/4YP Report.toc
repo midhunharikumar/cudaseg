@@ -16,15 +16,15 @@
 \contentsline {subsection}{\numberline {3.1.3}Stability}{13}
 \contentsline {section}{\numberline {3.2}Sequential Implementation}{14}
 \contentsline {subsection}{\numberline {3.2.1}Matlab}{14}
-\contentsline {subsection}{\numberline {3.2.2}C}{14}
-\contentsline {section}{\numberline {3.3}Parallel Implemention}{14}
-\contentsline {subsection}{\numberline {3.3.1}Block and Grid Sizes}{14}
-\contentsline {subsection}{\numberline {3.3.2}Shared Memory}{14}
-\contentsline {chapter}{\numberline {4}Results}{15}
-\contentsline {section}{\numberline {4.1}Speed Tests and Analysis}{15}
-\contentsline {section}{\numberline {4.2}Limitations}{15}
-\contentsline {chapter}{\numberline {5}Conclusions and Future Work}{16}
-\contentsline {section}{\numberline {5.1}Conclusion}{16}
-\contentsline {section}{\numberline {5.2}Future Work}{16}
-\contentsline {chapter}{\numberline {6}References}{17}
-\contentsline {chapter}{\numberline {7}Appendix}{18}
+\contentsline {subsection}{\numberline {3.2.2}C}{15}
+\contentsline {section}{\numberline {3.3}Parallel Implemention}{15}
+\contentsline {subsection}{\numberline {3.3.1}Block and Grid Sizes}{15}
+\contentsline {subsection}{\numberline {3.3.2}Shared Memory}{15}
+\contentsline {chapter}{\numberline {4}Results}{16}
+\contentsline {section}{\numberline {4.1}Speed Tests and Analysis}{16}
+\contentsline {section}{\numberline {4.2}Limitations}{16}
+\contentsline {chapter}{\numberline {5}Conclusions and Future Work}{17}
+\contentsline {section}{\numberline {5.1}Conclusion}{17}
+\contentsline {section}{\numberline {5.2}Future Work}{17}
+\contentsline {chapter}{\numberline {6}References}{18}
+\contentsline {chapter}{\numberline {7}Appendix}{19}

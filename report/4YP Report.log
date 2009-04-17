@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2009.3.31)  17 APR 2009 14:50
+This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2009.3.31)  17 APR 2009 18:36
 entering extended mode
 **C:/Users/Muz/Desktop/4YP*Report/4YP*Report.tex
 ("C:/Users/Muz/Desktop/4YP Report/4YP Report.tex"
@@ -220,36 +220,39 @@ Chapter 3.
 
 
 
-] [11] [12] [13]) [14] (Chapter4.tex
+] [11] [12] [13] <images/matlab.png, id=71, 476.78125pt x 419.5675pt>
+File: images/matlab.png Graphic file (type png)
+
+<use images/matlab.png> [14 <images/matlab.png (PNG copy)>]) [15] (Chapter4.tex
 Chapter 4.
-) [15
+) [16
 
 
 
 ] (Chapter5.tex
 Chapter 5.
-) [16
+) [17
 
 
 
 ]
 Chapter 6.
-[17
+[18
 
 
 ]
 Chapter 7.
-("4YP Report.bbl" [18
+("4YP Report.bbl" [19
 
-]) [19
+]) [20
 
 ] ("4YP Report.aux" (Chapter1.aux) (Chapter2.aux)
 (Chapter3.aux) (Chapter4.aux) (Chapter5.aux)) ) 
 Here is how much of TeX's memory you used:
- 1854 strings out of 95340
- 21852 string characters out of 1184178
- 78663 words of memory out of 1500000
- 4996 multiletter control sequences out of 110000
+ 1861 strings out of 95340
+ 21967 string characters out of 1184178
+ 78686 words of memory out of 1500000
+ 5002 multiletter control sequences out of 110000
  14042 words of font info for 53 fonts, out of 1200000 for 2000
  14 hyphenation exceptions out of 8191
  27i,17n,25p,874b,283s stack positions out of 5000i,500n,10000p,200000b,5000s
@@ -268,9 +271,9 @@ les/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.7/f
 onts/type1/bluesky/cm/cmsy5.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesk
 y/cm/cmsy7.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmti10.pfb><
 C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/ams/msbm10.pfb>
-Output written on "4YP Report.pdf" (20 pages, 391055 bytes).
+Output written on "4YP Report.pdf" (21 pages, 445069 bytes).
 PDF statistics:
- 147 PDF objects out of 1000 (max. 8388607)
+ 151 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 131072)
- 31 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 36 words of extra memory for PDF output out of 10000 (max. 10000000)
 
