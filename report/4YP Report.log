@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2009.3.31)  16 APR 2009 23:17
+This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2009.3.31)  17 APR 2009 14:50
 entering extended mode
 **C:/Users/Muz/Desktop/4YP*Report/4YP*Report.tex
 ("C:/Users/Muz/Desktop/4YP Report/4YP Report.tex"
@@ -220,66 +220,57 @@ Chapter 3.
 
 
 
-] [11]
-Overfull \hbox (36.66977pt too wide) in alignment at lines 81--94
- [][][] []
- []
-
-) [12] [13] (Chapter4.tex
+] [11] [12] [13]) [14] (Chapter4.tex
 Chapter 4.
-) [14
+) [15
 
 
 
 ] (Chapter5.tex
 Chapter 5.
-) [15
+) [16
 
 
 
 ]
 Chapter 6.
-[16
+[17
 
 
 ]
 Chapter 7.
-("4YP Report.bbl" [17
+("4YP Report.bbl" [18
 
-]) [18
+]) [19
 
 ] ("4YP Report.aux" (Chapter1.aux) (Chapter2.aux)
-(Chapter3.aux) (Chapter4.aux) (Chapter5.aux))
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
+(Chapter3.aux) (Chapter4.aux) (Chapter5.aux)) ) 
 Here is how much of TeX's memory you used:
- 1851 strings out of 95340
- 21820 string characters out of 1184178
- 77627 words of memory out of 1500000
- 4993 multiletter control sequences out of 110000
+ 1854 strings out of 95340
+ 21852 string characters out of 1184178
+ 78663 words of memory out of 1500000
+ 4996 multiletter control sequences out of 110000
  14042 words of font info for 53 fonts, out of 1200000 for 2000
  14 hyphenation exceptions out of 8191
- 27i,16n,25p,874b,283s stack positions out of 5000i,500n,10000p,200000b,5000s
-<C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmbx10.pfb><C:/Program Fi
-les/MiKTeX 2.7/fonts/type1/bluesky/cm/cmbx12.pfb><C:/Program Files/MiKTeX 2.7/f
-onts/type1/bluesky/cm/cmex10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/blues
-ky/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmmi5.pfb>
-<C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmmi7.pfb><C:/Program Files
-/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.7/fonts
-/type1/bluesky/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm
-/cmr17.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr5.pfb><C:/Pro
-gram Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr7.pfb><C:/Program Files/MiKTeX 
-2.7/fonts/type1/bluesky/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bl
-uesky/cm/cmsl10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy10.
-pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy5.pfb><C:/Program F
-iles/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy7.pfb><C:/Program Files/MiKTeX 2.7/f
-onts/type1/bluesky/cm/cmti10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/blues
-ky/ams/msbm10.pfb>
-Output written on "4YP Report.pdf" (19 pages, 352335 bytes).
+ 27i,17n,25p,874b,283s stack positions out of 5000i,500n,10000p,200000b,5000s
+<C:/Program Files/MiKTeX 2.7/fon
+ts/type1/bluesky/cm/cmbx10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky
+/cm/cmbx12.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmex10.pfb><
+C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmmi10.pfb><C:/Program Files
+/MiKTeX 2.7/fonts/type1/bluesky/cm/cmmi5.pfb><C:/Program Files/MiKTeX 2.7/fonts
+/type1/bluesky/cm/cmmi7.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm
+/cmr10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr12.pfb><C:/Pr
+ogram Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr17.pfb><C:/Program Files/MiKTe
+X 2.7/fonts/type1/bluesky/cm/cmr5.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/
+bluesky/cm/cmr7.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr8.pf
+b><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsl10.pfb><C:/Program Fi
+les/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.7/f
+onts/type1/bluesky/cm/cmsy5.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesk
+y/cm/cmsy7.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmti10.pfb><
+C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/ams/msbm10.pfb>
+Output written on "4YP Report.pdf" (20 pages, 391055 bytes).
 PDF statistics:
- 144 PDF objects out of 1000 (max. 8388607)
+ 147 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 131072)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
