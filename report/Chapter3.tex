@@ -119,7 +119,7 @@ H = \frac{1}{2}\nabla\cdot\frac{\nabla\phi}{|\nabla\phi|} = \frac{1}{2}((\textbf
 \label{eq:curv}
 \end{equation}
 
-\subsection{Stability}
+\subsection{Stability}\label{stability}
 From \cite{osher2003lsm}, a finite difference approximation to a linear partial differential equation is convergent if and only if it is both consistent and stable. Stability implies that small errors in the solution are not amplified during iteration. Stability is enforced using the Courant-Friedreichs-Lewy (CFL) condition which states the numerical wave speed must be greater than the physical wave speed, i.e. $\Delta x/\Delta t>|u|$. Rearranging, we have
 
 \begin{equation}
@@ -173,12 +173,12 @@ The level set function $\phi$ is then initialised to a signed distance function 
 
 The derivatives are calculated by subtracting shifted matrices of $\phi$ from $\phi$ (or vice-versa). Note how derivatives are not calculated in an element by element fashion.
 
+The MATLAB code also features the Courant-Friedreichs-Lewy (CFL) condition which was described in section \ref{stability} to enforce stability, instead of arbitrarily defining $\Delta t$.
+
 Finally, the user has the option of downsampling the input image in order to speed up the computation.
 
-CFL
-
 	\subsection{C}
-Initially C code was written to most closely mirror the MATLAB code. The feature image, level set function, and derivatives were stored in memory as one dimensional arrays. These arrays were stepped through by nested for loops, looping $i$ looping $j$. To go from the two dimensional $i,j$ indices to a one dimensional index \textit{ind}, the equation $\textrm{ind} = j \times \textrm{imageW} +i$ These for loops computed the derivatives serially, as shown in the pseudocode for algorithm \ref{alg:forloop}. This approach favoured itself well to being optimized at a low level using pointers to quickly step through the data. It was inefficient from a memory management perspective, with the derivative arrays taking up large amounts of memory for large image sizes, and also continuosly being allocated and freed at each iteration.
+Initially C code was written to most closely mirror the MATLAB code. The feature image, level set function, and derivatives were stored in memory as one dimensional arrays. These arrays were stepped through by nested for loops, looping $i$ looping $j$. To go from the two dimensional $i,j$ indices to a one dimensional index \textit{ind}, the equation $\textrm{ind} = j \times \textrm{imageW} +i$ was used. These for loops computed the derivatives serially, as shown in the pseudocode for algorithm \ref{alg:forloop}. This approach favoured itself well to being optimized at a low level using pointers to quickly step through the data. It was inefficient from a memory management perspective, with the derivative arrays taking up large amounts of memory for large image sizes, and also continuosly being allocated and freed at each iteration.
 
 \begin{algorithm}[h]
 \dontprintsemicolon
@@ -225,25 +225,25 @@ Update Level Set Function $\phi(t+\Delta t) =\phi(t) + \Delta t F|\nabla\phi|$\;
 
 For the distance transform initialization and reinitialization proceedures a seperate function was called. This is the "sedt2d" (Signed Euclidean Distance Transform in 2D) function written by Timothy Terriberry.
 
-GLUT, LACK OF CFL
+In order to visualise the level set evolution the combination of OpenGL and GLUT (OpenGL Utility Toolkit) was used to render the current zero level set. Rendering code was kept as compact and efficient as possible in order to have as minimal an effect as possible on performance whilst also making the program more comparable with the MATLAB code. Its principal purpose was of course to visualise how the level set was evolving (checking for instabilities, incorrect parameters for thresholding, range and curvature) and view the final segmentation. 
 
 \section{2D Parallel Implemention}
 	\subsection{Unoptimized Version}
-The first parallel implementation followed the structure shown in the pseudocode below. In CUDA, it is assumed that both the host and device maintain their own DRAM \cite{cuda}. Host memory is allocated as before using \texttt{malloc} and device memory is allocated using \texttt{cudaMalloc}. As memory transfers either from host to device or device to host are particularly slow, it is recommended to keep the number of transfers to a minimum. Therefore most CUDA programs follow a similar strucutre of initialization, memory transfer, compute, memory transfer. 
+The first parallel implementation followed the structure shown in the pseudocode below. In CUDA, it is assumed that both the host and device maintain their own DRAM \cite{cuda}. Host memory is allocated as before using \texttt{malloc} and device memory is allocated using \texttt{cudaMalloc}. As memory bandwidth between the host memory and device memory is low (it is much lower than the bandwidth between the device and the device memory), it is recommended to keep the number of transfers to a minimum. Therefore most CUDA programs follow a standard strucutre of initialization, host to device data transfer, compute, and finally memory transfer of compute results from device to host. 
 
-Unfortunately the algorithm for computing signed distance transforms is not executed in CUDA (and creating one from scratch would have been beyond the scope of this project), therefore required device to host memory transfer every time reinitialization was required. Of course, when timing it is possible to stop and start timers during this process.
+Unfortunately the algorithm for computing signed distance transforms is not executed in CUDA and creating one from scratch would have been beyond the scope of this project. Therefore device to host memory transfers were required every time reinitialization was necessary. Of course, when timing it is possible to stop and start timers during this process.
 
 	
 \begin{algorithm}[h]
 \dontprintsemicolon
 \BlankLine
 \SetLine
-Initialise $\phi_0, D$ on host memory\;
+Initialise $\phi_{i,j}^(0), D$ on host memory\;
 Allocate memory for $\phi_n ,\phi_{n+1}, D$ on device\;
 Copy $\phi_0 , D$ from host to device\;
 \ForAll{$N$ Iterations}{
-Execute Level Set Update CUDA Kernel $\phi_{n+1} =\phi_n + \Delta t F|\nabla\phi_n|$\;
-Swap pointers of $\phi_n ,\phi_{n+1}$\;
+Execute Level Set Update CUDA Kernel $\phi_{i,j}^(n+1) =\phi_{i,j}^(n) + \Delta t F|\nabla\phi_n|$\;
+Swap pointers of $\phi_{i,j}^(n) ,\phi_{i,j}^(n+1)$\;
 \If{Iterations \% 50 == 0}{
 Copy $\phi$ from device to host\;
 Reinitialise $\phi$ to S.D.F\;
@@ -254,7 +254,9 @@ Copy $\phi$ from device to host\;
 \caption{Parallel Implementation Pseudocode}\label{alg:cuda1}
 \end{algorithm}	
 
-CUDA threads are assigned a unique thread ID that identifies its location within the threadblock and grid. This provides a natural way to invoke computation across the image and level set domain, by using the thread IDs for addressing.  This is best explained using the table below. Assume our image has dimensions $4\times 4$ and the block size is $2 \times 2$. Invoking the kernel with a grid size of $2 \times 2$ results in the 16 threads shown in table \ref{table:threads}, in the form (\texttt{threadIdx.y},\texttt{threadIdx.x}). These threads are grouped into blocks of four, as shown in table \ref{table:blocks}, in the form (\texttt{blockIdx.y},\texttt{blockIdx.x}). 
+CUDA threads are assigned a unique thread ID that identifies its location within the threadblock and grid. This provides a natural way to invoke computation across the image and level set domain, by using the thread IDs for addressing.  This is best explained with the tables below. Assume our image has dimensions $4\times 4$ and the block size is $2 \times 2$. Invoking the kernel with a grid size of $2 \times 2$ results in the 16 threads shown in table \ref{table:threads}, in the form (\texttt{threadIdx.y},\texttt{threadIdx.x}). These threads are grouped into blocks of four, as shown in table \ref{table:blocks}, in the form (\texttt{blockIdx.y},\texttt{blockIdx.x}). 
+
+\begin{table}
 \begin{center}
   \begin{tabular}{ | c | c || c | c |}
     \hline
@@ -262,30 +264,35 @@ CUDA threads are assigned a unique thread ID that identifies its location within
     (1,0) & (1,1) & (1,0) & (1,1) \\ \hline\hline
     (0,0) & (0,1) & (0,0) & (0,1) \\ \hline
     (1,0) & (1,1) & (1,0) & (1,1) \\
-    \label{table:threads}
+    \hline
   \end{tabular}
 \end{center}
+\label{table:threads}\caption{Thread IDs of 16 threads grouped into 4 blocks}
+\end{table}
 
+\begin{table}
 \begin{center}
   \begin{tabular}{ | c | c |}
     \hline
     (0,0) & (0,1)  \\ \hline
-    (1,0) & (1,1)  \\ 
-    \label{table:blocks}
+    (1,0) & (1,1)  \\ \hline
   \end{tabular}
 \end{center}
+\label{table:blocks}\caption{Block IDs of 4 blocks grouped into a grid}
+\end{table}
 
 As each thread has access to its own \texttt{threadIdx} and \texttt{blockIdx} global indices ($i,j$) can be determined using the equations
 
-\begin{center}
 \begin{verbatim}
-	int c= blockIdx.x * blockDim.x + threadIdx.x;
-	int r= blockIdx.y * blockDim.y + threadIdx.y;
+           int i = blockIdx.x * blockDim.x + threadIdx.x;
+           int j = blockIdx.y * blockDim.y + threadIdx.y;
 \end{verbatim}
-\end{center}
 
-where \texttt{blockDim.x} and \texttt{blockDim.y} represent the dimensions of the block (which in this case are both equal to 2).
+where \texttt{blockDim.x} and \texttt{blockDim.y} represent the dimensions of the block (which in this case are both equal to 2). It should be noted that the size of these block sizes affect kernel performance greatly and that much larger block sizes are used (in the proceeding algorthms typical block sizes are $32\times 4$ or $16 \times 8$). The effect of different block sizes on performance is analysed in Section \ref{results}.
+
+Once these indices were set up, only minor tweaks were needed until the code was performing well. Although this code exhibited speedups over the single threaded implementation, there was still significant optimization to perform as a great deal of computation time was being wasted on access global memory continuously.
+
+Some features such as the CFL condition, could not be implemented in this parallel version without slowing down computation time significantly. This is because such a condition requires the determinination of the largest element of $\nabla\phi$ which is computed roughly half way through the update procedure. Therefore integrating this condition would require transferring $\nabla\phi$ and curvature terms back to host memory to determine $max\left\{F|\nabla\phi|\right\}$. The cost of this added complexity and slowdown outweighed the benefits, and therefore $\Delta t$ was chosen to be a free parameter.
 
 	\subsection{Shared Memory}
-	
-	
+In order to keep the number of costly accesses to device memory at a minimum, effective use of the on-chip shared memory is essential. This along with maximizing parallel execution and optimization of instruction usage form the three main performance optimization strategies for CUDA \cite{cuda}.
