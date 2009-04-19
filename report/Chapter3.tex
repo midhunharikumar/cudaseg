@@ -131,15 +131,36 @@ which is usually implemented, through variants of equation \eqref{eq:cfl}, by ch
 
 Another measure taken to ensure stability is the inclusion of a floating point relative accuracy term in the denominator of any fractions to avoid singularity errors as the denominator tends to zero. This is done in equations \eqref{eq:n} to ensure that $\textbf{n}$ does not tend to infinity if the square root is zero.
 
-\section{Sequential Implementation}
-Two dimensional implementations of the code in MATLAB, C and then CUDA were firstly written. Once these had been optimized, three dimensional implementations were written. 
+\section{2D Sequential Implementation}
+Two dimensional implementations of the code in MATLAB, C and then CUDA were the first to be written. Once these had been optimized, three dimensional implementations were coded. The following pseudocode outlines the structure of the MATLAB, C and CUDA implementations, with only minor differences between the different versions.
 
+\begin{algorithm}[h]
+\dontprintsemicolon
+\KwIn{Feature Image $I$, Initial Mask $m$, Threshold $T$, Range $\epsilon$, Iterations $N$}
+\KwOut{Segmentation Result}
+\BlankLine
+\SetLine
+Initialise $\phi_0$\ to S.D.F from mask $m$\;
+Calculate Data Speed Term $D(I)= \epsilon - |I-T|$\;
+\ForAll{$N$ Iterations}{
+Calculate First Order Derivatives $D_x^{(\pm)},D_y^{(\pm)},D_z^{(\pm)}$ \;
+Calculate Second Order Derivatives $D_x^{(\pm y,z)},D_y^{(\pm x,z)}...D_z^{(\pm x,y)}$ \;
+Calculate Curvature Terms $\textbf{n}^+ , \textbf{n}^-$\;
+Calculate Gradient $\nabla{\phi}$\;
+Calculate Speed Term $F=\alpha D(\bar{x})  + (1-\alpha)\nabla \cdot{\frac{\nabla{\phi}}{|\nabla{\phi|}}}$\;
+Update Level Set Function $\phi(t+\Delta t) =\phi(t) + \Delta t F|\nabla\phi|$\;
+\If{Iterations \% 50 == 0}{
+Reinitialise $\phi$ to S.D.F
+}
+}
+\caption{Pseudocode for Level Set Segmentation}\label{alg:alg}
+\end{algorithm}
 
 
 	\subsection{Matlab}
 The first task was to write code in MATLAB to segment two dimensional greyscale images. The MATLAB Image Processing Toolbox provides many functions (such as the ability to load, resample and filter images, compute distance transforms and easily visualise the level set evolution) which kept the code reasonably concise. 
 
-The code is split into two files (a launcher and a kernel), in order to seperate the initialisation and level set update code. The user specifies parameters for threshold values $T$, range $\epsilon$ and curvature weighting $\alpha$, runs the launcher and then proceeds to draw a closed polygon that will form the initial mask (providing some basic interactivity). 
+The code is split into two files (a launcher and a kernel), in order to seperate the initialisation and level set update code. The launcher handles the image loading and resampling, with the functions \texttt{imread} and \texttt{imresize}. The user specifies parameters for threshold values $T$, range $\epsilon$ and curvature weighting $\alpha$, runs the launcher and then proceeds to draw a closed polygon that will form the initial mask (providing some basic interactivity). 
 
 \begin{figure}[h]
 	\centering
@@ -154,12 +175,117 @@ The derivatives are calculated by subtracting shifted matrices of $\phi$ from $\
 
 Finally, the user has the option of downsampling the input image in order to speed up the computation.
 
-
+CFL
 
 	\subsection{C}
-Initially C code was written 
+Initially C code was written to most closely mirror the MATLAB code. The feature image, level set function, and derivatives were stored in memory as one dimensional arrays. These arrays were stepped through by nested for loops, looping $i$ looping $j$. To go from the two dimensional $i,j$ indices to a one dimensional index \textit{ind}, the equation $\textrm{ind} = j \times \textrm{imageW} +i$ These for loops computed the derivatives serially, as shown in the pseudocode for algorithm \ref{alg:forloop}. This approach favoured itself well to being optimized at a low level using pointers to quickly step through the data. It was inefficient from a memory management perspective, with the derivative arrays taking up large amounts of memory for large image sizes, and also continuosly being allocated and freed at each iteration.
+
+\begin{algorithm}[h]
+\dontprintsemicolon
+\ForAll{$i,j$}{
+Calculate $D_x$\;
+}
+\ForAll{$i,j$}{
+Calculate $D_y$\;
+}
+\ForAll{$i,j$}{
+Calculate $D_z$\;
+}
+\ForAll{$i,j$}{
+Calculate $D_x^+$\;
+}
+\BlankLine
+...\;
+\BlankLine
+Update Level Set Function $\phi(t+\Delta t) =\phi(t) + \Delta t F|\nabla\phi|$\;
+\caption{Pseudocode for Version 1 of Sequential C Code}\label{alg:forloop}
+\end{algorithm}
+
+This C implementation did not feature the versatility of the MATLAB implementation as it only accepted bitmap images as the input for the feature image. The loader function for the bitmap images (\texttt{bmploader.cpp}) is from the NVIDIA CUDA SDK image processing examples. It also did not feature any image resizing functions, as the focus was on optimization of the code and not versatility of inputs.
+
+Wheras the MATLAB code used shifts of the matrix $\phi$ to calculate derivatives, in C the level set function $\phi$ was being stepped through in an element by element fashion. Therefore many boundary conditions had to be placed in order to ensure that derivatives took the value zero at certain boundaries. For example the forward difference derivative $D_x^+ =u_{i+1,j}-u_{i,j}$ must equal zero when $i=\textrm{imageW}$ as there is no $u_{i+1,j}$ term. The complexity of this task increases in three dimensions as there are six boundaries instead of four boundaries to condition for.
+
+Restructuring the code for parallel computation of derivatives (using only one for loop) laid the framework for parallelization in CUDA, and only had a minor impact on performance. In this case all the derivatives are calculated at the same time at a given pixel, as shown below in algorithm \ref{alg:forloop2}. Also, the derivatives no longer needed to be stored in memory as arrays, and were simply floating point variables declared at each iteration. These two changes condensed the C code greatly.
 
 
-\section{Parallel Implemention}
-	\subsection{Block and Grid Sizes}
+\begin{algorithm}[h]
+\dontprintsemicolon
+\ForAll{$i,j$}{
+Calculate $D_x$\;
+Calculate $D_y$\;
+Calculate $D_z$\;
+Calculate $D_x^+$\;
+\BlankLine
+...\;
+}
+\BlankLine
+Update Level Set Function $\phi(t+\Delta t) =\phi(t) + \Delta t F|\nabla\phi|$\;
+\caption{Pseudocode for Version 2 of Sequential C Code}\label{alg:forloop2}
+\end{algorithm}
+
+For the distance transform initialization and reinitialization proceedures a seperate function was called. This is the "sedt2d" (Signed Euclidean Distance Transform in 2D) function written by Timothy Terriberry.
+
+GLUT, LACK OF CFL
+
+\section{2D Parallel Implemention}
+	\subsection{Unoptimized Version}
+The first parallel implementation followed the structure shown in the pseudocode below. In CUDA, it is assumed that both the host and device maintain their own DRAM \cite{cuda}. Host memory is allocated as before using \texttt{malloc} and device memory is allocated using \texttt{cudaMalloc}. As memory transfers either from host to device or device to host are particularly slow, it is recommended to keep the number of transfers to a minimum. Therefore most CUDA programs follow a similar strucutre of initialization, memory transfer, compute, memory transfer. 
+
+Unfortunately the algorithm for computing signed distance transforms is not executed in CUDA (and creating one from scratch would have been beyond the scope of this project), therefore required device to host memory transfer every time reinitialization was required. Of course, when timing it is possible to stop and start timers during this process.
+
+	
+\begin{algorithm}[h]
+\dontprintsemicolon
+\BlankLine
+\SetLine
+Initialise $\phi_0, D$ on host memory\;
+Allocate memory for $\phi_n ,\phi_{n+1}, D$ on device\;
+Copy $\phi_0 , D$ from host to device\;
+\ForAll{$N$ Iterations}{
+Execute Level Set Update CUDA Kernel $\phi_{n+1} =\phi_n + \Delta t F|\nabla\phi_n|$\;
+Swap pointers of $\phi_n ,\phi_{n+1}$\;
+\If{Iterations \% 50 == 0}{
+Copy $\phi$ from device to host\;
+Reinitialise $\phi$ to S.D.F\;
+Copy $\phi$ from host to device\;
+}
+}
+Copy $\phi$ from device to host\;
+\caption{Parallel Implementation Pseudocode}\label{alg:cuda1}
+\end{algorithm}	
+
+CUDA threads are assigned a unique thread ID that identifies its location within the threadblock and grid. This provides a natural way to invoke computation across the image and level set domain, by using the thread IDs for addressing.  This is best explained using the table below. Assume our image has dimensions $4\times 4$ and the block size is $2 \times 2$. Invoking the kernel with a grid size of $2 \times 2$ results in the 16 threads shown in table \ref{table:threads}, in the form (\texttt{threadIdx.y},\texttt{threadIdx.x}). These threads are grouped into blocks of four, as shown in table \ref{table:blocks}, in the form (\texttt{blockIdx.y},\texttt{blockIdx.x}). 
+\begin{center}
+  \begin{tabular}{ | c | c || c | c |}
+    \hline
+    (0,0) & (0,1) & (0,1) & (0,1) \\ \hline
+    (1,0) & (1,1) & (1,0) & (1,1) \\ \hline\hline
+    (0,0) & (0,1) & (0,0) & (0,1) \\ \hline
+    (1,0) & (1,1) & (1,0) & (1,1) \\
+    \label{table:threads}
+  \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{ | c | c |}
+    \hline
+    (0,0) & (0,1)  \\ \hline
+    (1,0) & (1,1)  \\ 
+    \label{table:blocks}
+  \end{tabular}
+\end{center}
+
+As each thread has access to its own \texttt{threadIdx} and \texttt{blockIdx} global indices ($i,j$) can be determined using the equations
+
+\begin{center}
+\begin{verbatim}
+	int c= blockIdx.x * blockDim.x + threadIdx.x;
+	int r= blockIdx.y * blockDim.y + threadIdx.y;
+\end{verbatim}
+\end{center}
+
+where \texttt{blockDim.x} and \texttt{blockDim.y} represent the dimensions of the block (which in this case are both equal to 2).
+
 	\subsection{Shared Memory}
+	
+	
