@@ -6,12 +6,25 @@ J.E. Cates, A.E. Lefohn, and R.T. Whitaker.
   medical images}.
 \newblock {\em Medical Image Analysis}, 8(3):217--231, 2004.
 
+\bibitem{mgiles}
+Mike Giles.
+\newblock Jacobi iteration for a laplace discretisation on a 3d structured
+  grid.
+\newblock 2008.
+
 \bibitem{Lefohn04astreaming}
 Aaron~E. Lefohn, Joe~M. Kniss, Charles~D. Hansen, and Ross~T. Whitaker.
 \newblock A streaming narrow-band algorithm: Interactive computation and
   visualization of level sets.
 \newblock {\em IEEE Transactions on Visualization and Computer Graphics},
   10:422--433, 2004.
+
+\bibitem{3dfinitedifference}
+Paulius Micikevicius.
+\newblock 3d finite difference computation on gpus using cuda.
+\newblock In {\em GPGPU-2: Proceedings of 2nd Workshop on General Purpose
+  Processing on Graphics Processing Units}, pages 79--84, New York, NY, USA,
+  2009. ACM.
 
 \bibitem{cuda}
 NVIDIA.

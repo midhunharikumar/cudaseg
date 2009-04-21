@@ -1,4 +1,15 @@
 \chapter{Results}
-	\section{Speed Tests and Analysis}\label{results}
-	\section{Limitations}
+
+In the following, the results of the speed ups attained by optimizing using GPU hardware will be shown. However, before this can be done, some preliminaries need to be listed. Firstly, all hardware testing was done on a single PC with an Intel Core 2 Duo T8100 Processor with a clock speed of 2.1 GHz and 4 GB of RAM. The graphics hardware used was the NVIDIA GeForce 8600M GT, with CUDA 2.1 software installed. It should be noted that at the time of writing, CUDA 2.2 was available although in beta form and was not chosen due to potential instabilities. 
+
+Although 8600M GT is adequate for CUDA development, it has rather limited performance in comparison to other graphics chips. For example, although the shader processing rate of 8600M GT is quoted as 91.2 Gigaflops the recently released GeForce GTX 295 boasts an impressive 1788.48 Gigaflops potentially allowing for another order of magnitude speed up from the 8600M GT hardware. This is mainly due to the increased number of on chip multiprocessors, however to lesser extent is also due to the device being of higher \textit{compute capability}: there are fewer limitations (such as support for double precision arithmetic) and relaxed requirements for coalescing memory transfers.
+
+\section{Speed Tests and Analysis}\label{results}
+
+\subsection{2D Segmentations}
+
+
+	
+
+\section{Limitations}
 	
