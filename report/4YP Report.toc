@@ -1,33 +1,42 @@
-\contentsline {chapter}{\numberline {1}Introduction}{2}
-\contentsline {section}{\numberline {1.1}Image Segmentation}{2}
-\contentsline {section}{\numberline {1.2}Parallel Processing}{3}
-\contentsline {subsection}{\numberline {1.2.1}GPGPU}{3}
-\contentsline {subsection}{\numberline {1.2.2}CUDA}{3}
-\contentsline {subsubsection}{Framework}{3}
-\contentsline {subsubsection}{Performance Guidelines}{4}
-\contentsline {chapter}{\numberline {2}Method}{6}
-\contentsline {section}{\numberline {2.1}Level Set Method}{6}
-\contentsline {section}{\numberline {2.2}Segmentation using Level Sets}{7}
-\contentsline {subsection}{\numberline {2.2.1}Signed Distance Transform}{8}
-\contentsline {chapter}{\numberline {3}Implementation}{10}
-\contentsline {section}{\numberline {3.1}Level Set Algorithm}{10}
-\contentsline {subsection}{\numberline {3.1.1}Upwinding}{10}
-\contentsline {subsection}{\numberline {3.1.2}Curvature}{12}
-\contentsline {subsection}{\numberline {3.1.3}Stability}{13}
-\contentsline {section}{\numberline {3.2}2D Sequential Implementation}{13}
-\contentsline {subsection}{\numberline {3.2.1}Matlab}{13}
-\contentsline {subsection}{\numberline {3.2.2}C}{14}
-\contentsline {section}{\numberline {3.3}2D Parallel Implemention}{17}
-\contentsline {subsection}{\numberline {3.3.1}Unoptimized Version}{17}
-\contentsline {subsection}{\numberline {3.3.2}2D Shared Memory Optimization}{19}
-\contentsline {subsection}{\numberline {3.3.3}3D Shared Memory Optimization}{21}
-\contentsline {chapter}{\numberline {4}Results}{22}
-\contentsline {section}{\numberline {4.1}Speed Tests and Analysis}{22}
-\contentsline {subsection}{\numberline {4.1.1}2D Segmentations}{22}
-\contentsline {section}{\numberline {4.2}Limitations}{22}
-\contentsline {chapter}{\numberline {5}Conclusions and Future Work}{23}
-\contentsline {section}{\numberline {5.1}Conclusion}{23}
-\contentsline {section}{\numberline {5.2}Future Work}{23}
-\contentsline {chapter}{\numberline {6}References}{24}
-\contentsline {chapter}{\numberline {7}Appendix}{25}
-\contentsline {section}{\numberline {7.1}MATLAB Level Set Update Code}{25}
+\contentsline {chapter}{\numberline {1}Introduction}{3}
+\contentsline {section}{\numberline {1.1}Image Segmentation}{3}
+\contentsline {section}{\numberline {1.2}Parallel Processing}{4}
+\contentsline {subsection}{\numberline {1.2.1}GPGPU}{4}
+\contentsline {subsection}{\numberline {1.2.2}CUDA}{4}
+\contentsline {subsubsection}{Framework}{5}
+\contentsline {subsubsection}{Performance Guidelines}{5}
+\contentsline {chapter}{\numberline {2}Method}{8}
+\contentsline {section}{\numberline {2.1}Level Set Method}{8}
+\contentsline {section}{\numberline {2.2}Segmentation using Level Sets}{9}
+\contentsline {subsection}{\numberline {2.2.1}Signed Distance Transforms}{10}
+\contentsline {subsection}{\numberline {2.2.2}3D Volume Segmentations}{12}
+\contentsline {chapter}{\numberline {3}Implementation}{13}
+\contentsline {section}{\numberline {3.1}Level Set Algorithm}{13}
+\contentsline {subsection}{\numberline {3.1.1}Upwinding}{13}
+\contentsline {subsection}{\numberline {3.1.2}Curvature}{15}
+\contentsline {subsection}{\numberline {3.1.3}Stability}{16}
+\contentsline {section}{\numberline {3.2}Sequential Implementation}{17}
+\contentsline {subsection}{\numberline {3.2.1}Matlab}{17}
+\contentsline {subsection}{\numberline {3.2.2}C}{18}
+\contentsline {section}{\numberline {3.3}Parallel Implemention}{20}
+\contentsline {subsection}{\numberline {3.3.1}Unoptimized Version}{20}
+\contentsline {subsection}{\numberline {3.3.2}2D Shared Memory Optimization}{22}
+\contentsline {subsection}{\numberline {3.3.3}3D Shared Memory Optimization}{24}
+\contentsline {chapter}{\numberline {4}Results}{26}
+\contentsline {section}{\numberline {4.1}Speed Tests and Analysis}{27}
+\contentsline {subsection}{\numberline {4.1.1}2D Segmentations}{27}
+\contentsline {subsubsection}{Effect of Noise}{28}
+\contentsline {subsubsection}{Effect of Different Image Sizes}{28}
+\contentsline {subsection}{\numberline {4.1.2}3D Segmentations}{29}
+\contentsline {subsubsection}{Effect of Different Volume Sizes}{33}
+\contentsline {subsubsection}{Effect of Different CUDA Block/Grid Sizes}{33}
+\contentsline {section}{\numberline {4.2}Discussion and Limitations}{34}
+\contentsline {subsection}{\numberline {4.2.1}Speed}{34}
+\contentsline {subsection}{\numberline {4.2.2}Accuracy}{34}
+\contentsline {chapter}{\numberline {5}Conclusions and Future Work}{36}
+\contentsline {section}{\numberline {5.1}Conclusion}{36}
+\contentsline {section}{\numberline {5.2}Future Work}{37}
+\contentsline {chapter}{\numberline {6}Appendix}{38}
+\contentsline {section}{\numberline {6.1}MATLAB Level Set Update Code}{38}
+\contentsline {section}{\numberline {6.2}CUDA 3D Shared Memory - kernel.cu}{40}
+\contentsline {section}{\numberline {6.3}CUDA 3D Shared Memory - main.cu}{44}

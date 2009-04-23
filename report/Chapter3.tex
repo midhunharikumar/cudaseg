@@ -2,7 +2,7 @@
 
 \section{Level Set Algorithm}\label{levelsetalgorithm}
 
-\subsection{Upwinding}
+\subsection{Upwinding}\label{upwinding}
 Equation \eqref{eq:levelsetequation}, the level set equation, needs to be discretized for both sequential and parallel computation. This is done using the \textit{up-wind} differencing scheme. The following explanation of \textit{upwinding} is from \cite{osher2003lsm}.
 
 A first order accurate method for time discretization of equation \eqref{eq:levelsetequation}, is given by the forward Euler method, from \cite{osher2003lsm}:
@@ -30,13 +30,16 @@ where $(\phi_x)_i$ is the spatial derivative of $\phi$ at $x_i$. The method of c
 
 Extending this to three dimensions, from \cite{Lefohn04astreaming}, results in the derivatives below required for the level set equation update. 
 
+\begin{spacing}{1.1}
 \begin{align}
 	D_x &= (u_{i+1,j,k}-u_{i-1,j,k})/2 & D_x^+ &= u_{i+1,j,k}-u_{i,j,k} & D_x^- &= u_{i,j,k}-u_{i-1,j,k} \nonumber\\
 	D_y &= (u_{i,j+1,k}-u_{i,j-1,k})/2 & D_y^+ &= u_{i,j+1,k}-u_{i,j,k} &	D_y^- &= u_{i,j,k}-u_{i,j-1,k} \nonumber\\
 	D_z &= (u_{i,j,k+1}-u_{i,j,k-1})/2 & D_z^+ &= u_{i,j,k+1}-u_{i,j,k} &	D_z^- &= u_{i,j,k}-u_{i,j,k-1} \nonumber\\
 \end{align}
 
+
 $\nabla\phi$ is approximated using the upwind scheme.
+\end{spacing}
 
 \begin{align}
 \nabla\phi_{\max} = \left[
@@ -69,21 +72,30 @@ Finally, depending on whether $F_{i,j,k} > 0$ or $F_{i,j,k} < 0$, $\nabla\phi$ i
 \label{eq:phi}
 \end{equation}
 
+
 The speed term $F$, as discussed before, is based on the pixel intensity values and curvature values. 
+
+This implementation is very computationally demanding (in terms of time taken and storage required) and therefore there have been several devlopments to optimize the implementation. Some of these include the narrow band method \cite{narrowband} and sparse field method \cite{sparsefield}. The narrow band method restricts the computation of level set update to a thin band of 'active' pixel/voxels that are on or near to the level set implicit contour/surface. This speeds up computation as there is very little need to update the level set for pixel/voxels very far from the contour.
+
+
 
 \subsection{Curvature}
 Curvature is computed based on the values of the current level set using the derivatives below. In two dimensions only the first two derivatives are required, alongside the derivatives defined previously. In three dimensions, all the derivatives below are required.
 
+\begin{spacing}{1.1}
 \begin{align}
 	D_x^{+y} &= (u_{i+1,j+1,k}-u_{i-1,j+1,k})/2 & 	D_x^{-y} &= (u_{i+1,j-1,k}-u_{i-1,j-1,k})/2 \nonumber\\
 	D_x^{+z} &= (u_{i+1,j,k+1}-u_{i-1,j,k+1})/2 &   D_x^{-z} &= (u_{i+1,j,k-1}-u_{i-1,j,k-1})/2 \nonumber\\
 	D_y^{+x} &= (u_{i+1,j+1,k}-u_{i+1,j-1,k})/2 & 	D_y^{-x} &= (u_{i-1,j+1,k}-u_{i-1,j-1,k})/2 \nonumber\\
 	D_y^{+z} &= (u_{i,j+1,k+1}-u_{i,j-1,k+1})/2 &	  D_y^{-z} &= (u_{i,j+1,k-1}-u_{i,j-1,k-1})/2 \nonumber\\
 	D_z^{+x} &= (u_{i+1,j,k+1}-u_{i+1,j,k-1})/2 & 	D_z^{-x} &= (u_{i-1,j,k+1}-u_{i-1,j,k-1})/2 \nonumber\\
-	D_z^{+y} &= (u_{i,j+1,k+1}-u_{i,j+1,k-1})/2 &	  D_z^{-y} &= (u_{i,j-1,k+1}-u_{i,j-1,k-1})/2 \nonumber
+	D_z^{+y} &= (u_{i,j+1,k+1}-u_{i,j+1,k-1})/2 &	  D_z^{-y} &= (u_{i,j-1,k+1}-u_{i,j-1,k-1})/2 \nonumber\\
 \end{align}
+\end{spacing}
 
-Using the \textit{difference of normals} method from \cite{Lefohn04astreaming}, curvature is computed using the above derivates with the two normals $\textbf{n}^+$ and $\textbf{n}^-$.\\
+Using the \textit{difference of normals} method from \cite{Lefohn04astreaming}, curvature is computed using the above derivates with the two normals $\textbf{n}^+$ and $\textbf{n}^-$.
+
+
 \begin{equation}
 \textbf{n}^+ = \left[
   \begin{array}{ c }
@@ -120,14 +132,15 @@ From \cite{osher2003lsm}, a finite difference approximation to a linear partial 
 \label{eq:cfl}
 \end{equation}
 
-which is usually implemented, through variants of equation \eqref{eq:cfl}, by choosing a \textit{CFL number} that lies between 0 and 1 to further guarentee stability.
+which is usually implemented, through variants of equation \eqref{eq:cfl}, by choosing a \textit{CFL number} that lies between 0 and 1 to further guarantee stability.
 
 Another measure taken to ensure stability is the inclusion of a floating point relative accuracy term in the denominator of any fractions to avoid singularity errors as the denominator tends to zero. This is done in equations \eqref{eq:nplus},\eqref{eq:nminus} to ensure that $\textbf{n}$ does not tend to infinity if the square root is zero.
 
-\section{2D Sequential Implementation}
+\section{Sequential Implementation}
 Two dimensional implementations of the code in MATLAB, C and then CUDA were the first to be written. Once these had been optimized, three dimensional implementations were coded. The following pseudocode outlines the structure of the MATLAB, C and CUDA implementations, with only minor differences between the different versions.
 
 \begin{algorithm}[h]
+\BlankLine
 \dontprintsemicolon
 \KwIn{Feature Image $I$, Initial Mask $m$, Threshold $T$, Range $\epsilon$, Iterations $N$}
 \KwOut{Segmentation Result}
@@ -151,7 +164,7 @@ Reinitialise $\phi$ to S.D.F
 
 
 	\subsection{Matlab}
-The first task was to write code in MATLAB to segment two dimensional greyscale images. The MATLAB Image Processing Toolbox provides many functions (such as the ability to load, resample and filter images, compute distance transforms and easily visualise the level set evolution) which kept the code reasonably concise. 
+The first task was to write code in MATLAB to learn about the inner workings of 2D image segmentation. The MATLAB Image Processing Toolbox provides many functions (such as the ability to load, resample and filter images, compute distance transforms and easily visualise the level set evolution) which kept the code reasonably concise. 
 
 The code is split into two files (a launcher and a kernel), in order to seperate the initialisation and level set update code. The launcher handles the image loading and resampling, with the functions \texttt{imread} and \texttt{imresize}. The user specifies parameters for threshold values $T$, range $\epsilon$ and curvature weighting $\alpha$, runs the launcher and then proceeds to draw a closed polygon that will form the initial mask (providing some basic interactivity). 
 
@@ -170,10 +183,13 @@ The MATLAB code also features the Courant-Friedreichs-Lewy (CFL) condition which
 
 Finally, the user has the option of downsampling the input image in order to speed up the computation.
 
+The MATLAB code was later adapted to 3D volume segmentation.
+
 	\subsection{C}
-Initially C code was written to most closely mirror the MATLAB code. The feature image, level set function, and derivatives were stored in memory as one dimensional arrays. These arrays were stepped through by nested for loops, looping $i$ looping $j$. To go from the two dimensional $i,j$ indices to a one dimensional index \textit{ind}, the equation $\textrm{ind} = j \times \textrm{imageW} +i$ was used. These for loops computed the derivatives serially, as shown in the pseudocode for algorithm \ref{alg:forloop}. This approach favoured itself well to being optimized at a low level using pointers to quickly step through the data. It was inefficient from a memory management perspective, with the derivative arrays taking up large amounts of memory for large image sizes, and also continuosly being allocated and freed at each iteration.
+Initially C code was written to most closely mirror the MATLAB code. The C code would serve as check for the parallel implementations to ensure correct values were calculated, the \textit{gold} version. The feature image, level set function, and derivatives were stored in memory as one dimensional arrays. These arrays were stepped through by nested for loops, looping $i$ looping $j$. To go from the two dimensional $i,j$ indices to a one dimensional index \textit{ind}, the equation $\textrm{ind} = j \times \textrm{imageW} +i$ was used. These for loops computed the derivatives serially, as shown in the pseudocode for algorithm \ref{alg:forloop}. This approach favoured itself well to being optimized at a low level using pointers to quickly step through the data. It was inefficient from a memory management perspective, with the derivative arrays taking up large amounts of memory for large image sizes, and also continuously being allocated and freed at each iteration.
 
 \begin{algorithm}[h]
+\BlankLine
 \dontprintsemicolon
 \ForAll{$i,j$}{
 Calculate $D_x$\;
@@ -202,6 +218,7 @@ Restructuring the code for parallel computation of derivatives (using only one f
 
 
 \begin{algorithm}[h]
+\BlankLine
 \dontprintsemicolon
 \ForAll{$i,j$}{
 Calculate $D_x$\;
@@ -216,13 +233,13 @@ Update Level Set Function $\phi(t+\Delta t) =\phi(t) + \Delta t F|\nabla\phi|$\;
 \caption{Pseudocode for Version 2 of Sequential C Code}\label{alg:forloop2}
 \end{algorithm}
 
-For the distance transform initialization and reinitialization proceedures a seperate function was called. This is the \texttt{sedt2d} (Signed Euclidean Distance Transform in 2D) function written by Timothy Terriberry.
+For the distance transform initialization and reinitialization procedures a seperate function was called. This is the \texttt{sedt2d} (Signed Euclidean Distance Transform in 2D) function written by Timothy Terriberry.
 
 In order to visualise the level set evolution the combination of OpenGL and GLUT (OpenGL Utility Toolkit) was used to render the current zero level set. Rendering code was kept as compact and efficient as possible in order to have as minimal an effect as possible on performance whilst also making the program more comparable with the MATLAB code. Its principal purpose was of course to visualise how the level set was evolving (checking for instabilities, incorrect parameters for thresholding, range and curvature) and view the final segmentation. 
 
-\section{2D Parallel Implemention}
+\section{Parallel Implemention}
 	\subsection{Unoptimized Version}
-The first parallel implementation followed the structure shown in the pseudocode below. In CUDA, it is assumed that both the host and device maintain their own DRAM \cite{cuda}. Host memory is allocated as before using \texttt{malloc} and device memory is allocated using \texttt{cudaMalloc}. As memory bandwidth between the host memory and device memory is low (it is much lower than the bandwidth between the device and the device memory), it is recommended to keep the number of transfers to a minimum. In order to minimise the latency of accessing the shared memory it is recommended to make the block size a multiple of 16 and use the \texttt{cudaMallocPitch} routine to allocate memory with padding if the array's $x$ dimension is not a multiple of 16. Therefore most CUDA programs follow a standard strucutre of initialization, host to device data transfer, compute, and finally memory transfer of compute results from device to host. 
+The first parallel implementation followed the structure shown in the pseudocode below. In CUDA, it is assumed that both the host and device maintain their own DRAM \cite{cuda}. Host memory is allocated as before using \texttt{malloc} and device memory is allocated using \texttt{cudaMalloc}. As memory bandwidth between the host memory and device memory is low (it is much lower than the bandwidth between the device and the device memory), it is recommended to keep the number of transfers to a minimum. In order to minimise the latency of accessing the shared memory it is recommended to make the block size a multiple of 16 and use the \texttt{cudaMallocPitch} routine to allocate memory with padding if the array's $x$ dimension is not a multiple of 16. Therefore most CUDA programs follow a standard structure of initialization, host to device data transfer, compute, and finally memory transfer of compute results from device to host. 
 
 Unfortunately the algorithm for computing signed distance transforms is not executed in CUDA and creating one from scratch would have been beyond the scope of this project. Therefore device to host memory transfers were required every time reinitialization was necessary. Of course, when timing it is possible to stop and start timers during this process.
 
@@ -283,9 +300,13 @@ As each thread has access to its own \texttt{threadIdx} and \texttt{blockIdx} gl
 
 where \texttt{blockDim.x} and \texttt{blockDim.y} represent the dimensions of the block (which in this case are both equal to 2). It should be noted that the size of these block sizes affect kernel performance greatly and that much larger block sizes are used (in the proceeding algorthms typical block sizes are $32\times 4$ or $16 \times 8$). The effect of different block sizes on performance is analysed in Section \ref{results}.
 
-Once these indices were set up, only minor tweaks were needed until the code was performing well. Although this code exhibited speedups over the single threaded implementation, there was still significant optimization to perform as a great deal of computation time was being wasted on access global memory continuously.
+Once these indices were set up, only minor tweaks were needed until the code was performing well. Although this code exhibited speedups over the single threaded implementation, there was still significant optimization to perform as a great deal of computation time was being wasted on access global memory continuously. Therefore this is a \textit{naive} implementation.
 
-Some features such as the CFL condition, could not be implemented in this parallel version without slowing down computation time significantly. This is because such a condition requires the determinination of the largest element of $\nabla\phi$ which is computed roughly half way through the update procedure. Therefore integrating this condition would require transferring $\nabla\phi$ and curvature terms back to host memory to determine $max\left\{F|\nabla\phi|\right\}$. The cost of this added complexity and slowdown outweighed the benefits, and therefore $\Delta t$ was chosen to be a free parameter.
+Some features such as the CFL condition, could not be implemented in this parallel version without slowing down computation time significantly. This is because such a condition requires the determination of the largest element of $\nabla\phi$ which is computed roughly half way through the update procedure. Therefore integrating this condition would require transferring $\nabla\phi$ and curvature terms back to host memory to determine $max\left\{F|\nabla\phi|\right\}$. The cost of this added complexity and slowdown outweighed the benefits, and therefore $\Delta t$ was chosen to be a free parameter.
+
+
+
+
 
 	\subsection{2D Shared Memory Optimization}
 In order to keep the number of costly accesses to device memory at a minimum, effective use of the on-chip shared memory is essential. This along with maximizing parallel execution and optimization of instruction usage form the three main performance optimization strategies for CUDA \cite{cuda}.
@@ -304,6 +325,7 @@ The two dimensional segmentation algorithm does not require any $k\pm1$ terms, m
 
 Each thread loads  $\phi_n$ values from global memory to the active tile stored in shared memory. However, depending on the location of the thread within the thread block it may also load a single halo node into the shared memory. Therefore in order to load all halo nodes, this technique assumes that there are at least as many interior nodes as there are halo nodes. Before data can be loaded into the halos, the thread ID needs to be mapped to the location of a halo node both within the halo and within the global indices. The segment of code that sets up the halo indices (both local and global) for loading into shared memory is shown below, code is from \cite{mgiles}.
 
+\begin{spacing}{1.1}
 \begin{verbatim}
 k    = threadIdx.x + threadIdx.y*BLOCK_X;
   halo = k < 2*(BLOCK_X+BLOCK_Y+2);
@@ -318,12 +340,13 @@ k    = threadIdx.x + threadIdx.y*BLOCK_X;
       j =  k/2 - BLOCK_X - 1;
     }
 \end{verbatim}
+\end{spacing}
 
 The first $2 \times (BX + BY +2)$ threads are assigned to load values into the halo in this manner. This is best visualised with the example of a $6 \times 6$ thread block as shown below in Figure \ref{fig:haloloading}.
 
 \begin{figure}[h]
 	\centering
-		\includegraphics[scale=0.5]{images/haloloading.PNG}
+		\includegraphics{images/halo.pdf}
 	\caption{Tile and halo showing for a $6 \times 6$ block the mapping of thread IDs to halo nodes}
 	\label{fig:haloloading}
 \end{figure}
@@ -332,10 +355,10 @@ The first $2 \times (BX + BY +2)$ threads are assigned to load values into the h
 This method of loading elements has been chosen in order to maximise \textit{coalescence}. Not only are the interior tile nodes loaded coalesced, but as can be seen above, the first 12 elements of the thread block load the $y$ halos (above and below the the interior tile excluding corners) in a coalesced manner. The side halos ($x$ halos) loads are non-coalesced. When writing back results to global memory, as only the interior nodes have updated values they are written to global memory coalesced.
 
 \subsection{3D Shared Memory Optimization}
-In three dimensions, $k\pm1$ terms are required and therefore these values need to also be stored in shared memory. CUDA only allows for two dimensional grid sizes (even though blocks can be three dimensional), implying that the number of blocks in the $z$ dimension cannot exceed 1. 
 
-The algorithm by Giles \cite{mgiles} uses three $k$-planes of data for this purpose as shown below in Figure \ref{fig:shared3d}.
 
+In three dimensions, $k\pm1$ terms are required and therefore these values need to also be stored in shared memory. CUDA only allows for two dimensional grid sizes (even though blocks can be three dimensional), implying that the number of blocks in the $z$ dimension cannot exceed 1.
+ 
 \begin{figure}[h]
 	\centering
 		\includegraphics[scale=0.5]{images/shared3d.PNG}
@@ -343,6 +366,9 @@ The algorithm by Giles \cite{mgiles} uses three $k$-planes of data for this purp
 	\label{fig:shared3d}
 \end{figure}
 
+The algorithm by Giles \cite{mgiles} uses three $k$-planes of data for this purpose as shown in Figure \ref{fig:shared3d}.
 
-Before looping over the $k$-planes begins, the $\phi_k$ plane is loaded into the $k+1$ plane of shared memory. Upon entering the loop this plane is shifted down one plane to the $k$ plane and the $\phi_{k+1}$ plane is loaded into the $k+1$ plane. Level set function values are updated, and then the $k$ plane is shifted to the $k-1$ plane, the $k+1$ plane is shifted to the $k$ plane, and new values are loaded from $\phi_{k+1}$ to the $k+1$ plane. This looping over the $z$ dimension continues for all $z<\textrm{imageD}$. In this manner, each block actually processes a $BX \times BY \times \textrm{imageD}$ sub domain.
+
+
+Before looping over the $k$-planes begins, the $\phi_k$ plane is loaded into the $k+1$ plane of shared memory. Upon entering the loop this plane is shifted down one plane to the $k$ plane and the $\phi_{k+1}^n$ plane is loaded into the $k+1$ plane. Level set function values for $\phi_{k}^{n+1}$ are calculated and written coalesced back to global memory. The $k$ plane is then shifted to the $k-1$ plane, the $k+1$ plane is shifted to the $k$ plane, and new values are loaded from $\phi_{k+1}^n$ to the $k+1$ plane. This looping over the $z$ dimension continues for all $z<\textrm{imageD}$. In this manner, each block actually processes a $BX \times BY \times \textrm{imageD}$ sub domain.
 

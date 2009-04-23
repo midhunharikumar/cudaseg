@@ -7,5 +7,8 @@ A level-1 auxiliary file: Chapter5.aux
 A level-1 auxiliary file: Appendix.aux
 The style file: plain.bst
 Database file #1: References.bib
+Warning--empty publisher in gpgpudistance
 Warning--empty journal in mgiles
-(There was 1 warning)
+Warning--empty journal in goodman
+Warning--can't use both volume and number fields in difi
+(There were 4 warnings)

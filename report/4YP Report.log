@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2009.3.31)  21 APR 2009 18:08
+This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2009.3.31)  23 APR 2009 18:31
 entering extended mode
 **C:/Users/Muz/Desktop/4YP*Report/4YP*Report.tex
 ("C:/Users/Muz/Desktop/4YP Report/4YP Report.tex"
@@ -220,30 +220,79 @@ File: listings.cfg 2007/02/22 1.4 listings configuration
 ))
 Package: listings 2007/02/22 1.4 (Carsten Heinz)
 
-("C:\Program Files\MiKTeX 2.7\tex\latex\listings\lstlang1.sty"
-File: lstlang1.sty 2004/09/05 1.3 listings language file
-) ("4YP Report.aux" (Chapter1.aux) (Chapter2.aux) (Chapter3.aux) (Chapter4.aux)
- (Chapter5.aux)
-(Appendix.aux))
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
+("C:\Program Files\MiKTeX 2.7\tex\latex\fancyhdr\fancyhdr.sty"
+\fancy@headwidth=\skip61
+\f@ncyO@elh=\skip62
+\f@ncyO@erh=\skip63
+\f@ncyO@olh=\skip64
+\f@ncyO@orh=\skip65
+\f@ncyO@elf=\skip66
+\f@ncyO@erf=\skip67
+\f@ncyO@olf=\skip68
+\f@ncyO@orf=\skip69
+)
+("C:\Program Files\MiKTeX 2.7\tex\latex\pdfpages\pdfpages.sty"
+Package: pdfpages 2009/02/07 v0.4g Insert pages of external PDF documents (AM)
+
+("C:\Program Files\MiKTeX 2.7\tex\latex\tools\calc.sty"
+Package: calc 2005/08/06 v4.2 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count119
+\calc@Bcount=\count120
+\calc@Adimen=\dimen127
+\calc@Bdimen=\dimen128
+\calc@Askip=\skip70
+\calc@Bskip=\skip71
+LaTeX Info: Redefining \setlength on input line 75.
+LaTeX Info: Redefining \addtolength on input line 76.
+\calc@Ccount=\count121
+\calc@Cskip=\skip72
+)
+("C:\Program Files\MiKTeX 2.7\tex\latex\eso-pic\eso-pic.sty"
+Package: eso-pic 2006/07/14 v1.1d eso-pic (RN)
+
+("C:\Program Files\MiKTeX 2.7\tex\latex\ms\everyshi.sty"
+Package: everyshi 2001/05/15 v3.00 EveryShipout Package (MS)
+))
+("C:\Program Files\MiKTeX 2.7\tex\latex\pdfpages\pppdftex.def"
+File: pppdftex.def 2009/02/07 v0.4g Pdfpages driver for pdfTeX (AM)
+)
+\AM@pagebox=\box35
+\AM@toc@title=\toks23
+\c@AM@survey=\count122
+\AM@templatesizebox=\box36
+)
+
+Package Fancyhdr Warning: \fancyhead's `E' option without twoside option is use
+less on input line 25.
+
+
+Package Fancyhdr Warning: \fancyhead's `E' option without twoside option is use
+less on input line 27.
+
+("4YP Report.aux" (Chapter1.aux) (Chapter2.aux) (Chapter3.aux) (Chapter4.aux
+
+LaTeX Warning: Label `dimensions2d' multiply defined.
+
+) (Chapter5.aux) (Appendix.aux))
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
 -------------------- Geometry parameters
 paper: a4paper
 landscape: --
 twocolumn: --
 twoside: --
 asymmetric: --
-h-parts: 85.35826pt, 398.33861pt, 85.35826pt
+h-parts: 56.9055pt, 455.24413pt, 56.9055pt
 v-parts: 85.35826pt, 674.33032pt, 85.35826pt
 hmarginratio: --
 vmarginratio: --
@@ -258,10 +307,10 @@ driver: pdftex
 -------------------- Page layout dimensions and switches
 \paperwidth  597.50787pt
 \paperheight 845.04684pt
-\textwidth  398.33861pt
+\textwidth  455.24413pt
 \textheight 674.33032pt
-\oddsidemargin  41.54102pt
-\evensidemargin 13.08827pt
+\oddsidemargin  13.08826pt
+\evensidemargin -15.36449pt
 \topmargin  -23.91173pt
 \headheight 12.0pt
 \headsep    25.0pt
@@ -276,24 +325,35 @@ driver: pdftex
 
 (1in=72.27pt, 1cm=28.45pt)
 -----------------------
- ("C:\Program Files\MiKTeX 2.7\tex\context\base\supp-pdf.tex"
+
+("C:\Program Files\MiKTeX 2.7\tex\context\base\supp-pdf.tex"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count119
-\scratchdimen=\dimen127
-\scratchbox=\box35
-\nofMPsegments=\count120
-\nofMParguments=\count121
-\MPscratchCnt=\count122
-\MPscratchDim=\dimen128
-\MPnumerator=\count123
-\everyMPtoPDFconversion=\toks23
+\scratchcounter=\count123
+\scratchdimen=\dimen129
+\scratchbox=\box37
+\nofMPsegments=\count124
+\nofMParguments=\count125
+\MPscratchCnt=\count126
+\MPscratchDim=\dimen130
+\MPnumerator=\count127
+\everyMPtoPDFconversion=\toks24
 )
-\c@lstlisting=\count124
-LaTeX Font Info:    Try loading font information for U+msa on input line 24.
- ("C:\Program Files\MiKTeX 2.7\tex\latex\amsfonts\umsa.fd"
+\c@lstlisting=\count128
+ ABD: EveryShipout initializing macros
+("C:\Program Files\MiKTeX 2.7\tex\latex\graphics\color.sty"
+Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
+
+("C:\Program Files\MiKTeX 2.7\tex\latex\00miktex\color.cfg"
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package color Info: Driver file: pdftex.def on input line 130.
+)
+LaTeX Font Info:    Try loading font information for U+msa on input line 43.
+
+("C:\Program Files\MiKTeX 2.7\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2002/01/19 v2.2g AMS font definitions
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 24.
+LaTeX Font Info:    Try loading font information for U+msb on input line 43.
 
 ("C:\Program Files\MiKTeX 2.7\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2002/01/19 v2.2g AMS font definitions
@@ -301,177 +361,369 @@ File: umsb.fd 2002/01/19 v2.2g AMS font definitions
 
 {C:/Users/Muz/Local Settings/Application Data/MiKTeX/2.7/pdftex/config/pdftex.m
 ap}]
+<images/declaration.pdf, id=9, page=1, 597.23125pt x 845.1575pt>
+File: images/declaration.pdf Graphic file (type pdf)
+
+<use images/declaration.pdf, page 1>
+File: images/declaration.pdf Graphic file (type pdf)
+ <use images/declaration.pdf, page 1>
+File: images/declaration.pdf Graphic file (type pdf)
+
+<use images/declaration.pdf, page 1>
+File: images/declaration.pdf Graphic file (type pdf)
+ <use images/declaration.pdf, page 1>
+File: images/declaration.pdf Graphic file (type pdf)
+
+<use images/declaration.pdf, page 1> [1 <images/declaration.pdf>]
 ("4YP Report.toc")
 \tf@toc=\write3
- [1
+ [2
 
 ] (Chapter1.tex
 Chapter 1.
-[2
+[3
 
 
-] [3] <images/cudathreads.PNG, id=21, 457.71pt x 580.1675pt>
+] [4] <images/cudathreads.PNG, id=42, 457.71pt x 580.1675pt>
 File: images/cudathreads.PNG Graphic file (type png)
 
 <use images/cudathreads.PNG>
-<images/cudamemory.PNG, id=22, 565.11125pt x 524.96124pt>
+<images/cudamemory.PNG, id=43, 565.11125pt x 524.96124pt>
 File: images/cudamemory.PNG Graphic file (type png)
 
-<use images/cudamemory.PNG>) [4] [5 <images/cudathreads.PNG (PNG copy)> <images
-/cudamemory.PNG (PNG copy)>] (Chapter2.tex
+<use images/cudamemory.PNG> [5] [6 <images/cudathreads.PNG (PNG copy)> <images/
+cudamemory.PNG (PNG copy)>]) [7] (Chapter2.tex
 Chapter 2.
-<images/levelsets.png, id=29, 451.6875pt x 492.84125pt>
+<images/levelsets.png, id=56, 451.6875pt x 492.84125pt>
 File: images/levelsets.png Graphic file (type png)
 
 <use images/levelsets.png>
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[6
+[8
 
 
 
-] [7 <images/levelsets.png (PNG copy)>]
-<images/speedterm.png, id=40, 769.87625pt x 529.98pt>
+] [9 <images/levelsets.png (PNG copy)>]
+<images/speedterm.png, id=65, 769.87625pt x 529.98pt>
 File: images/speedterm.png Graphic file (type png)
 
-<use images/speedterm.png> [8 <images/speedterm.png (PNG copy)>]
-<images/initmask.png, id=46, 294.34969pt x 237.13594pt>
+<use images/speedterm.png>
+<images/leaking.png, id=66, 255.95625pt x 253.94875pt>
+File: images/leaking.png Graphic file (type png)
+
+<use images/leaking.png>
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[10 <images/speedterm.png (PNG copy)>]
+<images/initmask.png, id=70, 294.34969pt x 237.13594pt>
 File: images/initmask.png Graphic file (type png)
 
-<use images/initmask.png> <images/sdf.png, id=47, 294.34969pt x 237.13594pt>
+<use images/initmask.png> <images/sdf.png, id=71, 294.34969pt x 237.13594pt>
 File: images/sdf.png Graphic file (type png)
 
-<use images/sdf.png>) [9 <images/initmask.png (PNG copy)> <images/sdf.png (PNG 
-copy)>] (Chapter3.tex
+<use images/sdf.png>) [11 <images/leaking.png (PNG copy)> <images/initmask.png 
+(PNG copy)> <images/sdf.png (PNG copy)>] [12] (Chapter3.tex
 Chapter 3.
-[10
+[13
 
 
 
-] [11]
-Underfull \hbox (badness 10000) in paragraph at lines 86--87
-
- []
-
-[12]
-Underfull \hbox (badness 10000) detected at line 150
+] [14] [15] [16]
+Underfull \hbox (badness 10000) detected at line 163
 [][]
  []
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[13] <images/matlab.png, id=71, 476.78125pt x 419.5675pt>
+<images/matlab.png, id=100, 476.78125pt x 419.5675pt>
 File: images/matlab.png Graphic file (type png)
-
-<use images/matlab.png>
+ <use images/matlab.png>
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[14]
-Underfull \hbox (badness 10000) detected at line 195
+[17] [18 <images/matlab.png (PNG copy)>]
+Underfull \hbox (badness 10000) detected at line 211
 [][]
  []
 
-[15 <images/matlab.png (PNG copy)>]
-Underfull \hbox (badness 10000) detected at line 217
+
+Underfull \hbox (badness 10000) detected at line 234
 [][]
  []
 
-[16]
-Underfull \hbox (badness 10000) detected at line 248
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[19] [20]
+Underfull \hbox (badness 10000) detected at line 265
 [][]
  []
 
-[17] [18]
-Underfull \hbox (badness 10000) in paragraph at lines 295--296
+[21] [22]
+Underfull \hbox (badness 10000) in paragraph at lines 316--317
 
  []
 
-<images/shared2d.PNG, id=89, 316.18124pt x 96.36pt>
+<images/shared2d.PNG, id=121, 316.18124pt x 96.36pt>
 File: images/shared2d.PNG Graphic file (type png)
  <use images/shared2d.PNG>
-[19 <images/shared2d.PNG (PNG copy)>]
-<images/haloloading.PNG, id=93, 316.18124pt x 225.84375pt>
-File: images/haloloading.PNG Graphic file (type png)
-
-<use images/haloloading.PNG> [20 <images/haloloading.PNG (PNG copy)>]
-<images/shared3d.PNG, id=97, 316.18124pt x 310.15875pt>
+[23 <images/shared2d.PNG (PNG copy)>]
+<images/halo.pdf, id=125, 284.62335pt x 219.09854pt>
+File: images/halo.pdf Graphic file (type pdf)
+ <use images/halo.pdf>
+<images/shared3d.PNG, id=126, 316.18124pt x 310.15875pt>
 File: images/shared3d.PNG Graphic file (type png)
 
-<use images/shared3d.PNG>) [21 <images/shared3d.PNG (PNG copy)>] (Chapter4.tex
+<use images/shared3d.PNG>
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[24 <images/halo.pdf
+
+pdfTeX warning:  (file images/halo.pdf): PDF inclusion: Page Group detected whi
+ch pdfTeX can't handle. Ignoring it.
+>]) [25 <images/shared3d.PNG (PNG copy)>] (Chapter4.tex
 Chapter 4.
-) [22
+[26
 
 
 
-] (Chapter5.tex
+] <images/liver.PNG, id=142, 256.96pt x 256.96pt>
+File: images/liver.PNG Graphic file (type png)
+ <use images/liver.PNG>
+<images/livermask.PNG, id=143, 256.96pt x 256.96pt>
+File: images/livermask.PNG Graphic file (type png)
+ <use images/livermask.PNG>
+<images/liverseg.PNG, id=144, 256.96pt x 256.96pt>
+File: images/liverseg.PNG Graphic file (type png)
+ <use images/liverseg.PNG>
+<images/brain.PNG, id=145, 513.92pt x 513.92pt>
+File: images/brain.PNG Graphic file (type png)
+ <use images/brain.PNG>
+<images/brainmask.PNG, id=146, 513.92pt x 513.92pt>
+File: images/brainmask.PNG Graphic file (type png)
+ <use images/brainmask.PNG>
+<images/brainseg.PNG, id=147, 513.92pt x 513.92pt>
+File: images/brainseg.PNG Graphic file (type png)
+ <use images/brainseg.PNG>
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[27 <images/liver.PNG (PNG copy)> <images/livermask.PNG (PNG copy)> <images/liv
+erseg.PNG (PNG copy)>] <images/livernoise20.PNG, id=151, 256.96pt x 256.96pt>
+File: images/livernoise20.PNG Graphic file (type png)
+
+<use images/livernoise20.PNG>
+<images/livernoise20seg.PNG, id=152, 256.96pt x 256.96pt>
+File: images/livernoise20seg.PNG Graphic file (type png)
+
+<use images/livernoise20seg.PNG>
+Underfull \hbox (badness 10000) in paragraph at lines 78--78
+[]\OT1/cmr/m/n/9 (b) Seg-men-ta-tion with
+ []
+
+<images/livernoise40.PNG, id=153, 256.96pt x 256.96pt>
+File: images/livernoise40.PNG Graphic file (type png)
+
+<use images/livernoise40.PNG>
+<images/livernoise40seg.PNG, id=154, 256.96pt x 256.96pt>
+File: images/livernoise40seg.PNG Graphic file (type png)
+
+<use images/livernoise40seg.PNG>
+Underfull \hbox (badness 10000) in paragraph at lines 80--80
+[]\OT1/cmr/m/n/9 (d) Seg-men-ta-tion with
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: Reference `fig:dimensions2d' on page 28 undefined on input line 
+90.
+
+[28 <images/brain.PNG (PNG copy)> <images/brainmask.PNG (PNG copy)> <images/bra
+inseg.PNG (PNG copy)>]
+<images/dimensions2d.pdf, id=158, 844.95674pt x 597.432pt>
+File: images/dimensions2d.pdf Graphic file (type pdf)
+
+<use images/dimensions2d.pdf>
+<images/elements2d.pdf, id=159, 844.95674pt x 597.432pt>
+File: images/elements2d.pdf Graphic file (type pdf)
+
+<use images/elements2d.pdf>
+<images/3devolution0.PNG, id=160, 297.11pt x 301.125pt>
+File: images/3devolution0.PNG Graphic file (type png)
+
+<use images/3devolution0.PNG>
+<images/3devolution1.PNG, id=161, 297.11pt x 301.125pt>
+File: images/3devolution1.PNG Graphic file (type png)
+
+<use images/3devolution1.PNG>
+<images/3devolution2.PNG, id=162, 297.11pt x 301.125pt>
+File: images/3devolution2.PNG Graphic file (type png)
+
+<use images/3devolution2.PNG>
+<images/3devolution3.PNG, id=163, 297.11pt x 301.125pt>
+File: images/3devolution3.PNG Graphic file (type png)
+
+<use images/3devolution3.PNG>
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[29 <images/livernoise20.PNG (PNG copy)> <images/livernoise20seg.PNG (PNG copy)
+> <images/livernoise40.PNG (PNG copy)> <images/livernoise40seg.PNG (PNG copy)>]
+[30 <images/dimensions2d.pdf
+
+pdfTeX warning:  (file images/dimensions2d.pdf): PDF inclusion: Page Group dete
+cted which pdfTeX can't handle. Ignoring it.
+> <images/elements2d.pdf
+
+pdfTeX warning:  (file images/elements2d.pdf): PDF inclusion: Page Group detect
+ed which pdfTeX can't handle. Ignoring it.
+>] <images/brain3d.PNG, id=190, 301.125pt x 301.125pt>
+File: images/brain3d.PNG Graphic file (type png)
+
+<use images/brain3d.PNG>
+<images/brain3dseg3.PNG, id=191, 301.125pt x 301.125pt>
+File: images/brain3dseg3.PNG Graphic file (type png)
+
+<use images/brain3dseg3.PNG>
+<images/brain3dseg1.PNG, id=192, 301.125pt x 301.125pt>
+File: images/brain3dseg1.PNG Graphic file (type png)
+
+<use images/brain3dseg1.PNG>
+<images/brain3dseg2.PNG, id=193, 301.125pt x 301.125pt>
+File: images/brain3dseg2.PNG Graphic file (type png)
+
+<use images/brain3dseg2.PNG>
+<images/heart3dseg.PNG, id=194, 401.5pt x 401.5pt>
+File: images/heart3dseg.PNG Graphic file (type png)
+ <use images/heart3dseg.PNG>
+<images/heart3dseg1.PNG, id=195, 401.5pt x 401.5pt>
+File: images/heart3dseg1.PNG Graphic file (type png)
+
+<use images/heart3dseg1.PNG> [31 <images/3devolution0.PNG (PNG copy)> <images/3
+devolution1.PNG (PNG copy)> <images/3devolution2.PNG (PNG copy)> <images/3devol
+ution3.PNG (PNG copy)>] [32 <images/brain3d.PNG (PNG copy)> <images/brain3dseg3
+.PNG (PNG copy)> <images/brain3dseg1.PNG (PNG copy)> <images/brain3dseg2.PNG (P
+NG copy)> <images/heart3dseg.PNG (PNG copy)> <images/heart3dseg1.PNG (PNG copy)
+>] [33] [34]) [35] (Chapter5.tex
 Chapter 5.
-) [23
+[36
 
 
 
-]
+]) [37] (Appendix.tex
 Chapter 6.
-[24
-
-
-] (Appendix.tex
-Chapter 7.
+("C:\Program Files\MiKTeX 2.7\tex\latex\listings\lstlang1.sty"
+File: lstlang1.sty 2004/09/05 1.3 listings language file
+)
 (code/simpleseg.m
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 14.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 11.
  ("C:\Program Files\MiKTeX 2.7\tex\latex\base\omscmr.fd"
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <9> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 14.
-LaTeX Font Info:    Try loading font information for OML+cmr on input line 29.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 11.
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 24.
 
 ("C:\Program Files\MiKTeX 2.7\tex\latex\base\omlcmr.fd"
 File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <9> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 29.
- [25
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 24.
+ [38
 
 
-] [26])) [27]
-("4YP Report.bbl") [28
+
+]) [39]
+("C:\Program Files\MiKTeX 2.7\tex\latex\listings\lstlang1.sty"
+File: lstlang1.sty 2004/09/05 1.3 listings language file
+)
+("C:\Program Files\MiKTeX 2.7\tex\latex\listings\lstmisc.sty"
+File: lstmisc.sty 2007/02/22 1.4 (Carsten Heinz)
+) (code/kernel.cu
+[40] [41]
+Overfull \hbox (5.4074pt too wide) in paragraph at lines 150--151
+[][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[42]
+Overfull \hbox (5.4074pt too wide) in paragraph at lines 157--158
+[][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+) [43] (code/main.cu
+Overfull \hbox (60.90758pt too wide) in paragraph at lines 36--37
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[44]
+LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <9> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 67.
+
+Overfull \hbox (10.95741pt too wide) in paragraph at lines 68--69
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[45])) [46] ("4YP Report.bbl") [47
 
 
-] ("4YP Report.aux" (Chapter1.aux) (Chapter2.aux)
-(Chapter3.aux) (Chapter4.aux) (Chapter5.aux) (Appendix.aux)) ) 
+]
+<images/riskassess.pdf, id=254, page=1, 845.19763pt x 597.55246pt>
+File: images/riskassess.pdf Graphic file (type pdf)
+
+<use images/riskassess.pdf, page 1>
+File: images/riskassess.pdf Graphic file (type pdf)
+ <use images/riskassess.pdf, page 1>
+File: images/riskassess.pdf Graphic file (type pdf)
+
+<use images/riskassess.pdf, page 1>
+File: images/riskassess.pdf Graphic file (type pdf)
+ <use images/riskassess.pdf, page 1>
+File: images/riskassess.pdf Graphic file (type pdf)
+
+<use images/riskassess.pdf, page 1> [48 <images/riskassess.pdf>]
+("4YP Report.aux" (Chapter1.aux) (Chapter2.aux) (Chapter3.aux) (Chapter4.aux)
+(Chapter5.aux) (Appendix.aux))
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
 Here is how much of TeX's memory you used:
- 5172 strings out of 95340
- 65981 string characters out of 1184178
- 189693 words of memory out of 1500000
- 8251 multiletter control sequences out of 110000
+ 6453 strings out of 95340
+ 85188 string characters out of 1184178
+ 216729 words of memory out of 1500000
+ 9471 multiletter control sequences out of 110000
  16913 words of font info for 63 fonts, out of 1200000 for 2000
  14 hyphenation exceptions out of 8191
- 35i,15n,40p,1109b,2019s stack positions out of 5000i,500n,10000p,200000b,5000s
-<C:/Program Files
-/MiKTeX 2.7/fonts/type1/bluesky/cm/cmbx10.pfb><C:/Program Files/MiKTeX 2.7/font
-s/type1/bluesky/cm/cmbx12.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/
-cm/cmbx9.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmex10.pfb><C:
-/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmmi10.pfb><C:/Program Files/M
-iKTeX 2.7/fonts/type1/bluesky/cm/cmmi6.pfb><C:/Program Files/MiKTeX 2.7/fonts/t
-ype1/bluesky/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/c
-mmi9.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr10.pfb><C:/Prog
-ram Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr12.pfb><C:/Program Files/MiKTeX 
-2.7/fonts/type1/bluesky/cm/cmr17.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/b
-luesky/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr8.pfb
-><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr9.pfb><C:/Program Files
-/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsl10.pfb><C:/Program Files/MiKTeX 2.7/font
-s/type1/bluesky/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/
-cm/cmsy6.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy8.pfb><C:/
-Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy9.pfb><C:/Program Files/MiK
-TeX 2.7/fonts/type1/bluesky/cm/cmti10.pfb><C:/Program Files/MiKTeX 2.7/fonts/ty
-pe1/bluesky/cm/cmti9.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cm
-tt10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/ams/msbm10.pfb>
-Output written on "4YP Report.pdf" (29 pages, 540038 bytes).
+ 33i,16n,51p,1109b,2118s stack positions out of 5000i,500n,10000p,200000b,5000s
+<C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmbx10.pfb><C:/Program Fi
+les/MiKTeX 2.7/fonts/type1/bluesky/cm/cmbx12.pfb><C:/Program Files/MiKTeX 2.7/f
+onts/type1/bluesky/cm/cmbx9.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesk
+y/cm/cmex10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmmi10.pfb>
+<C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmmi6.pfb><C:/Program Files
+/MiKTeX 2.7/fonts/type1/bluesky/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.7/fonts
+/type1/bluesky/cm/cmmi9.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm
+/cmr10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr12.pfb><C:/Pr
+ogram Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr17.pfb><C:/Program Files/MiKTe
+X 2.7/fonts/type1/bluesky/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/
+bluesky/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr9.pf
+b><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsl10.pfb><C:/Program Fi
+les/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.7/f
+onts/type1/bluesky/cm/cmsy6.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesk
+y/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy9.pfb><C
+:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmti10.pfb><C:/Program Files/
+MiKTeX 2.7/fonts/type1/bluesky/cm/cmti9.pfb><C:/Program Files/MiKTeX 2.7/fonts/
+type1/bluesky/cm/cmtt10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/am
+s/msbm10.pfb>
+Output written on "4YP Report.pdf" (49 pages, 2022103 bytes).
 PDF statistics:
- 199 PDF objects out of 1000 (max. 8388607)
+ 363 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 131072)
- 51 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 196 words of extra memory for PDF output out of 10000 (max. 10000000)
 

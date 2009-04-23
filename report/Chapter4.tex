@@ -1,15 +1,230 @@
 \chapter{Results}
 
-In the following, the results of the speed ups attained by optimizing using GPU hardware will be shown. However, before this can be done, some preliminaries need to be listed. Firstly, all hardware testing was done on a single PC with an Intel Core 2 Duo T8100 Processor with a clock speed of 2.1 GHz and 4 GB of RAM. The graphics hardware used was the NVIDIA GeForce 8600M GT, with CUDA 2.1 software installed. It should be noted that at the time of writing, CUDA 2.2 was available although in beta form and was not chosen due to potential instabilities. 
+In the following, the results of the speed ups attained by optimizing using GPU hardware will be shown. However, before this can be done, some preliminaries need to be listed. Firstly, all hardware testing was done on a single PC with an Intel Core 2 Duo T8100 Processor with a clock speed of 2.1 GHz and 4 GB of RAM. The graphics hardware used was the NVIDIA GeForce 8600M GT, with CUDA 2.1 software installed. It should be noted that at the time of writing, CUDA 2.2 was available although in beta form and was not chosen due to potential instabilities. Timing code used was from the \texttt{cutil} library.
 
-Although 8600M GT is adequate for CUDA development, it has rather limited performance in comparison to other graphics chips. For example, although the shader processing rate of 8600M GT is quoted as 91.2 Gigaflops the recently released GeForce GTX 295 boasts an impressive 1788.48 Gigaflops potentially allowing for another order of magnitude speed up from the 8600M GT hardware. This is mainly due to the increased number of on chip multiprocessors, however to lesser extent is also due to the device being of higher \textit{compute capability}: there are fewer limitations (such as support for double precision arithmetic) and relaxed requirements for coalescing memory transfers.
+Although 8600M GT is adequate for CUDA development, it has rather limited performance in comparison to other graphics chips. This implies that the performance speed ups below could potentially be up to a further order of magnitude faster on newer hardware. For example, although the shader processing rate of 8600M GT is quoted as 91.2 Gigaflops the recently released GeForce GTX 295 boasts an impressive 1788.48 Gigaflops potentially allowing for another order of magnitude speed up from the 8600M GT hardware. This is mainly due to the increased number of on chip multiprocessors, however to lesser extent is also due to the device being of higher \textit{compute capability}: there are fewer limitations (such as support for double precision arithmetic) and relaxed requirements for coalescing memory transfers.
 
 \section{Speed Tests and Analysis}\label{results}
 
 \subsection{2D Segmentations}
 
 
-	
+In Figure \ref{fig:liver} the example of a liver segmentation is shown. The liver data is of good contrast and dimension $256\times 256$ (which is a multiple of 16 implying no memory padding is required in CUDA). The liver has been entirely segmented, with the initial mask as the input. The time taken for 5000 iterations in MATLAB, C, CUDA (Unoptimized) and CUDA (Optimzed) are shown in Table \ref{livertime}.
 
-\section{Limitations}
+ 
+\begin{figure}[h]
+  \begin{center}
+    \subfigure[Feature Image Input - Liver]{\label{fig:liveroriginal}\includegraphics[scale=0.5]{images/liver.PNG}}
+    \subfigure[Initial Mask Input]{\label{fig:livermask}\includegraphics[scale=0.5]{images/livermask.PNG}}
+    \subfigure[Output of Segmentation]{\label{fig:liverseg}\includegraphics[scale=0.5]{images/liverseg.PNG}}
+  \end{center}
+  \caption{2D Liver Segmentation with parameters $T = 180, \epsilon = 45, \alpha = 0.003$}
+  \label{fig:liver}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ | l | c | r | }
+	\hline
+	Algorithm Version  & Time (s)\\ \hline
+  MATLAB 						 & 425.95 \\
+  C 								 & 55.44 \\
+  CUDA (Unoptimized) & 8.38 \\
+  CUDA (Optimized)   & 1.73  \\
+  \hline
+\end{tabular}\caption{Comparison of runtime for different algorithm versions - 2D liver segmentation}
+\label{livertime}
+\end{table}
+
+The runtime speed up attained from sequential code in C to CUDA optimized code is approximately $32 \times$. The block sizes used for 2D CUDA compute were $32 \times 8$ (the effect of varying block sizes in 3D is examined in \ref{blocksizes}.
+
+
+\begin{figure}[h]
+  \begin{center}
+    \subfigure[Feature Image Input - brain]{\label{fig:brainoriginal}\includegraphics[scale=0.25]{images/brain.PNG}}
+    \subfigure[Initial Mask Input]{\label{fig:brainmask}\includegraphics[scale=0.25]{images/brainmask.PNG}}
+    \subfigure[Output of Segmentation]{\label{fig:brainseg}\includegraphics[scale=0.25]{images/brainseg.PNG}}
+  \end{center}
+  \caption{2D Brain Segmentation with parameters $T = 45, \epsilon = 30, \alpha = 0.003$}
+  \label{fig:brain}
+\end{figure}
+
+In Figure \ref{fig:brain} we can see the brain in sagittal view. This image is of relatively poor contrast and has dimensions $512 \times 512$. This makes the image both a computationally demanding segmentation (as it has relatively large dimensions) and challenging in terms of accuracy.
+The segmentation inputs and output can be seen in Figure \ref{fig:brain}. It can be seen that the sequential algorithm has perfomed reasonably in segmenting the white and grey matter and some of the brian stem. Considerable weighting had to be given to curvature in order to prevent leaks due to the poor contrast, resulting in a very rounded segmentation. 
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ | l | c | r | }
+	\hline
+	Algorithm Version  & Time (s)\\ \hline
+  MATLAB 						 & 2737.84 \\
+  C 								 & 322.81 \\
+  CUDA (Unoptimized) & 44.68 \\
+  CUDA (Optimized)   & 6.99  \\
+  \hline
+\end{tabular}\caption{Comparison of runtime for different algorithm versions - 2D brain segmentation}
+\label{braintime}
+\end{table}
+
+The performance speedup attained on this larger image is therefore $46 \times$, which is greater than the speed up attained for the smaller $256 \times 256$ image. This motivates exploration into the effect of different image sizes on CUDA speed up, which is discussed in Section \ref{dimensions2d}. 
+
+\subsubsection{Effect of Noise}
+
+Denoising filters already exist as part of the CUDA SDK (i.e. \texttt{imageDenoising}). Our algorithm does not feature any image pre-processing algorithms such as denoising or blurring so its performance on noisy images is expected to be poor. In order to test this, artificial noise of 20\% and 40\% was added to the liver image as shown in Figure \ref{fig:livernoise}. 
+
+\begin{figure}[h]
+  \begin{center}
+    \subfigure[Liver with 20\% Noise]{\label{fig:livernoise20}\includegraphics[scale=0.4]{images/livernoise20.PNG}}
+    \subfigure[Segmentation with $T = 180, \epsilon = 55, \alpha = 0.003$]{\label{fig:livernoise20seg}\includegraphics[scale=0.4]{images/livernoise20seg.PNG}}\\
+    \subfigure[Liver with 40\% Noise]{\label{fig:livernoise40}\includegraphics[scale=0.4]{images/livernoise40.PNG}}
+    \subfigure[Segmentation with $T = 180, \epsilon = 75, \alpha = 0.003$]{\label{fig:livernoise40seg}\includegraphics[scale=0.4]{images/livernoise40seg.PNG}}
+  \end{center}
+  \caption{Segmentation of the liver with artifically added noise}
+  \label{fig:livernoise}
+\end{figure}
+
+It can be seen that through manipulating the parameter $\epsilon$ segmentations are still approximately valid. The effect of noise on performance of the algorithm was negligable.
+
+\subsubsection{Effect of Different Image Sizes}\label{dimensions2d}
+
+It is found, as expected, that for all versions of the algorithm (CUDA and single threaded) compute time scales proportionally with the number of elements. For square 2D images, this implies that increasing image size by a factor of two in each dimension increases compute time by a factor of four. Figure \ref{fig:dimensions2d} displays compute times to 5000 iterations across the different algorithm versions. The same input image and mask was used for all test, with block dimensions of $32 \times 8$.
+
+\begin{figure}[p]
+	\begin{flushleft}
+		\subfigure{\label{dimensions2d}\includegraphics[scale=0.5]{images/dimensions2d.pdf}}
+		\subfigure{\label{elements2d}\includegraphics[scale=0.5]{images/elements2d.pdf}}
+	\end{flushleft}
+	\label{fig:speed}\caption{Effect of different image sizes (a) On compute time (b) On number of elements computed per second]}
+\end{figure}
+
+It can be seen that the difference in compute time between the parallel and sequential versions is greatest for the largest images. This is due to the number of elements for the optimized CUDA version being considerably higher for all image sizes. Interestingly, Figure \ref{elements2d} shows that the number of elements per second is approximately constant for both the sequential and unoptimized CUDA implementations, but not for the optimized shared memory CUDA algorithm. This is due to the bottleneck being latency between device and shared memory and there not being enough occupancy of the GPU to mask this.
+
+
+
+
+\subsection{3D Segmentations}
+
+\begin{figure}[h]
+  \begin{center}
+    \subfigure{\includegraphics[scale=0.3]{images/3devolution0.PNG}}
+    \subfigure{\includegraphics[scale=0.3]{images/3devolution1.PNG}}
+    \subfigure{\includegraphics[scale=0.3]{images/3devolution2.PNG}}
+    \subfigure{\includegraphics[scale=0.3]{images/3devolution3.PNG}}
+  \end{center}
+  \caption{Level Set Surface Evolution in 3D at 50, 200, 400 and 600 Iterations}
+  \label{fig:evolution}
+\end{figure}
+
+Figure \ref{fig:evolution} illustrates a level set surface evolving in 3 dimensions. In order to visualise the level set evolving every certain number of iterations this the CUDA SDK example \texttt{volumeRender} was used, however is not advised as doing so slows down the segmentation process by approximately an order of magnitude. This volume rendering engine uses ray tracing which is not advised for segmentation validation, and therefore \textit{Paraview 3.4.0} (www.paraview.org) was used.
+
+The 3D segmentation CUDA code uses a block size of $32 \times 4$. A block size of $32 \times 8$ causes the kernel invokation to fail due to the registers used per threads multiplied by the thread block size being greater $N$ (where for G80 NVIDIA hardware $N=8192$ 32-bit registers per multiprocessor. This limits the extent to which occupancy can be increased to mask latencies due to global memory loads. Section \ref{blocksizes} explores the effect of varying block sizes on performance.
+
+\begin{figure}[p]
+  \begin{center}
+    \subfigure{\includegraphics[scale=0.55]{images/brain3d.PNG}}
+    \subfigure{\includegraphics[scale=0.55]{images/brain3dseg3.PNG}}
+    \subfigure{\includegraphics[scale=0.55]{images/brain3dseg1.PNG}}
+    \subfigure{\includegraphics[scale=0.55]{images/brain3dseg2.PNG}}
+  \end{center}
+  \caption{Segmentation of a brain MRI dataset with parameters $T = 150, \epsilon = 50, \alpha = 0.03$ MRI data from \cite{brainweb}}
+  \label{fig:brain3d}
+\end{figure}
+\begin{figure}[p]
+  \begin{center}
+    \subfigure[]{\includegraphics[scale=0.4]{images/heart3dseg.PNG}}
+    \subfigure[]{\includegraphics[scale=0.4]{images/heart3dseg1.PNG}}
+  \end{center}
+  \caption{Segmentation of the right and left ventricles from a heart MRI dataset with parameters $T = 180, \epsilon = 60, \alpha = 0.02$ (a) Input data slice (b) Segmented heart clipped through $z$ plane}
+  \label{fig:heart3d}
+\end{figure}
+
+As can be seen in Figure \ref{fig:brain3d} segmentation of the grey and white matter along with the brain stem is very anatomically detailed. This is due in part to the excellent quality of the \textit{BrainWeb} MRI data used, this data is available from \cite{brainweb}. As the CFL condition had not been implemented in the 3D level set solver, it was found to converge at 1000 iterations and that $DT$ values greater than 0.1 resulted in instability.
+
+The times taken to segment are shown in Figure \ref{brain3dtime}. MATLAB code is not shown as out of memory were encountered when loading such large arrays (even if these had not been encountered, the segmentation would have taken an infeasible amount of time).
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ | l | c | r | }
+	\hline
+	Algorithm Version  & Time (s)\\ \hline
+  MATLAB 						 & N/A \\
+  C 								 & 4697.5 \\
+  CUDA (Unoptimized) & 392.8 \\
+  CUDA (Optimized)   & 141.2  \\
+  \hline
+\end{tabular}\caption{Comparison of runtime for different algorithm versions - 3D Brain segmentation}
+\label{brain3dtime}
+\end{table}
+
+An impressive speed up of $33 \times$ is observed. To further demonstrate the power of this algorithm testing was briefly done on a more mid-range 8800 GTX card, observing a speed up of $117 \times$ compared to the sequential algorithm.
+
+In Figure \ref{fig:heart3d} segmentation of both the right and left ventricles can be seen. This segmentation data only had 17 $z$ plane slices (total resolution $256 \times 160 \times 17$).
+
+
+\subsubsection{Effect of Different Volume Sizes}\label{dimensions3d}
+
+
+Table \ref{table:dimensions3d} shows the effect of multiple volume sizes on the compute time to 1000 iterations on the optimized CUDA algorithm. Tests were not run on unoptimized or sequential code as results similar to those in 
+As the CUDA optimized algorithm loops over the $k$ planes in a sequentially fashion, it is expected that doubling the volume size in the $z$ dimension would have an effect on compute time when compared to doubling the volume sizes in either the $x$ or $y$ dimensions. Therefore testing was done on non-cubic volume dimensions in order to explore this effect.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ | c | c | c | }
+	\hline
+	Volume Dimensions  & Elements / Second & Time (s)\\ \hline
+  $64 \times 64 \times 64  $	 & 54050.3			& 4.9 \\
+  $128 \times 128 \times 128  $&	53676.8		& 39.1 \\
+  $128 \times 256 \times 128  $& 53092.5   & 79.0 \\
+  $128 \times 128 \times 256  $&	53485.1   & 78.4  \\
+  $256 \times 256 \times 256  $&	52925.0   & 317.1  \\
+  \hline
+\end{tabular}\caption{Comparison of runtime for different volume sizes}
+\label{table:dimensions3d}
+\end{table}
+
+In fact, it is found that there is no effect on performance which demonstrates the algorithms versatility. 
+
+\subsubsection{Effect of Different CUDA Block/Grid Sizes}\label{blocksizes}
+
+Finding the optimum block size for CUDA code is one of the most important ways to optimize performance. Block sizes should not be a user parameter (other than for testing purposes) as it assumed the developer would have chosen the optimum block size for maximum performance. Figure \ref{table:blocksizes} shows the compute times to 1000 iterations for the CUDA optimized code with different block sizes, all other parameters were held constant. 
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ | c | c | c | }
+	\hline
+	$BX \times BY$  & Threads/Block & Time (s) \\ \hline
+  $32 \times 4$	 &128			& 141.7 \\
+  $16 \times 8$	 &128			& 141.9 \\
+  $16 \times 12$ &192 & 108.4 \\
+  $32 \times 6$	 &192   & 107.4  \\
+  $48 \times 4$	 &192  & 106.8  \\
+  \hline
+\end{tabular}\caption{Comparison of runtime for different block sizes}
+\label{table:blocksizes}
+\end{table}
+
+It can be seen that for blocks with 192 threads performance is approximately constant across the different block arrangements. This is due to the fact that $BX$ has been chosen to be a multiple of 16 to maximise performance, the parameter $BY$ has much less of an effect on performance and should always be set secondary to $BX$.
+
+
+
+\section{Discussion and Limitations}
+
+\subsection{Speed}
+This algorithm does not currently use a narrow band, introduced in Section \ref{upwinding}, to update the level set in either the sequential or parallel versions, making the algorithm more of a 'brute force' approach to segmentation. This is a feature to be included in the next version of the algorithm and has potential to further speed the algorithm by another order of magnitude.
+
+Comparison of CPU and GPU code was done with algorithms that most closely mirrored each other. Although this standardizes the code, it does distort the results slightly as there is potential for optimizaton on the CPU by making effective use of the CPU cache, and multiple cores (if present). 
+
+Goodman \cite{goodman} shows that CPU code may be slowed if a GPU kernel is executed and therefore suggests that CPU and GPU code run in seperate independent environments. To this effect, this has been catered for, increasing the accuracy of the speed up figures attained.
+
+Furthermore, making comparisons with MATLAB code is inadvisable given the environment that MATLAB code runs. MATLAB code is JIT compiled, creating many problems when directly comparing compute times between the two versions. Speed ups were for this reason not measured against MATLAB code. In fact, the main purpose of the MATLAB code was to learn about the inner workings of level set segmentation.
+
+
+\subsection{Accuracy}
+The nature of segmenting images using thresholding and curvature terms favours segmentations of anatomical objects with a relatively homogenous gray value range. As the focus was on speed, a great deal of testing was not done on these forms of images.
 	
+Secondly, as discussed in Section \ref{3dvolumesegmentation} the current 3D level set segmentation solver does not integrate a reinitialisation algorithm. This is the largest limitation of this algorithm as it may result in instabilities in the level set function if $\nabla\phi$ values get too large. It should be noted that when implementing a 3D distance transform there is a major trade off between accuracy and speed.
+
+Finally, there are currently no built in preprocessing filters. Denoising, blurring, sharpening and edge detection would most likely produce more accurate segmentations without affecting performance too greatly (provided CUDA kernels are used for these filters).
+
+
+

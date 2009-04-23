@@ -51,10 +51,17 @@ which is plotted in Figure \ref{fig:speedterm}. Here $T$ describes the central i
 
 Therefore the three user parameters that need to be specified for segmentation are $T$,$\epsilon$ and $\alpha$. An initialization for the level set function is also required, which may take the form of a cube in three dimensions or a square in two dimensions, or any other arbitrary closed shape. 
 
-PICTURE OF CURVATURE FAIL
+The importance of having a curvature term is shown in Figure \ref{leaking}. Here there is no force to smoothen high curvatures resulting in the contour \textit{leaking}. This is when the level set surface evolves through a anatomical boundary into another anatomical object that was not intended to be segmented. This also makes segmentation tricky for objects which have very high curvature as the curvature weighting term often needs to be set very low in order to allow for these high curvatures, yet doing so may result in such leaking.
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[scale=0.4]{images/leaking.png}
+	\caption{Leaking when there is no curvature term (or $\alpha = 1$)}
+	\label{leaking}
+\end{figure}
 
 
-	\subsection{Signed Distance Transform}
+	\subsection{Signed Distance Transforms}
 A distance transform assigns a value for every pixel (or voxel) within a binary image containing one or more objects the value of which represents the minimum distance from that pixel to the closest pixel on the boundary of the object(s). The mathematical definition of a distance function $D:\mathbb{R}^3 \rightarrow \mathbb{R}$ for a set $S$, from \cite{oshersethian}, is
 	
 	\begin{equation}
@@ -74,5 +81,8 @@ Signed distance transforms are required to initialize $\phi$ and also to reiniti
 	  \caption{2D Signed Euclidean Distance Transform}
 	  \label{fig:sdfexplanation}
 	\end{figure}
+	
+Alternatively, \cite{gui2005lse} provides a method of evolving level sets without reinitialization using signed distance transforms by forcing the level set function to be close to a signed distance function.
 
-
+	\subsection{3D Volume Segmentations}\label{3dvolumesegmentation}
+Extending a two dimensional level set segmentation algorithm to three dimensions is a relatively straightforward task, however requires careful consideration of boundary conditions. In addition to the increased number of variables, creating a signed Euclidean distance function is one of the major challenges in developing 3D segmentation code. Unfortunately, neither C code or CUDA code could be located to perform distance transform (re)initialisation in 3D and therefore MATLAB was used to initialise and reinitialise the level set during execution. There has however been recent work on CUDA accelerated distance transforms from \cite{difi},\cite{gpgpudistance}.
