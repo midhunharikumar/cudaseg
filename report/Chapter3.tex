@@ -26,7 +26,7 @@ For simplicity, consider the one dimensional form of equation \eqref{eq:euler2} 
 \label{eq:euler3}
 \end{equation}
 
-where $(\phi_x)_i$ is the spatial derivative of $\phi$ at $x_i$. The method of characteristics indicates whether to use a forward difference or backwards difference for $\phi$ based on the sign of $u_i$ at the point $x_i$. If $u_i > 0$, the values of $\phi$ are moving from left to right, and therefore backwards difference methods ($D_x^-$) should be used. Conversely, if $u_i<0$, forward difference methods ($D_x^+$) should be used to approximate $\phi_x$. It is this process of choosing which approximation for the spatial derivative of $\phi$ to use based on the sign of $u_i$ that is known as \textit{upwinding}. 
+where $(\phi_x)_i$ is the spatial derivative of $\phi$ at $x_i$. The method of characteristics indicates whether to use a forward or backwards difference method for $\phi$ based on the sign of $u_i$ at the point $x_i$. If $u_i > 0$, the values of $\phi$ are moving from left to right, and therefore backwards difference methods ($D_x^-$ in Equations \ref{firstorderderivatives}) should be used. Conversely, if $u_i<0$, forward difference methods ($D_x^+$ in Equations \ref{firstorderderivatives}) should be used to approximate $\phi_x$. It is this process of choosing which approximation for the spatial derivative of $\phi$ to use based on the sign of $u_i$ that is known as \textit{upwinding}. 
 
 Extending this to three dimensions, from \cite{Lefohn04astreaming}, results in the derivatives below required for the level set equation update. 
 
@@ -35,6 +35,7 @@ Extending this to three dimensions, from \cite{Lefohn04astreaming}, results in t
 	D_x &= (u_{i+1,j,k}-u_{i-1,j,k})/2 & D_x^+ &= u_{i+1,j,k}-u_{i,j,k} & D_x^- &= u_{i,j,k}-u_{i-1,j,k} \nonumber\\
 	D_y &= (u_{i,j+1,k}-u_{i,j-1,k})/2 & D_y^+ &= u_{i,j+1,k}-u_{i,j,k} &	D_y^- &= u_{i,j,k}-u_{i,j-1,k} \nonumber\\
 	D_z &= (u_{i,j,k+1}-u_{i,j,k-1})/2 & D_z^+ &= u_{i,j,k+1}-u_{i,j,k} &	D_z^- &= u_{i,j,k}-u_{i,j,k-1} \nonumber\\
+	\label{firstorderderivatives}
 \end{align}
 
 
@@ -164,7 +165,7 @@ Reinitialise $\phi$ to S.D.F
 
 
 	\subsection{Matlab}
-The first task was to write code in MATLAB to learn about the inner workings of 2D image segmentation. The MATLAB Image Processing Toolbox provides many functions (such as the ability to load, resample and filter images, compute distance transforms and easily visualise the level set evolution) which kept the code reasonably concise. 
+The first task was to write code in MATLAB to learn about the inner workings of 2D image segmentation. The MATLAB Image Processing Toolbox provides many functions (such as the ability to load, resample and filter images, compute distance transforms and easily visualise the level set evolution) which kept code reasonably concise. 
 
 The code is split into two files (a launcher and a kernel), in order to seperate the initialisation and level set update code. The launcher handles the image loading and resampling, with the functions \texttt{imread} and \texttt{imresize}. The user specifies parameters for threshold values $T$, range $\epsilon$ and curvature weighting $\alpha$, runs the launcher and then proceeds to draw a closed polygon that will form the initial mask (providing some basic interactivity). 
 
@@ -210,7 +211,7 @@ Update Level Set Function $\phi(t+\Delta t) =\phi(t) + \Delta t F|\nabla\phi|$\;
 \caption{Pseudocode for Version 1 of Sequential C Code}\label{alg:forloop}
 \end{algorithm}
 
-This C implementation did not feature the versatility of the MATLAB implementation as it only accepted bitmap images as the input for the feature image. The loader function for the bitmap images (\texttt{bmploader.cpp}) is from the NVIDIA CUDA SDK image processing examples. It also did not feature any image resizing functions, as the focus was on optimization of the code and not versatility of inputs.
+This C implementation did not feature the versatility of the MATLAB implementation as it only accepted bitmap images as the input for the feature image. The loader function for the bitmap images (\texttt{bmploader.cpp}) is from the NVIDIA CUDA SDK image processing examples. It also did not feature any image resizing functions, as the focus was on speed of the code and not versatility of inputs.
 
 Wheras the MATLAB code used shifts of the matrix $\phi$ to calculate derivatives, in C the level set function $\phi$ was being stepped through in an element by element fashion. Therefore many boundary conditions had to be placed in order to ensure that derivatives took the value zero at certain boundaries. For example the forward difference derivative $D_x^+ =u_{i+1,j}-u_{i,j}$ must equal zero when $i=\textrm{imageW}$ as there is no $u_{i+1,j}$ term. The complexity of this task increases in three dimensions as there are six boundaries instead of four boundaries to condition for.
 
@@ -235,11 +236,11 @@ Update Level Set Function $\phi(t+\Delta t) =\phi(t) + \Delta t F|\nabla\phi|$\;
 
 For the distance transform initialization and reinitialization procedures a seperate function was called. This is the \texttt{sedt2d} (Signed Euclidean Distance Transform in 2D) function written by Timothy Terriberry.
 
-In order to visualise the level set evolution the combination of OpenGL and GLUT (OpenGL Utility Toolkit) was used to render the current zero level set. Rendering code was kept as compact and efficient as possible in order to have as minimal an effect as possible on performance whilst also making the program more comparable with the MATLAB code. Its principal purpose was of course to visualise how the level set was evolving (checking for instabilities, incorrect parameters for thresholding, range and curvature) and view the final segmentation. 
+In order to visualise the level set evolution the combination of OpenGL and GLUT (OpenGL Utility Toolkit) was used to render the current zero level set. Rendering code was kept as compact and efficient as possible in order to have as minimal an effect as possible on performance whilst also making the program more comparable with the MATLAB code. Its principal purpose was of course to visualise how the level set was evolving (checking for instabilities, incorrect parameters for thresholding, range and curvature) and also view the final segmentation. 
 
-\section{Parallel Implemention}
+\section{Parallel Implemention}\label{parallel}
 	\subsection{Unoptimized Version}
-The first parallel implementation followed the structure shown in the pseudocode below. In CUDA, it is assumed that both the host and device maintain their own DRAM \cite{cuda}. Host memory is allocated as before using \texttt{malloc} and device memory is allocated using \texttt{cudaMalloc}. As memory bandwidth between the host memory and device memory is low (it is much lower than the bandwidth between the device and the device memory), it is recommended to keep the number of transfers to a minimum. In order to minimise the latency of accessing the shared memory it is recommended to make the block size a multiple of 16 and use the \texttt{cudaMallocPitch} routine to allocate memory with padding if the array's $x$ dimension is not a multiple of 16. Therefore most CUDA programs follow a standard structure of initialization, host to device data transfer, compute, and finally memory transfer of compute results from device to host. 
+The first parallel implementation followed the structure shown in the pseudocode below. In CUDA, it is assumed that both the host and device maintain their own DRAM \cite{cuda}. Host memory is allocated as before using \texttt{malloc} and device memory is allocated using \texttt{cudaMalloc}. As memory bandwidth between the host memory and device memory is low (it is much lower than the bandwidth between the device and the device memory), it is recommended to keep the number of transfers to a minimum. In order to minimise the latency of accessing the shared memory it is recommended to make the block size a multiple of 16 and use the \texttt{cudaMallocPitch} routine to allocate memory with padding if the images's $x$ dimension is not a multiple of 16. Therefore most CUDA programs follow a standard structure of initialization, host to device data transfer, compute, and finally memory transfer of compute results from device to host. 
 
 Unfortunately the algorithm for computing signed distance transforms is not executed in CUDA and creating one from scratch would have been beyond the scope of this project. Therefore device to host memory transfers were required every time reinitialization was necessary. Of course, when timing it is possible to stop and start timers during this process.
 
@@ -264,7 +265,7 @@ Copy $\phi$ from device to host\;
 \caption{Parallel Implementation Pseudocode}\label{alg:cuda1}
 \end{algorithm}	
 
-CUDA threads are assigned a unique thread ID that identifies its location within the threadblock and grid. This provides a natural way to invoke computation across the image and level set domain, by using the thread IDs for addressing.  This is best explained with the tables below. Assume our image has dimensions $4\times 4$ and the block size is $2 \times 2$. Invoking the kernel with a grid size of $2 \times 2$ results in the 16 threads shown in table \ref{table:threads}, in the form (\texttt{threadIdx.y},\texttt{threadIdx.x}). These threads are grouped into blocks of four, as shown in table \ref{table:blocks}, in the form (\texttt{blockIdx.y},\texttt{blockIdx.x}). 
+CUDA threads are assigned a unique thread ID that identifies its location within the threadblock and grid. This provides a natural way to invoke computation across the image and level set domain, by using the thread IDs for addressing.  This is best explained with the tables below. Assume our image has dimensions $4\times 4$ and the block size is $2 \times 2$. Invoking the kernel with a grid size of 2 blocks $\times$ 2 blocks results in the 16 threads shown in table \ref{table:threads}, in the form (\texttt{threadIdx.y},\texttt{threadIdx.x}). These threads are grouped into blocks of four, as shown in table \ref{table:blocks}, in the form (\texttt{blockIdx.y},\texttt{blockIdx.x}). 
 
 \begin{table}
 \begin{center}
@@ -291,18 +292,18 @@ CUDA threads are assigned a unique thread ID that identifies its location within
 \label{table:blocks}\caption{Block IDs of 4 blocks grouped into a grid}
 \end{table}
 
-As each thread has access to its own \texttt{threadIdx} and \texttt{blockIdx} global indices ($i,j$) can be determined using the equations
+As each thread has access to its own \texttt{threadIdx} and \texttt{blockIdx}, global indices ($i,j$) can be determined using the equations
 
 \begin{verbatim}
            int i = blockIdx.x * blockDim.x + threadIdx.x;
            int j = blockIdx.y * blockDim.y + threadIdx.y;
 \end{verbatim}
 
-where \texttt{blockDim.x} and \texttt{blockDim.y} represent the dimensions of the block (which in this case are both equal to 2). It should be noted that the size of these block sizes affect kernel performance greatly and that much larger block sizes are used (in the proceeding algorthms typical block sizes are $32\times 4$ or $16 \times 8$). The effect of different block sizes on performance is analysed in Section \ref{results}.
+where \texttt{blockDim.x} and \texttt{blockDim.y} represent the dimensions of the block (which in this case are both equal to 2). Of course, much larger block sizes are used, keeping the block $x$ dimension ($BX$) a multiple of 16 for maximum speed. The effect of different block sizes on performance is analysed in Section \ref{blocksizes}.
 
-Once these indices were set up, only minor tweaks were needed until the code was performing well. Although this code exhibited speedups over the single threaded implementation, there was still significant optimization to perform as a great deal of computation time was being wasted on access global memory continuously. Therefore this is a \textit{naive} implementation.
+Once these indices were set up, it was relatively straightforward to transfer the level set update code to a CUDA kernel. Although this code exhibited speedups over the single threaded implementation, there was still significant optimization to perform as a great deal of computation time was being wasted on access global memory continuously. Therefore this is a \textit{naive} implementation.
 
-Some features such as the CFL condition, could not be implemented in this parallel version without slowing down computation time significantly. This is because such a condition requires the determination of the largest element of $\nabla\phi$ which is computed roughly half way through the update procedure. Therefore integrating this condition would require transferring $\nabla\phi$ and curvature terms back to host memory to determine $max\left\{F|\nabla\phi|\right\}$. The cost of this added complexity and slowdown outweighed the benefits, and therefore $\Delta t$ was chosen to be a free parameter.
+Some features such as the CFL condition, could not be implemented in this parallel version without slowing down computation time significantly. This is because such a condition requires the determination of the largest element of $\nabla\phi$ which is computed roughly half way through the update procedure. Therefore integrating this condition would require transferring $\nabla\phi$ and curvature terms back to host memory to determine $max\left\{F|\nabla\phi|\right\}$, or perhaps more efficiently calling a CUDA kernel to determine the largest element. The cost of this added complexity and slowdown outweighed the benefits, and therefore $\Delta t$ was chosen to be a free parameter.
 
 
 
@@ -311,7 +312,7 @@ Some features such as the CFL condition, could not be implemented in this parall
 	\subsection{2D Shared Memory Optimization}
 In order to keep the number of costly accesses to device memory at a minimum, effective use of the on-chip shared memory is essential. This along with maximizing parallel execution and optimization of instruction usage form the three main performance optimization strategies for CUDA \cite{cuda}.
 
-Integrating use of the shared memory into the CUDA kernel requires partitioning the level set domain into tiles. For first order finite difference problems such as this each tile must also contain values for neighbourhood nodes (often known as \textit{halo} nodes) for the $i\pm1$ and $j\pm1$ elements, so these must also be read into shared memory. As the size of the shared memory is only 16 KB, the sizes of the tiles and corresponding halo are limited. \cite{3dfinitedifference} outlines a framework for such a process that may serve as a good model for a multi GPU implementation, however the kernel will need to be modified as it is optimized for higher order stencils (without cross-derivative terms). Instead, tiling code was adapted from Giles' (2008) 'Jacobi iteration for Laplace discretisation' algorithm \cite{mgiles} which supports cross-derivatives well. The shared memory management technique in this finite difference algorithm accelerated the global memory implementation by over an order of magnitude.
+Integrating use of the shared memory into the CUDA kernel requires partitioning the level set domain into tiles. For first order finite difference problems such as ours each tile must also contain values for neighbourhood nodes (often known as \textit{halo} nodes) for the $i\pm1$ and $j\pm1$ elements, which would be stored in seperate tiles, so these must also be read into shared memory. As the size of the shared memory is only 16 KB, the sizes of the tiles and corresponding halo are limited. \cite{3dfinitedifference} outlines a framework for such a process that may serve as a good model for a multi GPU implementation, however the kernel will need to be modified as it is optimized for higher order stencils (without cross-derivative terms). Instead, tiling code was adapted from Giles' (2008) 'Jacobi iteration for Laplace discretisation' algorithm \cite{mgiles} which supports cross-derivatives well. The shared memory management technique in this finite difference algorithm accelerated the global memory implementation by over an order of magnitude.
 
 The two dimensional segmentation algorithm does not require any $k\pm1$ terms, making the shared memory management more straightforward. For a block (and tile) size of $BX\times BY$ there are $2 \times (BX + BY +2)$ halo elements, as can be seen in Figure \ref{fig:shared2d}. In this figure the darker elements represent the thread block (the active tile) and the lighter elements represent the halo. It is in this manner that the domain of the computation is partitioned and this results in overlapping of the halo nodes.\\
 

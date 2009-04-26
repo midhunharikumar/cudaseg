@@ -11,6 +11,11 @@ J.E. Cates, A.E. Lefohn, and R.T. Whitaker.
   medical images}.
 \newblock {\em Medical Image Analysis}, 8(3):217--231, 2004.
 
+\bibitem{chan2001acw}
+T.F. Chan and L.A. Vese.
+\newblock {Active contours without edges}.
+\newblock {\em IEEE Transactions on image processing}, 10(2):266--277, 2001.
+
 \bibitem{brainweb}
 Chris~A. Cocosco, Vasken Kollokian, Remi K.-S. Kwan, G.~Bruce Pike, and Alan~C.
   Evans.
@@ -33,6 +38,26 @@ Daniel Goodman.
 \newblock Measuring speed ups on graphics cards.
 \newblock 2009.
 
+\bibitem{gui2005lse}
+C.L.C.X.C. Gui and MD~Fox.
+\newblock {Level set evolution without re-initialization: a new variational
+  formulation}.
+\newblock In {\em IEEE Computer Society Conference on Computer Vision and
+  Pattern Recognition, 2005. CVPR 2005}, volume~1, 2005.
+
+\bibitem{ibanez:isg}
+L.~Ibanez, W.~Schroeder, L.~Ng, and J.~Cates.
+\newblock {The ITK Software Guide. Kitware, Inc}.
+
+\bibitem{kharlamov:id}
+A.~Kharlamov and V.~Podlozhnyuk.
+\newblock {Image Denoising}.
+
+\bibitem{klar:igb}
+O.~Klar.
+\newblock {Interactive GPU-based Segmentation of Large Medical Volume Data with
+  Level-Sets}.
+
 \bibitem{Lefohn04astreaming}
 Aaron~E. Lefohn, Joe~M. Kniss, Charles~D. Hansen, and Ross~T. Whitaker.
 \newblock A streaming narrow-band algorithm: Interactive computation and
@@ -47,10 +72,18 @@ Paulius Micikevicius.
   Processing on Graphics Processing Units}, pages 79--84, New York, NY, USA,
   2009. ACM.
 
+\bibitem{nguyen2007gg}
+H.~Nguyen.
+\newblock {GPU gems 3}.
+\newblock 2007.
+
 \bibitem{cuda}
 NVIDIA.
-\newblock Compute unified device architecture programming guide.
-\newblock {\em Nvidia, June}, 2007.
+\newblock {Compute Unified Device Architecture--Programming Guide”}, 2008.
+
+\bibitem{nvidia2008cud}
+NVIDIA.
+\newblock {Compute Unified Device Architecture--Reference Manual”}, 2008.
 
 \bibitem{osher2003lsm}
 S.~Osher and R.P. Fedkiw.
@@ -62,6 +95,25 @@ Stanley Osher and James~A. Sethian.
 \newblock Fronts propagating with curvature dependent speed: algorithms based
   on hamilton-jacobi formulations.
 \newblock {\em Journal of Computational Physics}, 79:12--49, 1988.
+
+\bibitem{rumpf2001lss}
+M.~Rumpf and R.~Strzodka.
+\newblock {Level set segmentation in graphics hardware}.
+\newblock In {\em Image Processing, 2001. Proceedings. 2001 International
+  Conference on}, volume~3, 2001.
+
+\bibitem{sethian2003lsm}
+J.A. Sethian et~al.
+\newblock {Level set methods and fast marching methods}.
+\newblock {\em Journal of Computing and Information Technology}, 11(1):1--2,
+  2003.
+
+\bibitem{sharma17cbl}
+O.~Sharma and F.~Anton.
+\newblock {CUDA based Level Set Method for 3D Reconstruction of Fishes from
+  Large Acoustic Data}.
+\newblock In {\em International Conference in Central Europe on Computer
+  Graphics, Visualization and Computer Vision 17}.
 
 \bibitem{difi}
 A.~Sud, M.A. Otaduy, and D.~Manocha.

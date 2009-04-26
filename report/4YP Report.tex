@@ -1,6 +1,6 @@
 %\documentclass[oneside,12pt]{Classes/CUEDthesisPSnPDF}
 %\documentclass[a4paper]{report}
-\documentclass[a4paper,11pt]{report}
+\documentclass[a4paper,oneside,11pt]{book}
 \usepackage[hmargin=2cm,vmargin=3cm,bindingoffset=1cm]{geometry}
 %\usepackage{suthesis-2e}
 
@@ -11,24 +11,8 @@
 \usepackage{amsmath}
 \usepackage[algoruled,vlined]{algorithm2e}
 \usepackage{listings}
-\usepackage{fancyhdr} 
 \usepackage{pdfpages}
-
-%%% Fancy Header %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Fancy Header Style Options
-\pagestyle{fancy}                       % Sets fancy header and footer
-\fancyfoot{}                            % Delete current footer settings
-\renewcommand{\chaptermark}[1]{         % Lower Case Chapter marker style
-  \markboth{\chaptername\ \thechapter.\ #1}{}} %
-\renewcommand{\sectionmark}[1]{        % Lower case Section marker style
-  \markright{\thesection.\ #1}}         %
-\fancyhead[LE,RO]{\bfseries\thepage}    % Page number (boldface) in left on even
-                                        % pages and right on odd pages
-\fancyhead[RE]{\bfseries\leftmark}      % Chapter in the right on even pages
-\fancyhead[LO]{\bfseries\rightmark}     % Section in the left on odd pages
-\renewcommand{\headrulewidth}{0.3pt}    % Width of head rule
-
-
+\usepackage{fancyhdr}
 
 \pdfminorversion=5
 \pagestyle{headings}
@@ -37,8 +21,9 @@
 \raggedbottom
 \begin{document}
 
+\frontmatter
 \title{Fast Level Set Segmentation of Biomedical Images using Graphics Processing Units}
-\author{Hormuz~Mostofi \\ Keble College\\ \\ \\ \\ \\\\\\\\\\\\\\\\\ \\ \\Department of Engineering Science  \\ Honour School of Engineering, Economics and Management}
+\author{Hormuz~Mostofi \\ Keble College\\ University of Oxford \\ \\ \\ \\\\\\\\\\\\\\\\\ \\ \\Department of Engineering Science  \\ Honour School of Engineering, Economics and Management}
 %\date{\today}
 \maketitle
 
@@ -53,7 +38,7 @@
 \tableofcontents
 \end{spacing}
 
-
+\mainmatter
 \include{Chapter1}
 \include{Chapter2}
 \include{Chapter3}
@@ -61,14 +46,17 @@
 \include{Chapter5}
 
 \begin{spacing}{1.2}
-\include{Appendix}
-
-
-
+\nocite{3dfinitedifference}\nocite{brainweb}\nocite{chan2001acw}\nocite{cuda}\nocite{difi}\nocite{gist}\nocite{goodman}\nocite{gpgpudistance}\nocite{gui2005lse}\nocite{ibanez:isg}\nocite{kharlamov:id}\nocite{klar:igb}\nocite{Lefohn04astreaming}\nocite{mgiles}\nocite{narrowband}\nocite{nvidia2008cud}\nocite{osher2003lsm}\nocite{oshersethian}\nocite{rumpf2001lss}\nocite{sethian2003lsm}\nocite{sharma17cbl}\nocite{sparsefield}\nocite{nguyen2007gg}
 \bibliographystyle{plain}
 \bibliography{References}
 \end{spacing}
 
+
+
+
+\begin{spacing}{1.18}
+\include{Appendix}
 \includepdf[landscape]{images/riskassess.pdf}
+\end{spacing}
 
 \end{document}

@@ -1,6 +1,6 @@
 \chapter{Results}
 
-In the following, the results of the speed ups attained by optimizing using GPU hardware will be shown. However, before this can be done, some preliminaries need to be listed. Firstly, all hardware testing was done on a single PC with an Intel Core 2 Duo T8100 Processor with a clock speed of 2.1 GHz and 4 GB of RAM. The graphics hardware used was the NVIDIA GeForce 8600M GT, with CUDA 2.1 software installed. It should be noted that at the time of writing, CUDA 2.2 was available although in beta form and was not chosen due to potential instabilities. Timing code used was from the \texttt{cutil} library.
+In the following, the results of the speed ups attained by optimizing using CUDA will be shown. However, before this can be done, some preliminaries need to be listed. Firstly, all hardware testing was done on a single PC with an Intel Core 2 Duo T8100 Processor with a clock speed of 2.1 GHz and 4 GB of RAM. The graphics hardware used was the NVIDIA GeForce 8600M GT, with CUDA 2.1 software installed. It should be noted that at the time of writing, CUDA 2.2 was available although in beta form and was not chosen due to potential instabilities. Timing code used was from the \texttt{cutil} library.
 
 Although 8600M GT is adequate for CUDA development, it has rather limited performance in comparison to other graphics chips. This implies that the performance speed ups below could potentially be up to a further order of magnitude faster on newer hardware. For example, although the shader processing rate of 8600M GT is quoted as 91.2 Gigaflops the recently released GeForce GTX 295 boasts an impressive 1788.48 Gigaflops potentially allowing for another order of magnitude speed up from the 8600M GT hardware. This is mainly due to the increased number of on chip multiprocessors, however to lesser extent is also due to the device being of higher \textit{compute capability}: there are fewer limitations (such as support for double precision arithmetic) and relaxed requirements for coalescing memory transfers.
 
@@ -91,13 +91,13 @@ It is found, as expected, that for all versions of the algorithm (CUDA and singl
 
 \begin{figure}[p]
 	\begin{flushleft}
-		\subfigure{\label{dimensions2d}\includegraphics[scale=0.5]{images/dimensions2d.pdf}}
+		\subfigure{\label{fig:dimensions2d}\includegraphics[scale=0.5]{images/dimensions2d.pdf}}
 		\subfigure{\label{elements2d}\includegraphics[scale=0.5]{images/elements2d.pdf}}
 	\end{flushleft}
 	\label{fig:speed}\caption{Effect of different image sizes (a) On compute time (b) On number of elements computed per second]}
 \end{figure}
 
-It can be seen that the difference in compute time between the parallel and sequential versions is greatest for the largest images. This is due to the number of elements for the optimized CUDA version being considerably higher for all image sizes. Interestingly, Figure \ref{elements2d} shows that the number of elements per second is approximately constant for both the sequential and unoptimized CUDA implementations, but not for the optimized shared memory CUDA algorithm. This is due to the bottleneck being latency between device and shared memory and there not being enough occupancy of the GPU to mask this.
+It can be seen that the difference in compute time between the parallel and sequential versions is greatest for the largest images. This is due to the number of elements for the optimized CUDA version being considerably higher for all image sizes. Interestingly, Figure \ref{elements2d} shows that the number of elements computed per second is approximately constant for both the sequential and unoptimized CUDA implementations, but not for the optimized shared memory CUDA algorithm. This is due to the bottleneck being latency between device and shared memory and there not being enough occupancy of the GPU to mask this.
 
 
 
@@ -115,7 +115,7 @@ It can be seen that the difference in compute time between the parallel and sequ
   \label{fig:evolution}
 \end{figure}
 
-Figure \ref{fig:evolution} illustrates a level set surface evolving in 3 dimensions. In order to visualise the level set evolving every certain number of iterations this the CUDA SDK example \texttt{volumeRender} was used, however is not advised as doing so slows down the segmentation process by approximately an order of magnitude. This volume rendering engine uses ray tracing which is not advised for segmentation validation, and therefore \textit{Paraview 3.4.0} (www.paraview.org) was used.
+Figure \ref{fig:evolution} illustrates a level set surface evolving in 3 dimensions. In order to visualise the level set evolving every certain number of iterations this the CUDA SDK example \texttt{volumeRender} was modified, however is not advised as doing so slows down the segmentation process by approximately an order of magnitude. This volume rendering engine uses ray tracing which is not advised for segmentation inspection, and therefore \textit{Paraview 3.4.0} (www.paraview.org) was used.
 
 The 3D segmentation CUDA code uses a block size of $32 \times 4$. A block size of $32 \times 8$ causes the kernel invokation to fail due to the registers used per threads multiplied by the thread block size being greater $N$ (where for G80 NVIDIA hardware $N=8192$ 32-bit registers per multiprocessor. This limits the extent to which occupancy can be increased to mask latencies due to global memory loads. Section \ref{blocksizes} explores the effect of varying block sizes on performance.
 
@@ -138,9 +138,9 @@ The 3D segmentation CUDA code uses a block size of $32 \times 4$. A block size o
   \label{fig:heart3d}
 \end{figure}
 
-As can be seen in Figure \ref{fig:brain3d} segmentation of the grey and white matter along with the brain stem is very anatomically detailed. This is due in part to the excellent quality of the \textit{BrainWeb} MRI data used, this data is available from \cite{brainweb}. As the CFL condition had not been implemented in the 3D level set solver, it was found to converge at 1000 iterations and that $DT$ values greater than 0.1 resulted in instability.
+As can be seen in Figure \ref{fig:brain3d} segmentation of the grey and white matter along with the brain stem is very anatomically detailed. This is due in part to the excellent quality of the \textit{BrainWeb} MRI data used (data is available from \cite{brainweb}). As the CFL condition had not been implemented in the 3D level set solver, it was found to converge at 1000 iterations and that $DT$ values greater than 0.1 resulted in instability.
 
-The times taken to segment are shown in Figure \ref{brain3dtime}. MATLAB code is not shown as out of memory were encountered when loading such large arrays (even if these had not been encountered, the segmentation would have taken an infeasible amount of time).
+The times taken to segment are shown in Figure \ref{brain3dtime}. MATLAB code is not shown as out of memory errors were encountered when loading such large arrays (even if these had not been encountered, the segmentation would have taken an infeasible amount of time).
 
 \begin{table}[h]
 \centering
