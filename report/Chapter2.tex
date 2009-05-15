@@ -19,21 +19,31 @@ The evolution of the contour or surface is governed by a level set equation. The
 	\label{eq:levelsetequation}
 	\end{equation}
 
-In the above level set equation $F$ is the velocity term that describes the level set evolution. By manipulating $F$, we can converge the level set to different areas or shapes, given a particular initialisation of the level set function. 
+In the above level set equation $F$ is the velocity term that describes the level set evolution. By manipulating $F$, we can guide the level set to different areas or shapes, given a particular initialization of the level set function. 
 
-\section{Segmentation using Level Sets}
-Typically, for applications in image segmentation $F$ is dependent on the pixel intensity or curvature values of the level set. It may also be dependent on an edge indicator function, which is defined as having a value zero on an edge, and non-zero otherwise. This causes $F$ to slow the level set evolution when on an edge.
+\section{Segmentation using Level Sets}\label{thresholding}
+Typically, for applications in image segmentation $F$ is dependent on the pixel intensity or curvature values of the level set. The importance of having a curvature term is shown in Figure \ref{leaking}. Here there is no force to smoothen high curvatures, resulting in the contour \textit{leaking}. This is when the level set surface evolves through a anatomical boundary into another anatomical object that was not intended to be segmented. This also makes segmentation difficult for objects which have very high curvature as the curvature weighting term often needs to be set very low in order to allow for these high curvatures, yet doing so may result in such leaking.
 
-In \cite{Lefohn04astreaming} $F$ is dependent on data and curvature functions (with a weighting parameter between the two) for the purposes of image segmentation. Therefore, we will adopt the same methodology making the level set equation take the form
+\begin{figure}[h]
+	\centering
+		\subfigure{\includegraphics[scale=0.5]{images/leaking.png}}
+		\subfigure{\includegraphics[scale=0.5]{images/leaking2.png}}
+	\caption{Leaking when there is no curvature term (or $\alpha = 1$)}
+	\label{leaking}
+\end{figure}
+
+$F$ may also be dependent on an edge indicator function, which is defined as having a value zero on an edge, and non-zero otherwise. This causes $F$ to slow the level set evolution when on an edge.
+
+In \cite{Lefohn04astreaming} $F$ is dependent on data and curvature functions only (with a weighting parameter between the two) for the purposes of image segmentation. Therefore, we will adopt the same methodology making the level set equation take the form
 
 	\begin{equation}
-	\frac{\partial{\phi}}{\partial{t}}=-|\nabla{\phi}|\left[\alpha D(\bar{x})  + (1-\alpha)\nabla \cdot{\frac{\nabla{\phi}}{|\nabla{\phi|}}}\right]
+	\frac{\partial{\phi}}{\partial{t}}=-|\nabla{\phi}|\left[\alpha D(I)  + (1-\alpha)\nabla \cdot{\frac{\nabla{\phi}}{|\nabla{\phi|}}}\right]
 	\label{eq:fulllevelsetequation}
 	\end{equation}
 
 where the data function $D(I)$ tends the solution towards targeted features, and the mean curvature term $\nabla \cdot{(\nabla{\phi}/|\nabla{\phi|})}$ keeps the level set function smooth. Weighting between these two is $\alpha \in [0,1]$, a free parameter that is set beforehand to control how smooth the contour or surface should be.
 
-The data function $D(I)$ acts as the principal 'force' that drives the segmentation. By making $D$ positive in desired regions or negative in undesired regions, the model will tend towards the segmentation sought after. A simple speed function that fulfills this purpose, used by Lefohn, Whitaker and Cates in \cite{Lefohn04astreaming, gist}, is given by
+The data function $D(I)$ acts as the principal `force' that drives the segmentation. By making $D$ positive in desired regions or negative in undesired regions, the model will tend towards the segmentation sought after. A simple speed function that fulfills this purpose, used by Lefohn, Whitaker and Cates in \cite{Lefohn04astreaming, gist}, is given by
 
 	\begin{equation}
 	D(I)= \epsilon - |I-T|
@@ -49,19 +59,12 @@ which is plotted in Figure \ref{fig:speedterm}. Here $T$ describes the central i
 		\label{fig:speedterm}
 	\end{figure}
 
-Therefore the three user parameters that need to be specified for segmentation are $T$,$\epsilon$ and $\alpha$. An initialization for the level set function is also required, which may take the form of a cube in three dimensions or a square in two dimensions, or any other arbitrary closed shape. 
+Therefore the three user parameters that need to be specified for segmentation are $T$,$\epsilon$ and $\alpha$. An initial mask (to be transformed to a signed distance function as discussed in Section \ref{sdf}) for the level set function is also required, which may take the form of a cube in three dimensions or a square in two dimensions, or any other arbitrary closed shape. Typically, the user selects spherical seed points specifying the center in $i,j,k$ space and the radius to guide the level set to the anatomical object of interest.
 
-The importance of having a curvature term is shown in Figure \ref{leaking}. Here there is no force to smoothen high curvatures resulting in the contour \textit{leaking}. This is when the level set surface evolves through a anatomical boundary into another anatomical object that was not intended to be segmented. This also makes segmentation tricky for objects which have very high curvature as the curvature weighting term often needs to be set very low in order to allow for these high curvatures, yet doing so may result in such leaking.
-
-\begin{figure}[h]
-	\centering
-		\includegraphics[scale=0.4]{images/leaking.png}
-	\caption{Leaking when there is no curvature term (or $\alpha = 1$)}
-	\label{leaking}
-\end{figure}
+The level set iteration can be terminated once $\phi$ has converged, or after a certain number of iterations. 
 
 
-	\subsection{Signed Distance Transforms}
+	\subsection{Signed Distance Transforms}\label{sdf}
 A distance transform assigns a value for every pixel (or voxel) within a binary image containing one or more objects a value which represents the minimum distance from that pixel to the closest pixel on the boundary of the object(s). The mathematical definition of a distance function $D:\mathbb{R}^3 \rightarrow \mathbb{R}$ for a set $S$, from \cite{oshersethian}, is
 	
 	\begin{equation}
@@ -69,9 +72,10 @@ A distance transform assigns a value for every pixel (or voxel) within a binary 
 	\label{eq:distancetransform}
 	\end{equation}
 
-A \textit{signed} distance transform assigns the sign of the distance value as positive for those pixels outside the object, and negative for those inside it. This is the sign convention that will be followed in the implementation, however the opposite sign convention is also used. It should be noted that the distance values depend on the chosen metric for distance: some common distance metrics are Euclidean distance, chessboard distance, and city block distance. Many of the algorithms that compute signed distance transforms often trade accuracy for efficiency and feature varying levels of complexity.
+A \textit{signed} distance transform assigns the sign of the distance value as positive for those pixels outside the object, and negative for those inside it. This is the sign convention that will be followed in the implementation, however the opposite sign convention could also be used. It should be noted that the distance values depend on the chosen metric for distance: some common distance metrics are Euclidean distance, chessboard distance, and city block distance. Many of the algorithms that compute signed Euclidean distance transforms (SEDT) often trade accuracy for efficiency and feature varying levels of complexity.
 
 Signed distance transforms are required to initialize $\phi$ and also to reinitialize it every certain number of iterations. Computation of the initialization of $\phi$ is required before iteration of the level set equation can take place, and this will typically be a signed distance transform of an initial mask. Therefore the level set segmentation filter requires two images: an initial mask (which indicates targeted regions) and a \textit{feature} image (which is the image to be segmented). 
+The choice of how often to reinitialize is an important one: if the number of iterations between reinitialization is too low the level set will simply oscillate, if it is too high the risky of instabilities is elevated. 
 	
 	\begin{figure}
 	  \begin{center}
@@ -85,4 +89,5 @@ Signed distance transforms are required to initialize $\phi$ and also to reiniti
 Alternatively, \cite{gui2005lse} provides a method of evolving level sets without reinitialization using signed distance transforms by forcing the level set function to be close to a signed distance function.
 
 	\subsection{3D Volume Segmentations}\label{3dvolumesegmentation}
-Extending a two dimensional level set segmentation algorithm to three dimensions is a relatively straightforward task, however requires careful consideration of boundary conditions. In addition to the increased number of variables, creating a signed Euclidean distance function is one of the major challenges in developing 3D segmentation code. Unfortunately, neither C code or CUDA code could be located to perform distance transform (re)initialisation in 3D and therefore MATLAB was used to initialise and reinitialise the level set during execution. There has however been recent work on CUDA accelerated distance transforms from \cite{difi},\cite{gpgpudistance}.
+Extending a two dimensional level set segmentation algorithm to three dimensions is a relatively straightforward task, however requires careful consideration of boundary conditions. There are many more derivatives that are required in order to compute the level set update. In addition to the increased number of variables, creating a signed Euclidean distance function is one of the major challenges in developing 3D segmentation code. Unfortunately, neither C code or CUDA code was available to perform distance transform (re)initialization in 3D and therefore MATLAB was used to initialize and reinitialize the level set during execution. There has however been recent work on CUDA accelerated distance transforms from \cite{difi},\cite{gpgpudistance}.
+The storage and computational complexity of 3D volume segmentation must also be appreciated and forms much of the motivation for acceleration with CUDA.

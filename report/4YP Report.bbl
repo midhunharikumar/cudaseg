@@ -19,7 +19,7 @@ T.F. Chan and L.A. Vese.
 \bibitem{brainweb}
 Chris~A. Cocosco, Vasken Kollokian, Remi K.-S. Kwan, G.~Bruce Pike, and Alan~C.
   Evans.
-\newblock Brainweb: Online interface to a 3d mri simulated brain database.
+\newblock Brainweb: Online interface to a {3D MRI Simulated Brain Database}.
 \newblock {\em NeuroImage}, 5:425, 1997.
 
 \bibitem{gpgpudistance}
@@ -49,6 +49,11 @@ C.L.C.X.C. Gui and MD~Fox.
 L.~Ibanez, W.~Schroeder, L.~Ng, and J.~Cates.
 \newblock {The ITK Software Guide. Kitware, Inc}.
 
+\bibitem{kass1988sac}
+M.~Kass, A.~Witkin, and D.~Terzopoulos.
+\newblock {Snakes: Active contour models}.
+\newblock {\em International journal of computer vision}, 1(4):321--331, 1988.
+
 \bibitem{kharlamov:id}
 A.~Kharlamov and V.~Podlozhnyuk.
 \newblock {Image Denoising}.
@@ -67,7 +72,7 @@ Aaron~E. Lefohn, Joe~M. Kniss, Charles~D. Hansen, and Ross~T. Whitaker.
 
 \bibitem{3dfinitedifference}
 Paulius Micikevicius.
-\newblock 3d finite difference computation on gpus using cuda.
+\newblock {3D finite difference computation on GPUs using CUDA}.
 \newblock In {\em GPGPU-2: Proceedings of 2nd Workshop on General Purpose
   Processing on Graphics Processing Units}, pages 79--84, New York, NY, USA,
   2009. ACM.
@@ -123,7 +128,7 @@ A.~Sud, M.A. Otaduy, and D.~Manocha.
 
 \bibitem{sparsefield}
 Ross~T. Whitaker.
-\newblock A level-set approach to 3d reconstruction from range data.
+\newblock {A Level-Set Approach to 3D Reconstruction from Range Data}.
 \newblock {\em Int. J. Comput. Vision}, 29(3):203--231, 1998.
 
 \end{thebibliography}

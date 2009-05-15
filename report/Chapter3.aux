@@ -10,8 +10,8 @@
 \newlabel{upwinding}{{3.1.1}{11}}
 \newlabel{eq:euler1}{{3.1}{11}}
 \newlabel{eq:euler2}{{3.2}{11}}
-\newlabel{eq:euler3}{{3.3}{11}}
 \citation{Lefohn04astreaming}
+\newlabel{eq:euler3}{{3.3}{12}}
 \newlabel{firstorderderivatives}{{3.4}{12}}
 \citation{narrowband}
 \citation{sparsefield}
@@ -27,41 +27,37 @@
 \newlabel{stability}{{3.1.3}{14}}
 \newlabel{eq:cfl}{{3.13}{14}}
 \@writefile{toc}{\contentsline {section}{\numberline {3.2}Sequential Implementation}{15}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces Pseudocode for Level Set Segmentation}}{15}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {1}{\ignorespaces Pseudo code for Level Set Segmentation}}{15}}
 \newlabel{alg:alg}{{1}{15}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}Matlab}{15}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces MATLAB user interface showing four subfigures with the input image, the initial mask, the current zero level set interface superimposed on the input image and the current level set surface in 3D}}{16}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}MATLAB}{15}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces MATLAB user interface showing four sub figures with the input image, the initial mask, the current zero level set interface superimposed on the input image and the current level set surface in 3D}}{16}}
 \newlabel{fig:matlab}{{3.1}{16}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}C}{16}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces Pseudocode for Version 1 of Sequential C Code}}{17}}
-\newlabel{alg:forloop}{{2}{17}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}C}{17}}
 \citation{cuda}
-\@writefile{loa}{\contentsline {algocf}{\numberline {3}{\ignorespaces Pseudocode for Version 2 of Sequential C Code}}{18}}
-\newlabel{alg:forloop2}{{3}{18}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.3}Parallel Implemention}{18}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}Parallel Implementation}{18}}
 \newlabel{parallel}{{3.3}{18}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}Unoptimized Version}{18}}
-\@writefile{loa}{\contentsline {algocf}{\numberline {4}{\ignorespaces Parallel Implementation Pseudocode}}{19}}
-\newlabel{alg:cuda1}{{4}{19}}
+\@writefile{loa}{\contentsline {algocf}{\numberline {2}{\ignorespaces Parallel Implementation Pseudo code}}{19}}
+\newlabel{alg:cuda1}{{2}{19}}
 \newlabel{table:threads}{{3.3.1}{19}}
 \@writefile{lot}{\contentsline {table}{\numberline {3.1}{\ignorespaces Thread IDs of 16 threads grouped into 4 blocks}}{19}}
+\newlabel{table:blocks}{{3.3.1}{19}}
+\@writefile{lot}{\contentsline {table}{\numberline {3.2}{\ignorespaces Block IDs of 4 blocks grouped into a grid}}{19}}
 \citation{cuda}
 \citation{3dfinitedifference}
 \citation{mgiles}
-\newlabel{table:blocks}{{3.3.1}{20}}
-\@writefile{lot}{\contentsline {table}{\numberline {3.2}{\ignorespaces Block IDs of 4 blocks grouped into a grid}}{20}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}2D Shared Memory Optimization}{20}}
 \citation{mgiles}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}2D Shared Memory Optimization}{20}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces 2D Shared Memory Arrangement}}{21}}
 \newlabel{fig:shared2d}{{3.2}{21}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces Tile and halo showing for a $6 \times 6$ block the mapping of thread IDs to halo nodes}}{21}}
+\newlabel{fig:haloloading}{{3.3}{21}}
 \citation{mgiles}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces Tile and halo showing for a $6 \times 6$ block the mapping of thread IDs to halo nodes}}{22}}
-\newlabel{fig:haloloading}{{3.3}{22}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.3.3}3D Shared Memory Optimization}{22}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces 3D Shared Memory Arrangement}}{23}}
-\newlabel{fig:shared3d}{{3.4}{23}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces 3D Shared Memory Arrangement}}{22}}
+\newlabel{fig:shared3d}{{3.4}{22}}
 \@setckpt{Chapter3}{
-\setcounter{page}{24}
+\setcounter{page}{23}
 \setcounter{equation}{13}
 \setcounter{enumi}{0}
 \setcounter{enumii}{0}
@@ -84,8 +80,8 @@
 \setcounter{lotdepth}{1}
 \setcounter{parentequation}{0}
 \setcounter{AlgoLine}{0}
-\setcounter{algocfline}{4}
-\setcounter{algocf}{4}
+\setcounter{algocfline}{2}
+\setcounter{algocf}{2}
 \setcounter{lstnumber}{1}
 \setcounter{AM@survey}{0}
 \setcounter{lstlisting}{0}

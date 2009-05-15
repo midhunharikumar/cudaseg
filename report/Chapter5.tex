@@ -1,17 +1,17 @@
 \chapter{Conclusions and Future Work}
 \section{Conclusion}
-In this project report a fast segmentation algorithm has been presented and analysed. The implementation on the graphics device is very fast, with large two dimensional images and three dimensional volumes segmented $30$ to $40$ times faster (on a relatively low performance GPU) than sequential algorithms. 
-The method of using level sets to segment images, and how to accelerate this process using GPUs has been discussed in great detail. The numerical methods used for the implementation were listed in Section \ref{levelsetalgorithm}. Giles' CUDA kernel for laplace discretization in 3D \cite{mgiles} has been adapted for level set iteration. In Section \ref{results} it was seen that the power of GPU acceleration was demonstrated for very large data sets.
+In this project report a fast segmentation algorithm has been presented and analyzed. The implementation on the graphics device is very fast, with large two dimensional images and three dimensional volumes segmented $30$ to $40$ times faster (on a relatively low performance GPU) than sequential algorithms. 
+The method of using level sets to segment images, and how to accelerate this process using GPUs has been discussed in great detail. The numerical methods used for the implementation were listed in Section \ref{levelsetalgorithm}. Giles' CUDA kernel for Laplace discretization in 3D \cite{mgiles} has been adapted for level set iteration. In Section \ref{results} it was seen that the power of GPU acceleration was demonstrated for very large data sets.
 
 Given the wide range of applications level sets have in computing (image processing, computer graphics and physical simulation) this algorithm serves as an excellent framework to solve a diverse array of problems.
 	
 CUDA itself has been shown to be an excellent framework to accelerate computational problems in engineering, and is gaining more features and fewer limitations every few months. The principal disadvantages of CUDA are that it is only effective for very data parallel problems, and that it is not an industry standard. Recently, to counter the latter, it is very likely that it will in fact be replaced by \textit{OpenCL} (Open Computing Language). The syntax and architecture between CUDA and OpenCL will be very similar, allowing this code to be easily ported to OpenCL.
 
+Nonetheless the impressive speedups attained using such low end hardware demonstrate the power of this parallel segmentation algorithm, and this makes segmentation with large 3D volumes much more practical in a clinical setting.
+
 \section{Future Work}
-There are several areas in which this algorithm could be improved which revolve around three central themes of speed, accuracy and usability. 
+There are several areas in which this algorithm could be extended. These revolve around three central themes of speed, accuracy and usability. 
 
-In terms of speed, integrating the narrow band method into the algorithm will provide significant further speed up, however increases the complexity of the kernel (potentially resulting in higher register usage and therefore less occupancy). Secondly, adding support for multiple GPUs and testing on very high performance hardware would be of significant interest. 
+In terms of speed, integrating the narrow band method into the algorithm will provide some further speed up, this however increases the complexity of the kernel potentially resulting in higher register usage and less occupancy. This, in combination to adding support for multiple GPUs and testing on very high performance hardware would be of significant interest. 
 
-Including a 3D signed Euclidean distance transform function is very important for volume segmentation. This would need to be implemented in CUDA in order to prevent costly transfers of data from the device to the host. To increase accuracy, integrating filters in CUDA to preprocess the medical data is strongly encouraged. Including more terms into the level set speed function (such as edge stopping functions) would allow the algorithm to segment unhomogenous gray valued regions. 
-
-Finally, in order to make the segmentation more interactive and versatile, it is suggested to include a graphical user interface allowing segmentation to be visualized and guided at the same time. In order to ensure visualization does not affect performance it is suggested to use two GPUs: one to process the level set and the other to render the level set evolution.
+In terms of accuracy, it would be interesting, and reasonably straightforward, to integrate some of the already coded CUDA image processing examples (such as denoising, blurring, sharpening examples) to form a modular CUDA image processing and segmentation library that clinicians could work with. This could be included with a modular graphical user interface to make a very robust, usable and fast image processing library.

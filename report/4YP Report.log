@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2009.3.31)  27 APR 2009 00:54
+This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2009.3.31)  15 MAY 2009 05:39
 entering extended mode
 **C:/Users/Muz/Desktop/4YP*Report/4YP*Report.tex
 ("C:/Users/Muz/Desktop/4YP Report/4YP Report.tex"
@@ -263,31 +263,31 @@ File: pppdftex.def 2009/02/07 v0.4g Pdfpages driver for pdfTeX (AM)
 ) ("4YP Report.aux" (Chapter1.aux) (Chapter2.aux) (Chapter3.aux) (Chapter4.aux)
  (Chapter5.aux)
 (Appendix.aux))
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
 -------------------- Geometry parameters
 paper: a4paper
 landscape: --
 twocolumn: --
 twoside: --
 asymmetric: --
-h-parts: 56.9055pt, 455.24413pt, 56.9055pt
+h-parts: 56.9055pt, 469.4705pt, 56.9055pt
 v-parts: 85.35826pt, 674.33032pt, 85.35826pt
 hmarginratio: --
 vmarginratio: --
 lines: --
 heightrounded: --
-bindingoffset: 28.45274pt
+bindingoffset: 14.22636pt
 truedimen: --
 includehead: --
 includefoot: --
@@ -296,9 +296,9 @@ driver: pdftex
 -------------------- Page layout dimensions and switches
 \paperwidth  597.50787pt
 \paperheight 845.04684pt
-\textwidth  455.24413pt
+\textwidth  469.4705pt
 \textheight 674.33032pt
-\oddsidemargin  13.08826pt
+\oddsidemargin  -1.13812pt
 \evensidemargin -15.36449pt
 \topmargin  -18.78552pt
 \headheight 12.0pt
@@ -336,12 +336,15 @@ File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
 Package color Info: Driver file: pdftex.def on input line 130.
 )
-LaTeX Font Info:    Try loading font information for U+msa on input line 28.
+<images/oxlogo.png, id=1, 116.1138pt x 138.7584pt>
+File: images/oxlogo.png Graphic file (type png)
+ <use images/oxlogo.png>
+LaTeX Font Info:    Try loading font information for U+msa on input line 48.
 
 ("C:\Program Files\MiKTeX 2.7\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2002/01/19 v2.2g AMS font definitions
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 28.
+LaTeX Font Info:    Try loading font information for U+msb on input line 48.
 
 ("C:\Program Files\MiKTeX 2.7\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2002/01/19 v2.2g AMS font definitions
@@ -350,8 +353,8 @@ File: umsb.fd 2002/01/19 v2.2g AMS font definitions
 
 
 {C:/Users/Muz/Local Settings/Application Data/MiKTeX/2.7/pdftex/config/pdftex.m
-ap}]
-<images/declaration.pdf, id=9, page=1, 597.23125pt x 845.1575pt>
+ap} <images/oxlogo.png>] <images/declaration.pdf, id=13, page=1, 597.23125pt x 
+845.1575pt>
 File: images/declaration.pdf Graphic file (type pdf)
 
 <use images/declaration.pdf, page 1>
@@ -364,10 +367,10 @@ File: images/declaration.pdf Graphic file (type pdf)
  <use images/declaration.pdf, page 1>
 File: images/declaration.pdf Graphic file (type pdf)
 
-<use images/declaration.pdf, page 1> [1 <images/declaration.pdf>]
+<use images/declaration.pdf, page 1> [1 <images/declaration.pdf>] [2]
 ("4YP Report.toc")
 \tf@toc=\write3
- [2
+ [3
 
 ] (Chapter1.tex
 Chapter 1.
@@ -375,17 +378,17 @@ Chapter 1.
 
 
 
-] [2] <images/cudathreads.PNG, id=42, 457.71pt x 580.1675pt>
+] [2] [3] <images/cudathreads.PNG, id=56, 457.71pt x 580.1675pt>
 File: images/cudathreads.PNG Graphic file (type png)
 
 <use images/cudathreads.PNG>
-<images/cudamemory.PNG, id=43, 565.11125pt x 524.96124pt>
+<images/cudamemory.PNG, id=57, 565.11125pt x 524.96124pt>
 File: images/cudamemory.PNG Graphic file (type png)
 
-<use images/cudamemory.PNG> [3] [4 <images/cudathreads.PNG (PNG copy)> <images/
-cudamemory.PNG (PNG copy)>]) [5] (Chapter2.tex
+<use images/cudamemory.PNG>) [4] [5 <images/cudathreads.PNG (PNG copy)> <images
+/cudamemory.PNG (PNG copy)>] (Chapter2.tex
 Chapter 2.
-<images/levelsets.png, id=55, 451.6875pt x 492.84125pt>
+<images/levelsets.png, id=64, 451.6875pt x 492.84125pt>
 File: images/levelsets.png Graphic file (type png)
 
 <use images/levelsets.png>
@@ -396,27 +399,25 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 
 
-] [7 <images/levelsets.png (PNG copy)>]
-<images/speedterm.png, id=65, 769.87625pt x 529.98pt>
+] <images/leaking.png, id=69, 240.9pt x 240.9pt>
+File: images/leaking.png Graphic file (type png)
+ <use images/leaking.png>
+<images/leaking2.png, id=70, 240.9pt x 240.9pt>
+File: images/leaking2.png Graphic file (type png)
+ <use images/leaking2.png>
+[7 <images/levelsets.png (PNG copy)> <images/leaking.png (PNG copy)> <images/le
+aking2.png (PNG copy)>] <images/speedterm.png, id=74, 769.87625pt x 529.98pt>
 File: images/speedterm.png Graphic file (type png)
 
-<use images/speedterm.png>
-<images/leaking.png, id=66, 255.95625pt x 253.94875pt>
-File: images/leaking.png Graphic file (type png)
-
-<use images/leaking.png>
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[8 <images/speedterm.png (PNG copy)>]
-<images/initmask.png, id=70, 294.34969pt x 237.13594pt>
+<use images/speedterm.png> [8 <images/speedterm.png (PNG copy)>]
+<images/initmask.png, id=79, 294.34969pt x 237.13594pt>
 File: images/initmask.png Graphic file (type png)
 
-<use images/initmask.png> <images/sdf.png, id=71, 294.34969pt x 237.13594pt>
+<use images/initmask.png> <images/sdf.png, id=80, 294.34969pt x 237.13594pt>
 File: images/sdf.png Graphic file (type png)
 
-<use images/sdf.png>) [9 <images/leaking.png (PNG copy)>] [10 <images/initmask.
-png (PNG copy)> <images/sdf.png (PNG copy)>] (Chapter3.tex
+<use images/sdf.png> [9]) [10 <images/initmask.png (PNG copy)> <images/sdf.png 
+(PNG copy)>] (Chapter3.tex
 Chapter 3.
 [11
 
@@ -427,80 +428,75 @@ Underfull \hbox (badness 10000) detected at line 164
 [][]
  []
 
-<images/matlab.png, id=100, 476.78125pt x 419.5675pt>
+<images/matlab.png, id=108, 476.78125pt x 419.5675pt>
 File: images/matlab.png Graphic file (type png)
  <use images/matlab.png>
-[15] [16 <images/matlab.png (PNG copy)>]
-Underfull \hbox (badness 10000) detected at line 212
+[15] [16 <images/matlab.png (PNG copy)>] [17]
+Underfull \hbox (badness 10000) detected at line 225
 [][]
  []
 
-[17]
-Underfull \hbox (badness 10000) detected at line 235
-[][]
- []
 
-[18]
-Underfull \hbox (badness 10000) detected at line 266
-[][]
- []
+LaTeX Warning: `h' float specifier changed to `ht'.
 
-[19] [20]
+[18] [19] <images/shared2d.PNG, id=126, 316.18124pt x 96.36pt>
+File: images/shared2d.PNG Graphic file (type png)
+
+<use images/shared2d.PNG>
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[20] <images/halo.pdf, id=130, 284.62335pt x 219.09854pt>
+File: images/halo.pdf Graphic file (type pdf)
+
+<use images/halo.pdf> [21 <images/shared2d.PNG (PNG copy)> <images/halo.pdf
+
+pdfTeX warning:  (file images/halo.pdf): PDF inclusion: Page Group detected whi
+ch pdfTeX can't handle. Ignoring it.
+>]
 Underfull \hbox (badness 10000) in paragraph at lines 317--318
 
  []
 
-<images/shared2d.PNG, id=121, 316.18124pt x 96.36pt>
-File: images/shared2d.PNG Graphic file (type png)
- <use images/shared2d.PNG>
-[21 <images/shared2d.PNG (PNG copy)>]
-<images/halo.pdf, id=125, 284.62335pt x 219.09854pt>
-File: images/halo.pdf Graphic file (type pdf)
- <use images/halo.pdf>
-<images/shared3d.PNG, id=126, 316.18124pt x 310.15875pt>
+<images/shared3d.PNG, id=140, 316.18124pt x 310.15875pt>
 File: images/shared3d.PNG Graphic file (type png)
 
-<use images/shared3d.PNG>
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[22 <images/halo.pdf
-
-pdfTeX warning:  (file images/halo.pdf): PDF inclusion: Page Group detected whi
-ch pdfTeX can't handle. Ignoring it.
->]) [23 <images/shared3d.PNG (PNG copy)>] (Chapter4.tex
+<use images/shared3d.PNG>) [22 <images/shared3d.PNG (PNG copy)>] (Chapter4.tex
 Chapter 4.
-[24
+[23
 
 
 
-] <images/liver.PNG, id=142, 256.96pt x 256.96pt>
+] <images/liver.PNG, id=147, 256.96pt x 256.96pt>
 File: images/liver.PNG Graphic file (type png)
  <use images/liver.PNG>
-<images/livermask.PNG, id=143, 256.96pt x 256.96pt>
+<images/livermask.PNG, id=148, 256.96pt x 256.96pt>
 File: images/livermask.PNG Graphic file (type png)
  <use images/livermask.PNG>
-<images/liverseg.PNG, id=144, 256.96pt x 256.96pt>
+<images/liverseg.PNG, id=149, 256.96pt x 256.96pt>
 File: images/liverseg.PNG Graphic file (type png)
  <use images/liverseg.PNG>
-<images/brain.PNG, id=145, 513.92pt x 513.92pt>
+<images/brain.PNG, id=150, 513.92pt x 513.92pt>
 File: images/brain.PNG Graphic file (type png)
  <use images/brain.PNG>
-<images/brainmask.PNG, id=146, 513.92pt x 513.92pt>
+<images/brainmask.PNG, id=151, 513.92pt x 513.92pt>
 File: images/brainmask.PNG Graphic file (type png)
  <use images/brainmask.PNG>
-<images/brainseg.PNG, id=147, 513.92pt x 513.92pt>
+<images/brainseg.PNG, id=152, 513.92pt x 513.92pt>
 File: images/brainseg.PNG Graphic file (type png)
  <use images/brainseg.PNG>
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[25 <images/liver.PNG (PNG copy)> <images/livermask.PNG (PNG copy)> <images/liv
-erseg.PNG (PNG copy)>] <images/livernoise20.PNG, id=151, 256.96pt x 256.96pt>
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[24 <images/liver.PNG (PNG copy)> <images/livermask.PNG (PNG copy)> <images/liv
+erseg.PNG (PNG copy)>] <images/livernoise20.PNG, id=156, 256.96pt x 256.96pt>
 File: images/livernoise20.PNG Graphic file (type png)
 
 <use images/livernoise20.PNG>
-<images/livernoise20seg.PNG, id=152, 256.96pt x 256.96pt>
+<images/livernoise20seg.PNG, id=157, 256.96pt x 256.96pt>
 File: images/livernoise20seg.PNG Graphic file (type png)
 
 <use images/livernoise20seg.PNG>
@@ -508,11 +504,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 78--78
 []\OT1/cmr/m/n/9 (b) Seg-men-ta-tion with
  []
 
-<images/livernoise40.PNG, id=153, 256.96pt x 256.96pt>
+<images/livernoise40.PNG, id=158, 256.96pt x 256.96pt>
 File: images/livernoise40.PNG Graphic file (type png)
 
 <use images/livernoise40.PNG>
-<images/livernoise40seg.PNG, id=154, 256.96pt x 256.96pt>
+<images/livernoise40seg.PNG, id=159, 256.96pt x 256.96pt>
 File: images/livernoise40seg.PNG Graphic file (type png)
 
 <use images/livernoise40seg.PNG>
@@ -523,38 +519,37 @@ Underfull \hbox (badness 10000) in paragraph at lines 80--80
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[26 <images/brain.PNG (PNG copy)> <images/brainmask.PNG (PNG copy)> <images/bra
-inseg.PNG (PNG copy)>]
-<images/dimensions2d.pdf, id=158, 844.95674pt x 597.432pt>
+<images/dimensions2d.pdf, id=160, 844.95674pt x 597.432pt>
 File: images/dimensions2d.pdf Graphic file (type pdf)
 
 <use images/dimensions2d.pdf>
-<images/elements2d.pdf, id=159, 844.95674pt x 597.432pt>
+<images/elements2d.pdf, id=161, 844.95674pt x 597.432pt>
 File: images/elements2d.pdf Graphic file (type pdf)
 
-<use images/elements2d.pdf>
-<images/3devolution0.PNG, id=160, 297.11pt x 301.125pt>
+<use images/elements2d.pdf> [25 <images/brain.PNG (PNG copy)> <images/brainmask
+.PNG (PNG copy)> <images/brainseg.PNG (PNG copy)>]
+<images/3devolution0.PNG, id=165, 401.5pt x 401.5pt>
 File: images/3devolution0.PNG Graphic file (type png)
 
 <use images/3devolution0.PNG>
-<images/3devolution1.PNG, id=161, 297.11pt x 301.125pt>
+<images/3devolution1.PNG, id=166, 401.5pt x 401.5pt>
 File: images/3devolution1.PNG Graphic file (type png)
 
 <use images/3devolution1.PNG>
-<images/3devolution2.PNG, id=162, 297.11pt x 301.125pt>
+<images/3devolution2.PNG, id=167, 401.5pt x 401.5pt>
 File: images/3devolution2.PNG Graphic file (type png)
 
 <use images/3devolution2.PNG>
-<images/3devolution3.PNG, id=163, 297.11pt x 301.125pt>
+<images/3devolution3.PNG, id=168, 401.5pt x 401.5pt>
 File: images/3devolution3.PNG Graphic file (type png)
 
 <use images/3devolution3.PNG>
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[27 <images/livernoise20.PNG (PNG copy)> <images/livernoise20seg.PNG (PNG copy)
+[26 <images/livernoise20.PNG (PNG copy)> <images/livernoise20seg.PNG (PNG copy)
 > <images/livernoise40.PNG (PNG copy)> <images/livernoise40seg.PNG (PNG copy)>]
-[28 <images/dimensions2d.pdf
+[27 <images/dimensions2d.pdf
 
 pdfTeX warning:  (file images/dimensions2d.pdf): PDF inclusion: Page Group dete
 cted which pdfTeX can't handle. Ignoring it.
@@ -562,49 +557,67 @@ cted which pdfTeX can't handle. Ignoring it.
 
 pdfTeX warning:  (file images/elements2d.pdf): PDF inclusion: Page Group detect
 ed which pdfTeX can't handle. Ignoring it.
->] <images/brain3d.PNG, id=190, 301.125pt x 301.125pt>
+>] <images/brain3d.PNG, id=195, 301.125pt x 301.125pt>
 File: images/brain3d.PNG Graphic file (type png)
 
 <use images/brain3d.PNG>
-<images/brain3dseg3.PNG, id=191, 301.125pt x 301.125pt>
+<images/brain3dseg3.PNG, id=196, 301.125pt x 301.125pt>
 File: images/brain3dseg3.PNG Graphic file (type png)
 
 <use images/brain3dseg3.PNG>
-<images/brain3dseg1.PNG, id=192, 301.125pt x 301.125pt>
+<images/brain3dseg1.PNG, id=197, 301.125pt x 301.125pt>
 File: images/brain3dseg1.PNG Graphic file (type png)
 
 <use images/brain3dseg1.PNG>
-<images/brain3dseg2.PNG, id=193, 301.125pt x 301.125pt>
+<images/brain3dseg2.PNG, id=198, 301.125pt x 301.125pt>
 File: images/brain3dseg2.PNG Graphic file (type png)
 
 <use images/brain3dseg2.PNG>
-<images/heart3dseg.PNG, id=194, 401.5pt x 401.5pt>
+<images/heart3dseg.PNG, id=199, 401.5pt x 401.5pt>
 File: images/heart3dseg.PNG Graphic file (type png)
  <use images/heart3dseg.PNG>
-<images/heart3dseg1.PNG, id=195, 401.5pt x 401.5pt>
+<images/heart3dseg1.PNG, id=200, 401.5pt x 401.5pt>
 File: images/heart3dseg1.PNG Graphic file (type png)
 
-<use images/heart3dseg1.PNG> [29 <images/3devolution0.PNG (PNG copy)> <images/3
+<use images/heart3dseg1.PNG> [28 <images/3devolution0.PNG (PNG copy)> <images/3
 devolution1.PNG (PNG copy)> <images/3devolution2.PNG (PNG copy)> <images/3devol
-ution3.PNG (PNG copy)>] [30 <images/brain3d.PNG (PNG copy)> <images/brain3dseg3
+ution3.PNG (PNG copy)>] [29 <images/brain3d.PNG (PNG copy)> <images/brain3dseg3
 .PNG (PNG copy)> <images/brain3dseg1.PNG (PNG copy)> <images/brain3dseg2.PNG (P
 NG copy)> <images/heart3dseg.PNG (PNG copy)> <images/heart3dseg1.PNG (PNG copy)
+>] <images/3dvolumesizes.pdf, id=207, 844.95674pt x 597.432pt>
+File: images/3dvolumesizes.pdf Graphic file (type pdf)
+
+<use images/3dvolumesizes.pdf>
+Overfull \hbox (37.50745pt too wide) in paragraph at lines 187--188
+ [][] 
+ []
+
+[30 <images/3dvolumesizes.pdf
+
+pdfTeX warning:  (file images/3dvolumesizes.pdf): PDF inclusion: Page Group det
+ected which pdfTeX can't handle. Ignoring it.
 >]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[31] [32]) [33] (Chapter5.tex
+[31] <images/occupancy.pdf, id=223, 844.95674pt x 597.432pt>
+File: images/occupancy.pdf Graphic file (type pdf)
+
+<use images/occupancy.pdf> [32 <images/occupancy.pdf
+
+pdfTeX warning:  (file images/occupancy.pdf): PDF inclusion: Page Group detecte
+d which pdfTeX can't handle. Ignoring it.
+>]) [33] (Chapter5.tex
 Chapter 5.
 [34
 
 
 
-]) [35] ("4YP Report.bbl"
-Missing character: There is no ” in font cmr10!
- [36
+]) [35] ("4YP Report.bbl" [36
 
 
 ]
+Missing character: There is no ” in font cmr10!
 Missing character: There is no ” in font cmr10!
 ) [37] (Appendix.tex
 Appendix A.
@@ -638,29 +651,15 @@ File: lstmisc.sty 2007/02/22 1.4 (Carsten Heinz)
 ) (code/kernel.cu
 [40
 
-] [41] [42]
-Overfull \hbox (5.4074pt too wide) in paragraph at lines 150--151
-[][][][][][][][][][][][][][][][][][][][][][][][] 
- []
-
-
-Overfull \hbox (5.4074pt too wide) in paragraph at lines 157--158
-[][][][][][][][][][][][][][][][][][][][][][][][] 
- []
-
-) [43]
+] [41] [42]) [43]
 Appendix C.
 (code/main.cu [44
 
 ]
 LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <9> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 68.
-
-Overfull \hbox (10.95741pt too wide) in paragraph at lines 69--70
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
- []
-
-[45])) [46] <images/riskassess.pdf, id=258, page=1, 845.19763pt x 597.55246pt>
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 77.
+ [45])) [46]
+<images/riskassess.pdf, id=286, page=1, 845.19763pt x 597.55246pt>
 File: images/riskassess.pdf Graphic file (type pdf)
 
 <use images/riskassess.pdf, page 1>
@@ -679,35 +678,37 @@ File: images/riskassess.pdf Graphic file (type pdf)
 ("4YP Report.aux" (Chapter1.aux) (Chapter2.aux) (Chapter3.aux) (Chapter4.aux)
 (Chapter5.aux) (Appendix.aux)) ) 
 Here is how much of TeX's memory you used:
- 6470 strings out of 95340
- 85409 string characters out of 1184178
- 215811 words of memory out of 1500000
- 9488 multiletter control sequences out of 110000
- 16913 words of font info for 63 fonts, out of 1200000 for 2000
+ 6495 strings out of 95340
+ 85914 string characters out of 1184178
+ 217403 words of memory out of 1500000
+ 9507 multiletter control sequences out of 110000
+ 16951 words of font info for 63 fonts, out of 1200000 for 2000
  14 hyphenation exceptions out of 8191
- 33i,16n,51p,1150b,2114s stack positions out of 5000i,500n,10000p,200000b,5000s
+ 33i,16n,51p,1155b,2116s stack positions out of 5000i,500n,10000p,200000b,5000s
 <C:/Program Files/MiKTeX 2.7/fonts/type1/bluesk
 y/cm/cmbx10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmbx12.pfb>
 <C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmbx9.pfb><C:/Program Files
-/MiKTeX 2.7/fonts/type1/bluesky/cm/cmex10.pfb><C:/Program Files/MiKTeX 2.7/font
-s/type1/bluesky/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/
-cm/cmmi6.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmmi8.pfb><C:/
-Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmmi9.pfb><C:/Program Files/MiK
-TeX 2.7/fonts/type1/bluesky/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.7/fonts/typ
-e1/bluesky/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr
-17.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr6.pfb><C:/Program
- Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.7/
-fonts/type1/bluesky/cm/cmr9.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesk
-y/cm/cmsl10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy10.pfb>
-<C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy6.pfb><C:/Program Files
-/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.7/fonts
-/type1/bluesky/cm/cmsy9.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm
-/cmti10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmti9.pfb><C:/P
-rogram Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmtt10.pfb><C:/Program Files/MiK
-TeX 2.7/fonts/type1/bluesky/ams/msbm10.pfb>
-Output written on "4YP Report.pdf" (50 pages, 2024922 bytes).
+/MiKTeX 2.7/fonts/type1/bluesky/cm/cmcsc10.pfb><C:/Program Files/MiKTeX 2.7/fon
+ts/type1/bluesky/cm/cmex10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky
+/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmmi6.pfb><C
+:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmmi8.pfb><C:/Program Files/M
+iKTeX 2.7/fonts/type1/bluesky/cm/cmmi9.pfb><C:/Program Files/MiKTeX 2.7/fonts/t
+ype1/bluesky/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/c
+mr12.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr17.pfb><C:/Prog
+ram Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr6.pfb><C:/Program Files/MiKTeX 2
+.7/fonts/type1/bluesky/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/blu
+esky/cm/cmr9.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsl10.pfb
+><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy10.pfb><C:/Program Fil
+es/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy6.pfb><C:/Program Files/MiKTeX 2.7/fon
+ts/type1/bluesky/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/
+cm/cmsy9.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmti10.pfb><C:
+/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmti12.pfb><C:/Program Files/M
+iKTeX 2.7/fonts/type1/bluesky/cm/cmti9.pfb><C:/Program Files/MiKTeX 2.7/fonts/t
+ype1/bluesky/cm/cmtt10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/ams
+/msbm10.pfb>
+Output written on "4YP Report.pdf" (51 pages, 2573091 bytes).
 PDF statistics:
- 366 PDF objects out of 1000 (max. 8388607)
+ 400 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 131072)
- 196 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 216 words of extra memory for PDF output out of 10000 (max. 10000000)
 

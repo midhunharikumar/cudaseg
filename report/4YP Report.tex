@@ -1,8 +1,6 @@
-%\documentclass[oneside,12pt]{Classes/CUEDthesisPSnPDF}
-%\documentclass[a4paper]{report}
 \documentclass[a4paper,oneside,11pt]{book}
-\usepackage[hmargin=2cm,vmargin=3cm,bindingoffset=1cm]{geometry}
-%\usepackage{suthesis-2e}
+\usepackage[hmargin=2cm,vmargin=3cm,bindingoffset=0.5cm]{geometry}
+
 
 \usepackage{setspace}
 \usepackage{graphicx}
@@ -22,16 +20,64 @@
 \begin{document}
 
 \frontmatter
-\title{Fast Level Set Segmentation of Biomedical Images using Graphics Processing Units}
-\author{Hormuz~Mostofi \\ Keble College\\ University of Oxford \\ \\ \\ \\\\\\\\\\\\\\\\\ \\ \\Department of Engineering Science  \\ Honour School of Engineering, Economics and Management}
-%\date{\today}
-\maketitle
+\begin{titlepage}
+\begin{center}
+\includegraphics[width=50mm]{images/oxlogo.png}\\
+\ \\ % force an empty line
+\ \\
+\textsc{\Large 
+%
+Department of Engineering Science\\
+\ \\
+Final Year Project\\
+\ \\}
+{\LARGE 
+Fast Level Set Segmentation of Biomedical Images using Graphics Processing Units
+\\}
+\ \\
+\ \\
+\ \\
+\ \\
+\ \\
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Author:}\\
+Hormuz~Mostofi\\
+Keble College
+\end{flushleft}
+\end{minipage}
+%
+% right column
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large 
+\emph{Supervisors:} \\
+Dr. Julia Schnabel\\
+Dr. Vicente Grau
+\end{flushright}
+\end{minipage}
+
+\vfill
+{\large {May 2009}}
+\end{center}
+\end{titlepage}
 
 
 \includepdf{images/declaration.pdf}
-%\begin{acknowledgements} 
-%I would like to thank Julia Schnabel and Vicente Grau for their assistance in teaching me about the inner workings of %level set methods. I would also like to thank Daniel Goodman for his guidance in CUDA programming.
-%\end{acknowledgements}
+
+\section*{Acknowledgments} 
+I would like to greatly thank my supervisors \textit{Dr Julia Schnabel} and \textit{Dr Vicente Grau} for their excellent guidance in this project. Their ability to point out the subtle technicalities of biomedical image and volume segmentation proved an invaluable resource. 
+
+I would also like to thank \textit{Professor Mike Giles} and \textit{Daniel Goodman} for their guidance in CUDA programming. I found the weekly CUDA meetings led by \textit{Professor Mike Giles} a very helpful forum to learn advanced CUDA programming techniques, whilst keeping up with any developments with respect to CUDA. 
+
+Finally, I would like to thank all the staff of the Oxford E-Research Centre for providing the facilities and excellent work environment for the development of this project.
+
+\section*{Personal Challenges}
+At the outset of this project, I had very limited knowledge in the areas of biomedical image segmentation and implementations thereof. A vast literature review of level set segmentation techniques was required in order to take the knowledge gained from C6 Medical Image Analysis course to engineer an initial implementation. As my knowledge of C was initially fairly basic, this first implementation was written in MATLAB using the Image Processing Toolbox.
+
+In order to optimize the algorithm, new skills had to be learnt for the development of a faster sequential C-language algorithm and a much faster parallel algorithm. For the sequential C-language algorithm, extensive knowledge and experience with pointers and arrays needed to be acquired alongside learning OpenGL for visualization. Optimizing further, in order to engineer the significantly faster parallel algorithm, a significant amount of time needed to be spent learning and experimenting with the NVIDIA CUDA programming language and architecture with all its intricacies and subtlety. 
+
+The final challenge was to extend to three dimensions, increasing the complexity of sequential and parallel algorithms greatly. Therefore throughout this project there has been a very steep learning curve to overcome in terms of software engineering skill and experience with segmentation algorithms.
+
 
 \setcounter{tocdepth}{1}
 \begin{spacing}{1.2}

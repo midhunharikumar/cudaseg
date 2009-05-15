@@ -3,15 +3,15 @@ Type=TeXnicCenterProjectSessionInformation
 Version=2
 
 [SessionInfo]
-ActiveTab=0
+ActiveTab=3
 FrameCount=8
-ActiveFrame=0
+ActiveFrame=3
 
 [Frame0]
 Columns=1
 Rows=1
-Flags=2
-ShowCmd=3
+Flags=0
+ShowCmd=1
 MinPos.x=-1
 MinPos.y=-1
 MaxPos.x=-4
@@ -24,15 +24,15 @@ Class=CLatexEdit
 Document=4YP Report.tex
 
 [Frame0_Row0]
-cyCur=1057
+cyCur=250
 cyMin=10
 
 [Frame0_Col0]
-cxCur=759
+cxCur=335
 cxMin=10
 
 [Frame0_View0,0]
-Cursor.row=34
+Cursor.row=0
 Cursor.column=0
 TopSubLine=0
 
@@ -61,9 +61,9 @@ cxCur=335
 cxMin=10
 
 [Frame1_View0,0]
-Cursor.row=49
-Cursor.column=153
-TopSubLine=231
+Cursor.row=55
+Cursor.column=1
+TopSubLine=299
 
 [Frame2]
 Columns=1
@@ -90,15 +90,15 @@ cxCur=335
 cxMin=10
 
 [Frame2_View0,0]
-Cursor.row=71
-Cursor.column=283
-TopSubLine=210
+Cursor.row=92
+Cursor.column=152
+TopSubLine=257
 
 [Frame3]
 Columns=1
 Rows=1
-Flags=0
-ShowCmd=1
+Flags=2
+ShowCmd=3
 MinPos.x=-1
 MinPos.y=-1
 MaxPos.x=-4
@@ -111,17 +111,17 @@ Class=CLatexEdit
 Document=Chapter3.tex
 
 [Frame3_Row0]
-cyCur=250
+cyCur=1451
 cyMin=10
 
 [Frame3_Col0]
-cxCur=335
+cxCur=785
 cxMin=10
 
 [Frame3_View0,0]
-Cursor.row=314
-Cursor.column=392
-TopSubLine=803
+Cursor.row=191
+Cursor.column=922
+TopSubLine=233
 
 [Frame4]
 Columns=1
@@ -148,9 +148,9 @@ cxCur=335
 cxMin=10
 
 [Frame4_View0,0]
-Cursor.row=143
-Cursor.column=0
-TopSubLine=396
+Cursor.row=89
+Cursor.column=290
+TopSubLine=241
 
 [Frame5]
 Columns=1
@@ -206,9 +206,9 @@ cxCur=335
 cxMin=10
 
 [Frame6_View0,0]
-Cursor.row=0
-Cursor.column=0
-TopSubLine=0
+Cursor.row=86
+Cursor.column=1
+TopSubLine=67
 
 [Frame7]
 Columns=1
@@ -235,7 +235,7 @@ cxCur=914
 cxMin=10
 
 [Frame7_View0,0]
-Cursor.row=0
+Cursor.row=28
 Cursor.column=0
-TopSubLine=0
+TopSubLine=8
 
